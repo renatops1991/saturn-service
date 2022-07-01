@@ -20,7 +20,6 @@ jobs:
         uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ hasFiles('**/package-lock.json')}}
 
       - name: Install dependencies
         run: npm install
@@ -37,7 +36,6 @@ jobs:
         uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ hasFiles('**/package-lock')}}
 
       - name: Install dependencies
         run: npm install
