@@ -56,5 +56,5 @@ jobs:
           path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json')}}
 
-      - name: Run init tests
+      - name: Run unit tests
         run: npm run test:unit
