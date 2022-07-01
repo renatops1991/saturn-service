@@ -10,6 +10,7 @@
     "test:e2e": "npm test -- --watch --findRelatedTests -c jest-e2e.config.js",
     "test:ci": "npm test -- --coverage",
     "test:staged": "jest --passWithNoTests --silent --noStackTrace --findRelatedTests",
+    "ts-prune": "ts-prune",
     "prepare": "husky install"
   },
   "keywords": [],
