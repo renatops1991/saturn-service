@@ -20,9 +20,10 @@ jobs:
         uses: actions/cache@v2
         with:
           path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json')}}
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --force
 
   unused-exports:
     name: Find unused import (dead code)
@@ -32,13 +33,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Cache node_modules
+      - name: Restore node_modules
         uses: actions/cache@v2
         with:
           path: node_modules
-
-      - name: Install dependencies
-        run: npm install
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json')}}
 
       - name: Search dead code
         run: npm run prune
