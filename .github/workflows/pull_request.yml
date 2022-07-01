@@ -35,5 +35,5 @@ unusedImport:
     - name: Install dependencies
       run: npm install
 
-    - name: Run ts-prune
-      run: npm ts-prune --error
+    - name: Search dead code
+      run: npm run prune
