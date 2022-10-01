@@ -12,5 +12,13 @@ export class UserController {
     if (!userDto.email) {
       return badRequest(new MissingMandatoryParamError('email'))
     }
+
+    if (!userDto.password) {
+      return badRequest(new MissingMandatoryParamError('password'))
+    }
+
+    if (!userDto.passwordConfirmation) {
+      return badRequest(new MissingMandatoryParamError('passwordConfirmation'))
+    }
   }
 }
