@@ -1,7 +1,7 @@
 import { SignUpUserController } from '../../../../src/presentation/controllers/signup-user-controller'
 import { InvalidParamError } from '../../../../src/presentation/errors/invalid-param-error'
 import { MissingMandatoryParamError } from '../../../../src/presentation/errors/missing-mandatory-param-error'
-import { serverError } from '../../../../src/presentation/http-helper'
+import { badRequest, serverError } from '../../../../src/presentation/http-helper'
 import { EmailValidator } from '../../../../src/presentation/protocols/email-validator'
 
 interface SutTypes {
@@ -41,7 +41,7 @@ describe('User Controller', () => {
     }
     const expectedResponse = sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
-    expect(expectedResponse.body).toEqual(new MissingMandatoryParamError('name'))
+    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('name')))
   })
 
   it('Should return 400 if no email is provided', async () => {
@@ -54,7 +54,7 @@ describe('User Controller', () => {
     }
     const expectedResponse = sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
-    expect(expectedResponse.body).toEqual(new MissingMandatoryParamError('email'))
+    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('email')))
   })
 
   it('Should return 400 if no password is provided', async () => {
@@ -67,7 +67,7 @@ describe('User Controller', () => {
     }
     const expectedResponse = sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
-    expect(expectedResponse.body).toEqual(new MissingMandatoryParamError('password'))
+    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('password')))
   })
 
   it('Should return 400 if no passwordConfirmation is provided', async () => {
@@ -80,7 +80,7 @@ describe('User Controller', () => {
     }
     const expectedResponse = sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
-    expect(expectedResponse.body).toEqual(new MissingMandatoryParamError('passwordConfirmation'))
+    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('passwordConfirmation')))
   })
 
   it('Should call is valid method with correct value', async () => {
