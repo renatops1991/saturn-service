@@ -1,4 +1,5 @@
 import { UserDto } from '../dtos/user.dto'
+import { InvalidParamError } from '../errors/invalid-param-error'
 import { MissingMandatoryParamError } from '../errors/missing-mandatory-param-error'
 import { badRequest } from '../http-helper'
 import { Controller } from '../protocols/controller'
@@ -17,6 +18,9 @@ export class SignUpUserController implements Controller {
       }
     }
 
-    this.emailValidator.isValid(userDto.email)
+    const isValidEmail = this.emailValidator.isValid(userDto.email)
+    if (!isValidEmail) {
+      return badRequest(new InvalidParamError('email'))
+    }
   }
 }
