@@ -11,22 +11,11 @@ export class SignUpUserController implements Controller {
   ) {}
 
   handle (userDto: UserDto): HttpResponse {
-    this.validation.validate(userDto)
-
-    if (!userDto.name) {
-      return badRequest(new MissingMandatoryParamError('name'))
-    }
-
-    if (!userDto.email) {
-      return badRequest(new MissingMandatoryParamError('email'))
-    }
-
-    if (!userDto.password) {
-      return badRequest(new MissingMandatoryParamError('password'))
-    }
-
-    if (!userDto.passwordConfirmation) {
-      return badRequest(new MissingMandatoryParamError('passwordConfirmation'))
+    const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
+    for (const field of requiredFields) {
+      if (!userDto[field]) {
+        return badRequest(new MissingMandatoryParamError(field))
+      }
     }
   }
 }

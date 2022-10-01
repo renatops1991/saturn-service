@@ -1,9 +1,34 @@
 import { SignUpUserController } from '../../../../src/presentation/controllers/signup-user-controller'
 import { MissingMandatoryParamError } from '../../../../src/presentation/errors/missing-mandatory-param-error'
+import { Validation } from '../../../../src/presentation/protocols/validation'
 
+interface SutTypes {
+  sut: SignUpUserController
+  validationStub: Validation
+}
+
+const makeSut = (): SutTypes => {
+  const validationStub = mockValidation()
+  const sut = new SignUpUserController(validationStub)
+
+  return {
+    sut,
+    validationStub
+  }
+}
+
+const mockValidation = (): Validation => {
+  class ValidationStub implements Validation {
+    validate (input: any): Error {
+      return null
+    }
+  }
+  return new ValidationStub()
+}
 describe('User Controller', () => {
   it('Should return 400 if no name is provided', async () => {
-    const sut = new SignUpUserController()
+    const { sut } = makeSut()
+
     const userDto = {
       name: '',
       email: 'foo@example.com',
@@ -16,7 +41,7 @@ describe('User Controller', () => {
   })
 
   it('Should return 400 if no email is provided', async () => {
-    const sut = new SignUpUserController()
+    const { sut } = makeSut()
     const userDto = {
       name: 'John Foo Bar',
       email: '',
@@ -29,7 +54,7 @@ describe('User Controller', () => {
   })
 
   it('Should return 400 if no password is provided', async () => {
-    const sut = new SignUpUserController()
+    const { sut } = makeSut()
     const userDto = {
       name: 'John Foo Bar',
       email: 'foo@example.com',
@@ -42,7 +67,7 @@ describe('User Controller', () => {
   })
 
   it('Should return 400 if no passwordConfirmation is provided', async () => {
-    const sut = new SignUpUserController()
+    const { sut } = makeSut()
     const userDto = {
       name: 'John Foo Bar',
       email: 'foo@example.com',
