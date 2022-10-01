@@ -27,4 +27,30 @@ describe('User Controller', () => {
     expect(expectedResponse.statusCode).toBe(400)
     expect(expectedResponse.body).toEqual(new MissingMandatoryParamError('email'))
   })
+
+  it('Should return 400 if no password is provided', async () => {
+    const sut = new UserController()
+    const userDto = {
+      name: 'John Foo Bar',
+      email: 'foo@example.com',
+      password: '',
+      passwordConfirmation: '12345'
+    }
+    const expectedResponse = sut.create(userDto)
+    expect(expectedResponse.statusCode).toBe(400)
+    expect(expectedResponse.body).toEqual(new MissingMandatoryParamError('password'))
+  })
+
+  it('Should return 400 if no passwordConfirmation is provided', async () => {
+    const sut = new UserController()
+    const userDto = {
+      name: 'John Foo Bar',
+      email: 'foo@example.com',
+      password: '12345',
+      passwordConfirmation: ''
+    }
+    const expectedResponse = sut.create(userDto)
+    expect(expectedResponse.statusCode).toBe(400)
+    expect(expectedResponse.body).toEqual(new MissingMandatoryParamError('passwordConfirmation'))
+  })
 })
