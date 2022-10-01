@@ -1,6 +1,7 @@
 import { SignUpUserController } from '../../../../src/presentation/controllers/signup-user-controller'
 import { InvalidParamError } from '../../../../src/presentation/errors/invalid-param-error'
 import { MissingMandatoryParamError } from '../../../../src/presentation/errors/missing-mandatory-param-error'
+import { ServerError } from '../../../../src/presentation/errors/sever-error'
 import { EmailValidator } from '../../../../src/presentation/protocols/email-validator'
 
 interface SutTypes {
@@ -19,13 +20,13 @@ const makeSut = (): SutTypes => {
 }
 
 const mockEmailValidator = (): EmailValidator => {
-  class EmailValidator {
+  class EmailValidatorStub {
     isValid (email: string): boolean {
       return true
     }
   }
 
-  return new EmailValidator()
+  return new EmailValidatorStub()
 }
 
 describe('User Controller', () => {
@@ -107,5 +108,26 @@ describe('User Controller', () => {
     const expectedResponse = sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
     expect(expectedResponse.body).toEqual(new InvalidParamError('email'))
+  })
+
+  it('Should return 500 error if SignUpController throw exception error', async () => {
+    class EmailValidatorStub {
+      isValid (email: string): boolean {
+        throw new Error()
+      }
+    }
+    const emailValidatorStub = new EmailValidatorStub()
+    const sut = new SignUpUserController(emailValidatorStub)
+    const userDto = {
+      name: 'John Foo Bar',
+      email: 'foo@example.com',
+      password: '12345',
+      passwordConfirmation: '12345'
+    }
+
+    jest.spyOn(emailValidatorStub, 'isValid')
+    const expectedResponse = sut.handle(userDto)
+    expect(expectedResponse.statusCode).toBe(500)
+    expect(expectedResponse.body).toEqual(new ServerError())
   })
 })
