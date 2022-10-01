@@ -1,4 +1,5 @@
 import { SignUpUserController } from '../../../../src/presentation/controllers/signup-user-controller'
+import { InvalidParamError } from '../../../../src/presentation/errors/invalid-param-error'
 import { MissingMandatoryParamError } from '../../../../src/presentation/errors/missing-mandatory-param-error'
 import { EmailValidator } from '../../../../src/presentation/protocols/email-validator'
 
@@ -92,5 +93,19 @@ describe('User Controller', () => {
     const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
     sut.handle(userDto)
     expect(isValidSpy).toHaveBeenCalledWith(userDto.email)
+  })
+
+  it('Should return 400 error if email provided is not valid', async () => {
+    const { sut, emailValidatorStub } = makeSut()
+    const userDto = {
+      name: 'John Foo Bar',
+      email: 'wrongemail',
+      password: '12345',
+      passwordConfirmation: '12345'
+    }
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => false)
+    const expectedResponse = sut.handle(userDto)
+    expect(expectedResponse.statusCode).toBe(400)
+    expect(expectedResponse.body).toEqual(new InvalidParamError('email'))
   })
 })
