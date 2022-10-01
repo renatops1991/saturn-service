@@ -1,30 +1,18 @@
 import { SignUpUserController } from '../../../../src/presentation/controllers/signup-user-controller'
 import { MissingMandatoryParamError } from '../../../../src/presentation/errors/missing-mandatory-param-error'
-import { Validation } from '../../../../src/presentation/protocols/validation'
 
 interface SutTypes {
   sut: SignUpUserController
-  validationStub: Validation
 }
 
 const makeSut = (): SutTypes => {
-  const validationStub = mockValidation()
-  const sut = new SignUpUserController(validationStub)
+  const sut = new SignUpUserController()
 
   return {
-    sut,
-    validationStub
+    sut
   }
 }
 
-const mockValidation = (): Validation => {
-  class ValidationStub implements Validation {
-    validate (input: any): Error {
-      return null
-    }
-  }
-  return new ValidationStub()
-}
 describe('User Controller', () => {
   it('Should return 400 if no name is provided', async () => {
     const { sut } = makeSut()
