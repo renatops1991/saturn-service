@@ -1,6 +1,9 @@
 import { SignUpUserController } from '../../../../src/presentation/controllers/signup-user-controller'
-import { InvalidParamError } from '../../../../src/presentation/errors/invalid-param-error'
-import { MissingMandatoryParamError } from '../../../../src/presentation/errors/missing-mandatory-param-error'
+import {
+  MissingMandatoryParamError,
+  InvalidParamError,
+  ServerError
+} from '../../../../src/presentation/errors'
 import { badRequest, serverError } from '../../../../src/presentation/http-helper'
 import { EmailValidator } from '../../../../src/presentation/protocols/email-validator'
 import { fixturesCreateUser } from '../fixtures/fixtures-user'
@@ -82,6 +85,6 @@ describe('User Controller', () => {
     jest.spyOn(emailValidatorStub, 'isValid')
     const expectedResponse = sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(500)
-    expect(expectedResponse).toEqual(serverError(new Error()))
+    expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body)))
   })
 })
