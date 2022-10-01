@@ -1,7 +1,7 @@
 import { SignUpUserController } from '../../../../src/presentation/controllers/signup-user-controller'
 import { InvalidParamError } from '../../../../src/presentation/errors/invalid-param-error'
 import { MissingMandatoryParamError } from '../../../../src/presentation/errors/missing-mandatory-param-error'
-import { ServerError } from '../../../../src/presentation/errors/sever-error'
+import { serverError } from '../../../../src/presentation/http-helper'
 import { EmailValidator } from '../../../../src/presentation/protocols/email-validator'
 
 interface SutTypes {
@@ -128,6 +128,6 @@ describe('User Controller', () => {
     jest.spyOn(emailValidatorStub, 'isValid')
     const expectedResponse = sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(500)
-    expect(expectedResponse.body).toEqual(new ServerError())
+    expect(expectedResponse).toEqual(serverError(new Error()))
   })
 })

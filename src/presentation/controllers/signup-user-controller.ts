@@ -1,8 +1,7 @@
 import { UserDto } from '../dtos/user.dto'
 import { InvalidParamError } from '../errors/invalid-param-error'
 import { MissingMandatoryParamError } from '../errors/missing-mandatory-param-error'
-import { ServerError } from '../errors/sever-error'
-import { badRequest } from '../http-helper'
+import { badRequest, serverError } from '../http-helper'
 import { Controller } from '../protocols/controller'
 import { EmailValidator } from '../protocols/email-validator'
 import { HttpResponse } from '../protocols/http'
@@ -25,10 +24,7 @@ export class SignUpUserController implements Controller {
         return badRequest(new InvalidParamError('email'))
       }
     } catch (error) {
-      return {
-        statusCode: 500,
-        body: new ServerError()
-      }
+      return serverError(error)
     }
   }
 }
