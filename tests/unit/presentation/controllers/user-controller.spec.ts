@@ -3,6 +3,8 @@ import { InvalidParamError } from '../../../../src/presentation/errors/invalid-p
 import { MissingMandatoryParamError } from '../../../../src/presentation/errors/missing-mandatory-param-error'
 import { badRequest, serverError } from '../../../../src/presentation/http-helper'
 import { EmailValidator } from '../../../../src/presentation/protocols/email-validator'
+import { fixturesCreateUser } from '../fixtures/fixtures-user'
+import { mockEmailValidator, mockEmailValidatorWithError } from '../mocks/mock-email-validator'
 
 interface SutTypes {
   sut: SignUpUserController
@@ -19,26 +21,11 @@ const makeSut = (): SutTypes => {
   }
 }
 
-const mockEmailValidator = (): EmailValidator => {
-  class EmailValidatorStub {
-    isValid (email: string): boolean {
-      return true
-    }
-  }
-
-  return new EmailValidatorStub()
-}
-
 describe('User Controller', () => {
   it('Should return 400 if no name is provided', async () => {
     const { sut } = makeSut()
-
-    const userDto = {
-      name: '',
-      email: 'foo@example.com',
-      password: '12345',
-      passwordConfirmation: '12345'
-    }
+    const userDto = fixturesCreateUser()
+    delete (userDto.name)
     const expectedResponse = sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
     expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('name')))
@@ -46,12 +33,8 @@ describe('User Controller', () => {
 
   it('Should return 400 if no email is provided', async () => {
     const { sut } = makeSut()
-    const userDto = {
-      name: 'John Foo Bar',
-      email: '',
-      password: '12345',
-      passwordConfirmation: '12345'
-    }
+    const userDto = fixturesCreateUser()
+    delete (userDto.email)
     const expectedResponse = sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
     expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('email')))
@@ -59,12 +42,8 @@ describe('User Controller', () => {
 
   it('Should return 400 if no password is provided', async () => {
     const { sut } = makeSut()
-    const userDto = {
-      name: 'John Foo Bar',
-      email: 'foo@example.com',
-      password: '',
-      passwordConfirmation: '12345'
-    }
+    const userDto = fixturesCreateUser()
+    delete (userDto.password)
     const expectedResponse = sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
     expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('password')))
@@ -72,12 +51,8 @@ describe('User Controller', () => {
 
   it('Should return 400 if no passwordConfirmation is provided', async () => {
     const { sut } = makeSut()
-    const userDto = {
-      name: 'John Foo Bar',
-      email: 'foo@example.com',
-      password: '12345',
-      passwordConfirmation: ''
-    }
+    const userDto = fixturesCreateUser()
+    delete (userDto.passwordConfirmation)
     const expectedResponse = sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
     expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('passwordConfirmation')))
@@ -85,12 +60,7 @@ describe('User Controller', () => {
 
   it('Should call is valid method with correct value', async () => {
     const { sut, emailValidatorStub } = makeSut()
-    const userDto = {
-      name: 'John Foo Bar',
-      email: 'foo@example.com',
-      password: '12345',
-      passwordConfirmation: '12345'
-    }
+    const userDto = fixturesCreateUser()
     const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
     sut.handle(userDto)
     expect(isValidSpy).toHaveBeenCalledWith(userDto.email)
@@ -98,12 +68,7 @@ describe('User Controller', () => {
 
   it('Should return 400 error if email provided is not valid', async () => {
     const { sut, emailValidatorStub } = makeSut()
-    const userDto = {
-      name: 'John Foo Bar',
-      email: 'wrongemail',
-      password: '12345',
-      passwordConfirmation: '12345'
-    }
+    const userDto = fixturesCreateUser()
     jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => false)
     const expectedResponse = sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
@@ -111,20 +76,9 @@ describe('User Controller', () => {
   })
 
   it('Should return 500 error if SignUpController throw exception error', async () => {
-    class EmailValidatorStub {
-      isValid (email: string): boolean {
-        throw new Error()
-      }
-    }
-    const emailValidatorStub = new EmailValidatorStub()
+    const emailValidatorStub = mockEmailValidatorWithError()
     const sut = new SignUpUserController(emailValidatorStub)
-    const userDto = {
-      name: 'John Foo Bar',
-      email: 'foo@example.com',
-      password: '12345',
-      passwordConfirmation: '12345'
-    }
-
+    const userDto = fixturesCreateUser()
     jest.spyOn(emailValidatorStub, 'isValid')
     const expectedResponse = sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(500)

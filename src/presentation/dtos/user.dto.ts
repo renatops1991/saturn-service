@@ -9,7 +9,7 @@ export interface UserDto {
   phone?: string[]
   type?: string
   document?: string
-  password?: string
+  password: string
   passwordConfirmation: string
   confirmUser?: boolean
 }
