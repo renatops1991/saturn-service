@@ -7,7 +7,7 @@ import {
 import { badRequest, serverError } from '../../../../src/presentation/http-helper'
 import { EmailValidator } from '../../../../src/presentation/protocols/email-validator'
 import { fixturesCreateUser } from '../fixtures/fixtures-user'
-import { mockEmailValidator, mockEmailValidatorWithError } from '../mocks/mock-email-validator'
+import { mockEmailValidator } from '../mocks/mock-email-validator'
 
 interface SutTypes {
   sut: SignUpUserController
@@ -79,10 +79,9 @@ describe('User Controller', () => {
   })
 
   it('Should return 500 error if SignUpController throw exception error', async () => {
-    const emailValidatorStub = mockEmailValidatorWithError()
-    const sut = new SignUpUserController(emailValidatorStub)
+    const { sut, emailValidatorStub } = makeSut()
     const userDto = fixturesCreateUser()
-    jest.spyOn(emailValidatorStub, 'isValid')
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => { throw new Error() })
     const expectedResponse = sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(500)
     expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body)))
