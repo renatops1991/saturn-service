@@ -1,4 +1,7 @@
+import { User } from '../../../../src/domain/protocols/user/user'
 import { SignUpUserController } from '../../../../src/presentation/controllers/signup-user-controller'
+import { CreateUserOutPutDto } from '../../../../src/presentation/dtos/user/create-user-output.dto'
+import { CreateUserDto } from '../../../../src/presentation/dtos/user/create-user.dto'
 import {
   MissingMandatoryParamError,
   InvalidParamError,
@@ -12,16 +15,35 @@ import { mockEmailValidator } from '../mocks/mock-email-validator'
 interface SutTypes {
   sut: SignUpUserController
   emailValidatorStub: EmailValidator
+  userStub: User
 }
 
 const makeSut = (): SutTypes => {
   const emailValidatorStub = mockEmailValidator()
-  const sut = new SignUpUserController(emailValidatorStub)
+  const userStub = makeCreateUser()
+  const sut = new SignUpUserController(emailValidatorStub, userStub)
 
   return {
     sut,
-    emailValidatorStub
+    emailValidatorStub,
+    userStub
   }
+}
+
+const makeCreateUser = (): User => {
+  class UserStub implements User {
+    create (user: CreateUserDto): CreateUserOutPutDto {
+      const fakeUser = {
+        id: 'foo',
+        name: 'John Foo Bar',
+        email: 'foo@email.com',
+        password: 'foo'
+      }
+      return fakeUser
+    }
+  }
+
+  return new UserStub()
 }
 
 describe('User Controller', () => {
@@ -95,5 +117,13 @@ describe('User Controller', () => {
     const expectedResponse = sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(500)
     expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body)))
+  })
+
+  it('Should call User use case with correct values', async () => {
+    const { sut, userStub } = makeSut()
+    const userDto = fixturesCreateUser()
+    const userSpy = jest.spyOn(userStub, 'create')
+    sut.handle(userDto)
+    expect(userSpy).toHaveBeenCalledWith(userDto)
   })
 })
