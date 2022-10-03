@@ -1,6 +1,6 @@
 {
   "name": "saturn-service",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The Saturn service is an API used for financial organization",
   "scripts": {
     "test": "jest --passWithNoTests --silent --runInBand",
