@@ -1,7 +1,7 @@
-import { UserDto } from '../../../../src/presentation/dtos/user.dto'
+import { CreateUserDto } from '../../../../src/presentation/dtos/user/createUser.dto'
 
-export const fixturesCreateUser = (): UserDto => {
-  const userDto: UserDto = {
+export const fixturesCreateUser = (): CreateUserDto => {
+  const userDto: CreateUserDto = {
     name: 'John Foo Bar',
     email: 'foo@example.com',
     password: '12345',

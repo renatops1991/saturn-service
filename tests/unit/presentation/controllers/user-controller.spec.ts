@@ -78,6 +78,16 @@ describe('User Controller', () => {
     expect(expectedResponse.body).toEqual(new InvalidParamError('email'))
   })
 
+  it('Should return 400 error if password confirmation provided is fail', async () => {
+    const { sut, emailValidatorStub } = makeSut()
+    const userDto = fixturesCreateUser()
+    userDto.passwordConfirmation = 'wrongPasswordConfirmation'
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => false)
+    const expectedResponse = sut.handle(userDto)
+    expect(expectedResponse.statusCode).toBe(400)
+    expect(expectedResponse.body).toEqual(new InvalidParamError('passwordConfirmation'))
+  })
+
   it('Should return 500 error if SignUpController throw exception error', async () => {
     const { sut, emailValidatorStub } = makeSut()
     const userDto = fixturesCreateUser()
