@@ -1,4 +1,5 @@
-import { CreateUserDto } from '../dtos/user/createUser.dto'
+import { User } from '../../domain/protocols/user/user'
+import { CreateUserDto } from '../dtos/user/create-user.dto'
 import { InvalidParamError } from '../errors/invalid-param-error'
 import { MissingMandatoryParamError } from '../errors/missing-mandatory-param-error'
 import { badRequest, serverError } from '../http-helper'
@@ -7,7 +8,8 @@ import { EmailValidator } from '../protocols/email-validator'
 import { HttpResponse } from '../protocols/http'
 export class SignUpUserController implements Controller {
   constructor (
-    private readonly emailValidator: EmailValidator
+    private readonly emailValidator: EmailValidator,
+    private readonly user: User
   ) {}
 
   handle (userDto: CreateUserDto): HttpResponse {
@@ -19,7 +21,7 @@ export class SignUpUserController implements Controller {
         }
       }
 
-      const { email, password, passwordConfirmation } = userDto
+      const { name, email, password, passwordConfirmation } = userDto
       if (password !== passwordConfirmation) {
         return badRequest(new InvalidParamError('passwordConfirmation'))
       }
@@ -28,6 +30,14 @@ export class SignUpUserController implements Controller {
       if (!isValidEmail) {
         return badRequest(new InvalidParamError('email'))
       }
+
+      this.user.create({
+        name,
+        email,
+        password,
+        passwordConfirmation,
+        confirmUser: false
+      })
     } catch (error) {
       return serverError(error)
     }
