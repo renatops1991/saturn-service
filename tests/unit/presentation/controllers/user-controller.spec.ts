@@ -1,6 +1,6 @@
 import { User } from '../../../../src/domain/protocols/user/user'
 import { SignUpUserController } from '../../../../src/presentation/controllers/signup-user-controller'
-import { CreateUserOutPutDto } from '../../../../src/presentation/dtos/user/create-user-output.dto'
+import { CreateUserOutputDto } from '../../../../src/presentation/dtos/user/create-user-output.dto'
 import { CreateUserDto } from '../../../../src/presentation/dtos/user/create-user.dto'
 import {
   MissingMandatoryParamError,
@@ -9,7 +9,7 @@ import {
 } from '../../../../src/presentation/errors'
 import { badRequest, serverError } from '../../../../src/presentation/http-helper'
 import { EmailValidator } from '../../../../src/presentation/protocols/email-validator'
-import { fixturesCreateUser } from '../fixtures/fixtures-user'
+import { fixturesCreateUser, fixturesCreateUserOutput } from '../fixtures/fixtures-user'
 import { mockEmailValidator } from '../mocks/mock-email-validator'
 
 interface SutTypes {
@@ -32,14 +32,8 @@ const makeSut = (): SutTypes => {
 
 const makeCreateUser = (): User => {
   class UserStub implements User {
-    create (user: CreateUserDto): CreateUserOutPutDto {
-      const fakeUser = {
-        id: 'foo',
-        name: 'John Foo Bar',
-        email: 'foo@email.com',
-        password: 'foo'
-      }
-      return fakeUser
+    create (user: CreateUserDto): CreateUserOutputDto {
+      return fixturesCreateUserOutput()
     }
   }
 
@@ -134,5 +128,13 @@ describe('User Controller', () => {
     const expectedResponse = sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(500)
     expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body)))
+  })
+
+  it('Should return 200 success status if data provided is valid', async () => {
+    const { sut } = makeSut()
+    const userDto = fixturesCreateUser()
+    const expectedResponse = sut.handle(userDto)
+    expect(expectedResponse.statusCode).toBe(200)
+    expect(expectedResponse.body).toEqual(fixturesCreateUserOutput())
   })
 })

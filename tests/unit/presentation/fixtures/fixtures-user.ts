@@ -1,3 +1,4 @@
+import { CreateUserOutputDto } from '../../../../src/presentation/dtos/user/create-user-output.dto'
 import { CreateUserDto } from '../../../../src/presentation/dtos/user/create-user.dto'
 
 export const fixturesCreateUser = (): CreateUserDto => {
@@ -10,3 +11,9 @@ export const fixturesCreateUser = (): CreateUserDto => {
   }
   return userDto
 }
+
+export const fixturesCreateUserOutput = (): CreateUserOutputDto => ({
+  id: 'foo',
+  name: 'John Foo Bar',
+  email: 'foo@example.com'
+})
