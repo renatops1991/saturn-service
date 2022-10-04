@@ -12,7 +12,7 @@ export class SignUpUserController implements Controller {
     private readonly user: User
   ) {}
 
-  handle (userDto: CreateUserDto): HttpResponse {
+  async handle (userDto: CreateUserDto): Promise<HttpResponse> {
     try {
       const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
       for (const field of requiredFields) {
@@ -32,7 +32,7 @@ export class SignUpUserController implements Controller {
       }
 
       userDto.confirmUser = false
-      const user = this.user.create(userDto)
+      const user = await this.user.create(userDto)
       return success(user)
     } catch (error) {
       return serverError(error)

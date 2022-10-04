@@ -32,8 +32,8 @@ const makeSut = (): SutTypes => {
 
 const makeCreateUser = (): User => {
   class UserStub implements User {
-    create (user: CreateUserDto): CreateUserOutputDto {
-      return fixturesCreateUserOutput()
+    async create (user: CreateUserDto): Promise<CreateUserOutputDto> {
+      return await new Promise(resolve => resolve(fixturesCreateUserOutput()))
     }
   }
 
@@ -45,7 +45,7 @@ describe('User Controller', () => {
     const { sut } = makeSut()
     const userDto = fixturesCreateUser()
     delete (userDto.name)
-    const expectedResponse = sut.handle(userDto)
+    const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
     expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('name')))
   })
@@ -54,7 +54,7 @@ describe('User Controller', () => {
     const { sut } = makeSut()
     const userDto = fixturesCreateUser()
     delete (userDto.email)
-    const expectedResponse = sut.handle(userDto)
+    const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
     expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('email')))
   })
@@ -63,7 +63,7 @@ describe('User Controller', () => {
     const { sut } = makeSut()
     const userDto = fixturesCreateUser()
     delete (userDto.password)
-    const expectedResponse = sut.handle(userDto)
+    const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
     expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('password')))
   })
@@ -72,7 +72,7 @@ describe('User Controller', () => {
     const { sut } = makeSut()
     const userDto = fixturesCreateUser()
     delete (userDto.passwordConfirmation)
-    const expectedResponse = sut.handle(userDto)
+    const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
     expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('passwordConfirmation')))
   })
@@ -81,7 +81,7 @@ describe('User Controller', () => {
     const { sut, emailValidatorStub } = makeSut()
     const userDto = fixturesCreateUser()
     const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
-    sut.handle(userDto)
+    await sut.handle(userDto)
     expect(isValidSpy).toHaveBeenCalledWith(userDto.email)
   })
 
@@ -89,7 +89,7 @@ describe('User Controller', () => {
     const { sut, emailValidatorStub } = makeSut()
     const userDto = fixturesCreateUser()
     jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => false)
-    const expectedResponse = sut.handle(userDto)
+    const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
     expect(expectedResponse.body).toEqual(new InvalidParamError('email'))
   })
@@ -99,7 +99,7 @@ describe('User Controller', () => {
     const userDto = fixturesCreateUser()
     userDto.passwordConfirmation = 'wrongPasswordConfirmation'
     jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => false)
-    const expectedResponse = sut.handle(userDto)
+    const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
     expect(expectedResponse.body).toEqual(new InvalidParamError('passwordConfirmation'))
   })
@@ -108,7 +108,7 @@ describe('User Controller', () => {
     const { sut, emailValidatorStub } = makeSut()
     const userDto = fixturesCreateUser()
     jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => { throw new Error() })
-    const expectedResponse = sut.handle(userDto)
+    const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(500)
     expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body)))
   })
@@ -117,7 +117,7 @@ describe('User Controller', () => {
     const { sut, userStub } = makeSut()
     const userDto = fixturesCreateUser()
     const userSpy = jest.spyOn(userStub, 'create')
-    sut.handle(userDto)
+    await sut.handle(userDto)
     expect(userSpy).toHaveBeenCalledWith(userDto)
   })
 
@@ -125,7 +125,7 @@ describe('User Controller', () => {
     const { sut, userStub } = makeSut()
     const userDto = fixturesCreateUser()
     jest.spyOn(userStub, 'create').mockImplementationOnce(() => { throw new Error() })
-    const expectedResponse = sut.handle(userDto)
+    const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(500)
     expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body)))
   })
@@ -133,7 +133,7 @@ describe('User Controller', () => {
   it('Should return 200 success status if data provided is valid', async () => {
     const { sut } = makeSut()
     const userDto = fixturesCreateUser()
-    const expectedResponse = sut.handle(userDto)
+    const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(200)
     expect(expectedResponse.body).toEqual(fixturesCreateUserOutput())
   })

@@ -2,5 +2,5 @@ import { CreateUserOutputDto } from '../../../presentation/dtos/user/create-user
 import { CreateUserDto } from '../../../presentation/dtos/user/create-user.dto'
 
 export interface User {
-  create: (user: CreateUserDto) => CreateUserOutputDto
+  create: (user: CreateUserDto) => Promise<CreateUserOutputDto>
 }
