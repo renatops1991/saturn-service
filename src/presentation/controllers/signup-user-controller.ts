@@ -21,7 +21,7 @@ export class SignUpUserController implements Controller {
         }
       }
 
-      const { name, email, password, passwordConfirmation } = userDto
+      const { email, password, passwordConfirmation } = userDto
       if (password !== passwordConfirmation) {
         return badRequest(new InvalidParamError('passwordConfirmation'))
       }
@@ -31,13 +31,8 @@ export class SignUpUserController implements Controller {
         return badRequest(new InvalidParamError('email'))
       }
 
-      this.user.create({
-        name,
-        email,
-        password,
-        passwordConfirmation,
-        confirmUser: false
-      })
+      userDto.confirmUser = false
+      this.user.create(userDto)
     } catch (error) {
       return serverError(error)
     }

@@ -126,4 +126,13 @@ describe('User Controller', () => {
     sut.handle(userDto)
     expect(userSpy).toHaveBeenCalledWith(userDto)
   })
+
+  it('Should return 500 error if create method throw exception error', async () => {
+    const { sut, userStub } = makeSut()
+    const userDto = fixturesCreateUser()
+    jest.spyOn(userStub, 'create').mockImplementationOnce(() => { throw new Error() })
+    const expectedResponse = sut.handle(userDto)
+    expect(expectedResponse.statusCode).toBe(500)
+    expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body)))
+  })
 })
