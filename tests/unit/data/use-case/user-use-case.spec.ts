@@ -49,4 +49,12 @@ describe('UserUseCase', () => {
     await sut.create(user)
     expect(createSpy).toHaveBeenCalledWith(expectedResponse)
   })
+
+  it('Should forward the error if UserRepository throws error', async () => {
+    const { sut, userRepositoryStub } = makeSut()
+    jest.spyOn(userRepositoryStub, 'create').mockRejectedValueOnce(new Error())
+    const user = fixturesCreateUser()
+    const expectedResponse = sut.create(user)
+    await expect(expectedResponse).rejects.toThrow()
+  })
 })
