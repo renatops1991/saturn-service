@@ -1,7 +1,7 @@
 import { Encrypted } from '../../../../src/data/protocols/encrypted'
 import { UserRepository } from '../../../../src/data/protocols/user-repository'
 import { UserUseCase } from '../../../../src/data/use-cases/user-use-case'
-import { fixturesCreateUser } from '../../presentation/fixtures/fixtures-user'
+import { fixturesCreateUser, fixturesCreateUserOutput } from '../../presentation/fixtures/fixtures-user'
 import { mockEncrypted, mockUserRepository } from './mock/mock-user-use-case'
 
 type SutType = {
@@ -56,5 +56,12 @@ describe('UserUseCase', () => {
     const user = fixturesCreateUser()
     const expectedResponse = sut.create(user)
     await expect(expectedResponse).rejects.toThrow()
+  })
+
+  it('Should return an user on success', async () => {
+    const { sut } = makeSut()
+    const user = fixturesCreateUser()
+    const expectedResponse = await sut.create(user)
+    expect(expectedResponse).toEqual(fixturesCreateUserOutput())
   })
 })
