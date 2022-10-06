@@ -25,4 +25,12 @@ describe('UserUseCase', () => {
     await sut.create(user)
     expect(encryptSpy).toHaveBeenCalledWith('12345')
   })
+
+  it('Should forward the error if Encrypted throws error', async () => {
+    const { sut, encryptedStub } = makeSut()
+    jest.spyOn(encryptedStub, 'encrypt').mockRejectedValueOnce(new Error())
+    const user = fixturesCreateUser()
+    const expectedResponse = sut.create(user)
+    await expect(expectedResponse).rejects.toThrow()
+  })
 })
