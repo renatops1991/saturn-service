@@ -12,7 +12,7 @@ import { EmailValidator } from '../../../../src/presentation/protocols/email-val
 import { fixturesCreateUser, fixturesCreateUserOutput } from '../fixtures/fixtures-user'
 import { mockEmailValidator } from '../mocks/mock-email-validator'
 
-interface SutTypes {
+type SutTypes = {
   sut: SignUpUserController
   emailValidatorStub: EmailValidator
   userStub: User
