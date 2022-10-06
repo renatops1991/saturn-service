@@ -15,5 +15,6 @@ export const fixturesCreateUser = (): CreateUserDto => {
 export const fixturesCreateUserOutput = (): CreateUserOutputDto => ({
   id: 'foo',
   name: 'John Foo Bar',
-  email: 'foo@example.com'
+  email: 'foo@example.com',
+  password: 'hashedPassword'
 })
