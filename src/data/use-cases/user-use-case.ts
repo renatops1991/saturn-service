@@ -15,8 +15,7 @@ export class UserUseCase implements User {
   async create (userDto: CreateUserDto): Promise<CreateUserOutputDto> {
     const buildUser = this.userBuilder.buildUserBasicInfo(userDto)
     const hashedPassword = await this.encrypted.encrypt(buildUser.password)
-    await this.userRepository.create(Object.assign({}, userDto, { password: hashedPassword }))
-    const user = await this.userRepository.create(userDto)
+    const user = await this.userRepository.create(Object.assign({}, buildUser, { password: hashedPassword }))
 
     return user
   }
