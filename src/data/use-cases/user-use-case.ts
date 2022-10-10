@@ -1,4 +1,4 @@
-import { User } from '../../domain/protocols/user/user'
+import { User } from '../../domain/user/user'
 import { CreateUserOutputDto } from '../../presentation/dtos/user/create-user-output.dto'
 import { CreateUserDto } from '../../presentation/dtos/user/create-user.dto'
 import { UserBuilder } from '../builders/user-builder'

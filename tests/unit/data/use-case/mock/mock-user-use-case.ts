@@ -1,7 +1,7 @@
 import { UserBuilder } from '../../../../../src/data/builders/user-builder'
 import { Encrypted } from '../../../../../src/data/protocols/encrypted'
 import { UserRepository } from '../../../../../src/data/protocols/user-repository'
-import { UserBasicInfo } from '../../../../../src/data/types/user-basic-info'
+import { UserBasicInfo } from '../../../../../src/types/user-basic-info'
 import { CreateUserOutputDto } from '../../../../../src/presentation/dtos/user/create-user-output.dto'
 import { CreateUserDto } from '../../../../../src/presentation/dtos/user/create-user.dto'
 import { fixturesCreateUser, fixturesCreateUserOutput } from '../../../presentation/fixtures/fixtures-user'

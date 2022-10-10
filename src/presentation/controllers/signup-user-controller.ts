@@ -1,4 +1,4 @@
-import { User } from '../../domain/protocols/user/user'
+import { User } from '../../domain/user/user'
 import { CreateUserDto } from '../dtos/user/create-user.dto'
 import { InvalidParamError } from '../errors/invalid-param-error'
 import { MissingMandatoryParamError } from '../errors/missing-mandatory-param-error'

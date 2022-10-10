@@ -1,4 +1,4 @@
-import { User } from '../../../../src/domain/protocols/user/user'
+import { User } from '../../../../src/domain/user/user'
 import { SignUpUserController } from '../../../../src/presentation/controllers/signup-user-controller'
 import { CreateUserOutputDto } from '../../../../src/presentation/dtos/user/create-user-output.dto'
 import { CreateUserDto } from '../../../../src/presentation/dtos/user/create-user.dto'
