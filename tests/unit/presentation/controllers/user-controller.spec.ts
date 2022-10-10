@@ -1,14 +1,14 @@
-import { User } from '../../../../src/domain/user/user'
-import { SignUpUserController } from '../../../../src/presentation/controllers/signup-user-controller'
-import { CreateUserOutputDto } from '../../../../src/presentation/dtos/user/create-user-output.dto'
-import { CreateUserDto } from '../../../../src/presentation/dtos/user/create-user.dto'
+import { User } from '@/domain/user/user'
+import { SignUpUserController } from '@/presentation/controllers/signup-user-controller'
+import { CreateUserOutputDto } from '@/presentation/dtos/user/create-user-output.dto'
+import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
 import {
   MissingMandatoryParamError,
   InvalidParamError,
   ServerError
-} from '../../../../src/presentation/errors'
-import { badRequest, serverError } from '../../../../src/presentation/http-helper'
-import { EmailValidator } from '../../../../src/presentation/protocols/email-validator'
+} from '@/presentation/errors'
+import { badRequest, serverError } from '@/presentation/http-helper'
+import { EmailValidator } from '@/presentation/protocols/email-validator'
 import { fixturesCreateUser, fixturesCreateUserOutput } from '../fixtures/fixtures-user'
 import { mockEmailValidator } from '../mocks/mock-email-validator'
 

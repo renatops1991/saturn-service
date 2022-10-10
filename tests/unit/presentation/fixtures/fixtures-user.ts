@@ -1,5 +1,5 @@
-import { CreateUserOutputDto } from '../../../../src/presentation/dtos/user/create-user-output.dto'
-import { CreateUserDto } from '../../../../src/presentation/dtos/user/create-user.dto'
+import { CreateUserOutputDto } from '@/presentation/dtos/user/create-user-output.dto'
+import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
 
 export const fixturesCreateUser = (): CreateUserDto => {
   const userDto: CreateUserDto = {

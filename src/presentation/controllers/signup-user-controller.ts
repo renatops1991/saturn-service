@@ -1,11 +1,11 @@
-import { User } from '../../domain/user/user'
-import { CreateUserDto } from '../dtos/user/create-user.dto'
-import { InvalidParamError } from '../errors/invalid-param-error'
-import { MissingMandatoryParamError } from '../errors/missing-mandatory-param-error'
-import { badRequest, serverError, success } from '../http-helper'
-import { Controller } from '../protocols/controller'
-import { EmailValidator } from '../protocols/email-validator'
-import { HttpResponse } from '../protocols/http'
+import { User } from '@/domain/user/user'
+import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
+import { InvalidParamError } from '@/presentation/errors/invalid-param-error'
+import { MissingMandatoryParamError } from '@/presentation/errors/missing-mandatory-param-error'
+import { badRequest, serverError, success } from '@/presentation/http-helper'
+import { Controller } from '@/presentation/protocols/controller'
+import { EmailValidator } from '@/presentation/protocols/email-validator'
+import { HttpResponse } from '@/presentation/protocols/http'
 export class SignUpUserController implements Controller {
   constructor (
     private readonly emailValidator: EmailValidator,

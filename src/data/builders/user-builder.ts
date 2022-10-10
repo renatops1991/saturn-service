@@ -1,7 +1,7 @@
-import { User } from '../../entities/user'
-import { CreateUserDto } from '../../presentation/dtos/user/create-user.dto'
-import { UserBuilderInterface } from '../protocols/user-builder'
-import { UserBasicInfo } from '../../types/user-basic-info'
+import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
+import { UserBuilderInterface } from '@/data/protocols/user-builder'
+import { UserBasicInfo } from '@/types/user-basic-info'
+import { User } from '@/entities/user'
 
 export class UserBuilder implements UserBuilderInterface {
   buildUserBasicInfo (userDto: CreateUserDto): UserBasicInfo {

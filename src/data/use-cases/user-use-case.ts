@@ -1,9 +1,9 @@
-import { User } from '../../domain/user/user'
-import { CreateUserOutputDto } from '../../presentation/dtos/user/create-user-output.dto'
-import { CreateUserDto } from '../../presentation/dtos/user/create-user.dto'
-import { UserBuilder } from '../builders/user-builder'
-import { Encrypted } from '../protocols/encrypted'
-import { UserRepository } from '../protocols/user-repository'
+import { User } from '@/domain/user/user'
+import { CreateUserOutputDto } from '@/presentation/dtos/user/create-user-output.dto'
+import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
+import { UserBuilder } from '@/data/builders/user-builder'
+import { Encrypted } from '@/data/protocols/encrypted'
+import { UserRepository } from '@/data/protocols/user-repository'
 
 export class UserUseCase implements User {
   constructor (

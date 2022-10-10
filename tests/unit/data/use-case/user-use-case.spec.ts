@@ -1,7 +1,7 @@
-import { UserBuilder } from '../../../../src/data/builders/user-builder'
-import { Encrypted } from '../../../../src/data/protocols/encrypted'
-import { UserRepository } from '../../../../src/data/protocols/user-repository'
-import { UserUseCase } from '../../../../src/data/use-cases/user-use-case'
+import { UserBuilder } from '@/data/builders/user-builder'
+import { Encrypted } from '@/data/protocols/encrypted'
+import { UserRepository } from '@/data/protocols/user-repository'
+import { UserUseCase } from '@/data/use-cases/user-use-case'
 import { fixturesCreateUser, fixturesCreateUserOutput } from '../../presentation/fixtures/fixtures-user'
 import { mockEncrypted, mockUserBuilder, mockUserRepository } from './mock/mock-user-use-case'
 

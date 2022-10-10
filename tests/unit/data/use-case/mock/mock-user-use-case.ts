@@ -1,9 +1,9 @@
-import { UserBuilder } from '../../../../../src/data/builders/user-builder'
-import { Encrypted } from '../../../../../src/data/protocols/encrypted'
-import { UserRepository } from '../../../../../src/data/protocols/user-repository'
-import { UserBasicInfo } from '../../../../../src/types/user-basic-info'
-import { CreateUserOutputDto } from '../../../../../src/presentation/dtos/user/create-user-output.dto'
-import { CreateUserDto } from '../../../../../src/presentation/dtos/user/create-user.dto'
+import { UserBuilder } from '@/data/builders/user-builder'
+import { Encrypted } from '@/data/protocols/encrypted'
+import { UserRepository } from '@/data/protocols/user-repository'
+import { UserBasicInfo } from '@/types/user-basic-info'
+import { CreateUserOutputDto } from '@/presentation/dtos/user/create-user-output.dto'
+import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
 import { fixturesCreateUser, fixturesCreateUserOutput } from '../../../presentation/fixtures/fixtures-user'
 
 export const mockEncrypted = (): Encrypted => {
