@@ -1,12 +1,12 @@
 import { UserBuilder } from '@/data/builders/user-builder'
 import { Encrypted } from '@/data/protocols/encrypted'
 import { UserRepository } from '@/data/protocols/user-repository'
-import { UserUseCase } from '@/data/use-cases/user-use-case'
+import { User } from '@/data/use-cases/user'
 import { fixturesCreateUser, fixturesCreateUserOutput } from '../../presentation/fixtures/fixtures-user'
 import { mockEncrypted, mockUserBuilder, mockUserRepository } from './mock/mock-user-use-case'
 
 type SutType = {
-  sut: UserUseCase
+  sut: User
   encryptedStub: Encrypted
   userRepositoryStub: UserRepository
   userBuilderStub: UserBuilder
@@ -16,7 +16,7 @@ const makeSut = (): SutType => {
   const encryptedStub = mockEncrypted()
   const userRepositoryStub = mockUserRepository()
   const userBuilderStub = mockUserBuilder()
-  const sut = new UserUseCase(encryptedStub, userRepositoryStub, userBuilderStub)
+  const sut = new User(encryptedStub, userRepositoryStub, userBuilderStub)
   return {
     sut,
     encryptedStub,
@@ -25,7 +25,7 @@ const makeSut = (): SutType => {
   }
 }
 
-describe('UserUseCase', () => {
+describe('User use case', () => {
   it('Should call Encrypted with correct password', async () => {
     const { sut, encryptedStub } = makeSut()
     const encryptSpy = jest.spyOn(encryptedStub, 'encrypt')
