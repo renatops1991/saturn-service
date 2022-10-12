@@ -9,5 +9,5 @@ module.exports = {
       dbName: 'jest'
     }
   },
-  mongoURLEnvName: 'MONGODB_URI'
+  mongoURLEnvName: 'MONGODB_URL'
 }

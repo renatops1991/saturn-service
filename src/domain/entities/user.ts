@@ -12,7 +12,6 @@ export class User {
   type?: string
   document?: string
   password: string
-  passwordConfirmation: string
   confirmUser?: boolean
 
   public getUserBasicInfo (): UserBasicInfo {
@@ -20,7 +19,6 @@ export class User {
       name: this.name,
       email: this.email,
       password: this.password,
-      passwordConfirmation: this.passwordConfirmation,
       confirmUser: this.confirmUser
     }
   }

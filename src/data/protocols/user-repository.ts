@@ -2,5 +2,5 @@ import { CreateUserOutputDto } from '@/presentation/dtos/user/create-user-output
 import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
 
 export interface UserRepository {
-  create: (user: CreateUserDto) => Promise<CreateUserOutputDto>
+  create: (userDto: Omit<CreateUserDto, 'passwordConfirmation'>) => Promise<CreateUserOutputDto>
 }

@@ -12,7 +12,7 @@ export class User implements UserInterface {
     private readonly userBuilder: UserBuilder
   ) { }
 
-  async create (userDto: CreateUserDto): Promise<CreateUserOutputDto> {
+  async create (userDto: Omit<CreateUserDto, 'passwordConfirmation'>): Promise<CreateUserOutputDto> {
     const buildUser = this.userBuilder.buildUserBasicInfo(userDto)
     const hashedPassword = await this.encrypted.encrypt(buildUser.password)
     const user = await this.userRepository.create(Object.assign({}, buildUser, { password: hashedPassword }))

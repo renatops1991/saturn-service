@@ -17,7 +17,7 @@ export const mockEncrypted = (): Encrypted => {
 
 export const mockUserRepository = (): UserRepository => {
   class UserRepositoryStub implements UserRepository {
-    async create (user: CreateUserDto): Promise<CreateUserOutputDto> {
+    async create (userDto: CreateUserDto): Promise<CreateUserOutputDto> {
       const fakeUser = fixturesCreateUserOutput()
       return await new Promise(resolve => resolve(fakeUser))
     }
