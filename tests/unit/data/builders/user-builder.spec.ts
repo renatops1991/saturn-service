@@ -1,5 +1,5 @@
 import { UserBuilder } from '@/data/builders/user-builder'
-import { fixturesCreateUser } from '../../presentation/fixtures/fixtures-user'
+import { fixturesCreateUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
 
 describe('UserBuilder', () => {
   it('Should build user with correct', async () => {
