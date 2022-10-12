@@ -18,6 +18,12 @@ describe('UserRepositoryMongoAdapter', () => {
   afterAll(async () => {
     await MongoConnect.disconnect()
   })
+
+  beforeEach(async () => {
+    const userCollection = MongoConnect.getCollection('users')
+    await userCollection.deleteMany({})
+  })
+
   it('Should return correct an user on success', async () => {
     const { sut } = makeSut()
     delete fixturesCreateUser().passwordConfirmation

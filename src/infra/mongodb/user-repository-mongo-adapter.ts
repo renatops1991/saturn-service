@@ -7,8 +7,8 @@ import { Collection } from 'mongodb'
 export class UserRepositoryMongoAdapter implements UserRepository {
   private readonly userCollection: Collection = MongoConnect.getCollection('users')
   async create (userDto: Omit<CreateUserDto, 'passwordConfirmation'>): Promise<CreateUserOutputDto> {
-    const user = await this.userCollection.insertOne(userDto)
-    const userResponse = await this.userCollection.findOne(user.insertedId)
-    return MongoConnect.map(userResponse)
+    const createUser = await this.userCollection.insertOne(userDto)
+    const user = await this.userCollection.findOne(createUser.insertedId)
+    return MongoConnect.map(user)
   }
 }
