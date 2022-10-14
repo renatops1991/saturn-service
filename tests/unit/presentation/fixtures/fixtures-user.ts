@@ -1,7 +1,7 @@
 import { CreateUserOutputDto } from '@/presentation/dtos/user/create-user-output.dto'
 import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
 
-export const fixturesCreateUser = (): CreateUserDto => {
+export const fixturesCreateUserRequest = (): CreateUserDto => {
   const userDto: CreateUserDto = {
     name: 'John Foo Bar',
     email: 'foo@example.com',
@@ -18,3 +18,13 @@ export const fixturesCreateUserOutput = (): CreateUserOutputDto => ({
   email: 'foo@example.com',
   password: 'hashedPassword'
 })
+
+export const fixturesCreateUser = (): Omit<CreateUserDto, 'passwordConfirmation'> => {
+  const userDto: Omit<CreateUserDto, 'passwordConfirmation'> = {
+    name: 'John Foo Bar',
+    email: 'foo@example.com',
+    password: '12345',
+    confirmUser: false
+  }
+  return userDto
+}

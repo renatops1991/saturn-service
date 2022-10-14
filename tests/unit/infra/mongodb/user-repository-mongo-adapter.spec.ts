@@ -26,7 +26,6 @@ describe('UserRepositoryMongoAdapter', () => {
 
   it('Should return correct an user on success', async () => {
     const { sut } = makeSut()
-    delete fixturesCreateUser().passwordConfirmation
     const expectedResponse = await sut.create(fixturesCreateUser())
     expect(expectedResponse).toBeTruthy()
     expect(expectedResponse.id).toBeTruthy()
