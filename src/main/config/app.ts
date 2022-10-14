@@ -1,9 +1,9 @@
 import setupMiddleware from '@/main/config/middleware'
-import dotenv from 'dotenv'
-import express from 'express'
+import express, { Express } from 'express'
 
-dotenv.config()
+export const setupApp = async (): Promise<Express> => {
+  const app = express()
+  setupMiddleware(app)
 
-const app = express()
-setupMiddleware(app)
-export default app
+  return app
+}

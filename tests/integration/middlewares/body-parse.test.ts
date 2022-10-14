@@ -1,8 +1,14 @@
 
 import request from 'supertest'
-import app from '@/main/config/app'
+import { setupApp } from '@/main/config/app'
+import { Express } from 'express'
+
+let app: Express
 
 describe('BodyParse Middleware', () => {
+  beforeAll(async () => {
+    app = await setupApp()
+  })
   it('Should correct parse as json', async () => {
     app.post('/body-parse-test', (request, response) => {
       response.send(request.body)
