@@ -11,6 +11,7 @@ export const MongoConnect = {
 
   async disconnect (): Promise<void> {
     await this.client.close()
+    this.client = null
   },
 
   getCollection (collectionName: string): Collection {
