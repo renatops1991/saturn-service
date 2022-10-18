@@ -1,27 +1,23 @@
-import { UserBuilder } from '@/data/builders/user-builder'
 import { Encrypted } from '@/data/protocols/encrypted'
 import { UserRepository } from '@/data/protocols/user-repository'
 import { User } from '@/data/use-cases/user'
 import { fixturesCreateUser, fixturesCreateUserOutput } from '../../presentation/fixtures/fixtures-user'
-import { mockEncrypted, mockUserBuilder, mockUserRepository } from './mock/mock-user-use-case'
+import { mockEncrypted, mockUserRepository } from './mock/mock-user-use-case'
 
 type SutType = {
   sut: User
   encryptedStub: Encrypted
   userRepositoryStub: UserRepository
-  userBuilderStub: UserBuilder
 }
 
 const makeSut = (): SutType => {
   const encryptedStub = mockEncrypted()
   const userRepositoryStub = mockUserRepository()
-  const userBuilderStub = mockUserBuilder()
-  const sut = new User(encryptedStub, userRepositoryStub, userBuilderStub)
+  const sut = new User(encryptedStub, userRepositoryStub)
   return {
     sut,
     encryptedStub,
-    userRepositoryStub,
-    userBuilderStub
+    userRepositoryStub
   }
 }
 
@@ -67,13 +63,5 @@ describe('User use case', () => {
     const user = fixturesCreateUser()
     const expectedResponse = await sut.create(user)
     expect(expectedResponse).toEqual(fixturesCreateUserOutput())
-  })
-
-  it('Should call UserBuilder with correct password', async () => {
-    const { sut, userBuilderStub } = makeSut()
-    const buildUserSpy = jest.spyOn(userBuilderStub, 'buildUserBasicInfo')
-    const user = fixturesCreateUser()
-    await sut.create(user)
-    expect(buildUserSpy).toHaveBeenCalledWith(fixturesCreateUser())
   })
 })
