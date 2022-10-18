@@ -8,12 +8,12 @@ import { UserRepository } from '@/data/protocols/user-repository'
 export class User implements UserInterface {
   constructor (
     private readonly encrypted: Encrypted,
-    private readonly userRepository: UserRepository,
-    private readonly userBuilder: UserBuilder
+    private readonly userRepository: UserRepository
   ) { }
 
   async create (userDto: Omit<CreateUserDto, 'passwordConfirmation'>): Promise<CreateUserOutputDto> {
-    const buildUser = this.userBuilder.buildUserBasicInfo(userDto)
+    const userBuilder = new UserBuilder()
+    const buildUser = userBuilder.buildUserBasicInfo(userDto)
     const hashedPassword = await this.encrypted.encrypt(buildUser.password)
     const user = await this.userRepository.create(Object.assign({}, buildUser, { password: hashedPassword }))
 
