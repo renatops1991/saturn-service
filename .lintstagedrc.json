@@ -1,7 +1,6 @@
 {
   "src/**/*.ts": [
     "eslint --fix",
-    "npm run prune",
     "npm run test:staged"
   ]
 }

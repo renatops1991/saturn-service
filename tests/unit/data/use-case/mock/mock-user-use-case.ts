@@ -1,10 +1,8 @@
-import { UserBuilder } from '@/data/builders/user-builder'
 import { Encrypted } from '@/data/protocols/encrypted'
 import { UserRepository } from '@/data/protocols/user-repository'
-import { UserBasicInfo } from '@/types/user-basic-info'
 import { CreateUserOutputDto } from '@/presentation/dtos/user/create-user-output.dto'
 import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
-import { fixturesCreateUser, fixturesCreateUserOutput } from '../../../presentation/fixtures/fixtures-user'
+import { fixturesCreateUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 
 export const mockEncrypted = (): Encrypted => {
   class EncryptedStub {
@@ -24,14 +22,4 @@ export const mockUserRepository = (): UserRepository => {
   }
 
   return new UserRepositoryStub()
-}
-
-export const mockUserBuilder = (): UserBuilder => {
-  class UserBuilderStub implements UserBuilder {
-    buildUserBasicInfo (userDto: CreateUserDto): UserBasicInfo {
-      return fixturesCreateUser()
-    }
-  }
-
-  return new UserBuilderStub()
 }
