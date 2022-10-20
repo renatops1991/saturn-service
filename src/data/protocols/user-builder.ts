@@ -1,6 +1,6 @@
 import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
 import { UserBasicInfo } from '@/types/user-basic-info'
 
-export interface UserBuilderInterface {
+export interface IUserBuilder {
   buildUserBasicInfo: (userDto: CreateUserDto) => UserBasicInfo
 }

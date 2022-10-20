@@ -1,19 +1,19 @@
 
-import { User } from '@/domain/protocols/user'
+import { IUser } from '@/domain/protocols/user'
 import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
 import { InvalidParamError } from '@/presentation/errors/invalid-param-error'
 import { MissingMandatoryParamError } from '@/presentation/errors/missing-mandatory-param-error'
 import { badRequest, serverError, success } from '@/presentation/http-helper'
-import { Controller } from '@/presentation/protocols/controller'
-import { EmailValidator } from '@/presentation/protocols/email-validator'
-import { HttpResponse } from '@/presentation/protocols/http'
-export class SignUpUserController implements Controller {
+import { IController } from '@/presentation/protocols/controller'
+import { IEmailValidator } from '@/presentation/protocols/email-validator'
+import { IHttpResponse } from '@/presentation/protocols/http'
+export class SignUpUserController implements IController {
   constructor (
-    private readonly emailValidator: EmailValidator,
-    private readonly user: User
+    private readonly emailValidator: IEmailValidator,
+    private readonly user: IUser
   ) {}
 
-  async handle (userDto: CreateUserDto): Promise<HttpResponse> {
+  async handle (userDto: CreateUserDto): Promise<IHttpResponse> {
     try {
       const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
       for (const field of requiredFields) {

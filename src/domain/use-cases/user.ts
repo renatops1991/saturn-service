@@ -1,14 +1,14 @@
-import { User as UserInterface } from '@/domain/protocols/user'
+import { IUser } from '@/domain/protocols/user'
 import { CreateUserOutputDto } from '@/presentation/dtos/user/create-user-output.dto'
 import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
 import { UserBuilder } from '@/domain/builders/user-builder'
-import { Encrypted } from '@/data/protocols/encrypted'
-import { UserRepository } from '@/data/protocols/user-repository'
+import { IEncrypted } from '@/data/protocols/encrypted'
+import { IUserRepository } from '@/data/protocols/user-repository'
 
-export class User implements UserInterface {
+export class User implements IUser {
   constructor (
-    private readonly encrypted: Encrypted,
-    private readonly userRepository: UserRepository
+    private readonly encrypted: IEncrypted,
+    private readonly userRepository: IUserRepository
   ) { }
 
   async create (userDto: Omit<CreateUserDto, 'passwordConfirmation'>): Promise<CreateUserOutputDto> {

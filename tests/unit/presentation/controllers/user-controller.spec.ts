@@ -1,5 +1,5 @@
 
-import { User } from '@/domain/protocols/user'
+import { IUser } from '@/domain/protocols/user'
 import { SignUpUserController } from '@/presentation/controllers/signup-user-controller'
 import { CreateUserOutputDto } from '@/presentation/dtos/user/create-user-output.dto'
 import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
@@ -9,14 +9,14 @@ import {
   ServerError
 } from '@/presentation/errors'
 import { badRequest, serverError } from '@/presentation/http-helper'
-import { EmailValidator } from '@/presentation/protocols/email-validator'
+import { IEmailValidator } from '@/presentation/protocols/email-validator'
 import { fixturesCreateUserRequest, fixturesCreateUserOutput } from '../fixtures/fixtures-user'
 import { mockEmailValidator } from '../mocks/mock-email-validator'
 
 type SutTypes = {
   sut: SignUpUserController
-  emailValidatorStub: EmailValidator
-  userStub: User
+  emailValidatorStub: IEmailValidator
+  userStub: IUser
 }
 
 const makeSut = (): SutTypes => {
@@ -31,8 +31,8 @@ const makeSut = (): SutTypes => {
   }
 }
 
-const makeCreateUser = (): User => {
-  class UserStub implements User {
+const makeCreateUser = (): IUser => {
+  class UserStub implements IUser {
     async create (user: CreateUserDto): Promise<CreateUserOutputDto> {
       return await new Promise(resolve => resolve(fixturesCreateUserOutput()))
     }

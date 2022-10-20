@@ -1,6 +1,6 @@
-import { EmailValidator } from '@/presentation/protocols/email-validator'
+import { IEmailValidator } from '@/presentation/protocols/email-validator'
 
-export const mockEmailValidator = (): EmailValidator => {
+export const mockEmailValidator = (): IEmailValidator => {
   class EmailValidatorStub {
     isValid (email: string): boolean {
       return true
