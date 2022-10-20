@@ -1,4 +1,5 @@
-import { User } from '@/domain/user/user'
+
+import { User } from '@/domain/protocols/user'
 import { SignUpUserController } from '@/presentation/controllers/signup-user-controller'
 import { CreateUserOutputDto } from '@/presentation/dtos/user/create-user-output.dto'
 import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'

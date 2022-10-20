@@ -1,4 +1,4 @@
-import { UserBuilder } from '@/data/builders/user-builder'
+import { UserBuilder } from '@/domain/builders/user-builder'
 import { fixturesCreateUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
 
 describe('UserBuilder', () => {

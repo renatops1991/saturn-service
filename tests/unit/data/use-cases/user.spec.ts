@@ -1,7 +1,8 @@
-import { UserBuilder } from '@/data/builders/user-builder'
+
 import { Encrypted } from '@/data/protocols/encrypted'
 import { UserRepository } from '@/data/protocols/user-repository'
-import { User } from '@/data/use-cases/user'
+import { UserBuilder } from '@/domain/builders/user-builder'
+import { User } from '@/domain/use-cases/user'
 import { fixturesCreateUser, fixturesCreateUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockEncrypted, mockUserBuilder, mockUserRepository } from './mock/mock-user-use-case'
 
