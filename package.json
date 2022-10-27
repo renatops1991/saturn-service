@@ -10,6 +10,8 @@
     "test:e2e": "npm test -- --watch -c jest-e2e.config.js",
     "test:ci": "npm test -- --coverage",
     "test:staged": "jest --passWithNoTests --silent --noStackTrace --findRelatedTests",
+    "lint": "eslint src --ext ts",
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
     "prepare": "husky install"
   },
   "keywords": [],
