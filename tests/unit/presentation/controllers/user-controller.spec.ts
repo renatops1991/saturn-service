@@ -48,7 +48,7 @@ describe('User Controller', () => {
     delete (userDto.name)
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
-    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('name')))
+    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('name').serializeErrors()))
   })
 
   it('Should return 400 if no email is provided', async () => {
@@ -57,7 +57,7 @@ describe('User Controller', () => {
     delete (userDto.email)
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
-    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('email')))
+    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('email').serializeErrors()))
   })
 
   it('Should return 400 if no password is provided', async () => {
@@ -66,7 +66,7 @@ describe('User Controller', () => {
     delete (userDto.password)
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
-    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('password')))
+    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('password').serializeErrors()))
   })
 
   it('Should return 400 if no passwordConfirmation is provided', async () => {
@@ -75,7 +75,7 @@ describe('User Controller', () => {
     delete (userDto.passwordConfirmation)
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
-    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('passwordConfirmation')))
+    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('passwordConfirmation').serializeErrors()))
   })
 
   it('Should call is valid method with correct value', async () => {
@@ -92,7 +92,7 @@ describe('User Controller', () => {
     jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => false)
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
-    expect(expectedResponse.body).toEqual(new InvalidParamError('email'))
+    expect(expectedResponse.body).toEqual(new InvalidParamError('email').serializeErrors())
   })
 
   it('Should return 400 error if password confirmation provided is fail', async () => {
@@ -102,7 +102,7 @@ describe('User Controller', () => {
     jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => false)
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
-    expect(expectedResponse.body).toEqual(new InvalidParamError('passwordConfirmation'))
+    expect(expectedResponse.body).toEqual(new InvalidParamError('passwordConfirmation').serializeErrors())
   })
 
   it('Should return 500 error if SignUpController throw exception error', async () => {
@@ -111,7 +111,7 @@ describe('User Controller', () => {
     jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => { throw new Error() })
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(500)
-    expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body)))
+    expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))
   })
 
   it('Should call User use case with correct values', async () => {
@@ -128,7 +128,7 @@ describe('User Controller', () => {
     jest.spyOn(userStub, 'create').mockImplementationOnce(() => { throw new Error() })
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(500)
-    expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body)))
+    expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))
   })
 
   it('Should return 200 success status if data provided is valid', async () => {

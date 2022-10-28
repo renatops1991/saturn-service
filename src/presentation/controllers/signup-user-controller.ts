@@ -18,18 +18,18 @@ export class SignUpUserController implements IController {
       const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
       for (const field of requiredFields) {
         if (!userDto[field]) {
-          return badRequest(new MissingMandatoryParamError(field))
+          return badRequest(new MissingMandatoryParamError(field).serializeErrors())
         }
       }
 
       const { email, password, passwordConfirmation } = userDto
       if (password !== passwordConfirmation) {
-        return badRequest(new InvalidParamError('passwordConfirmation'))
+        return badRequest(new InvalidParamError('passwordConfirmation').serializeErrors())
       }
 
       const isValidEmail = this.emailValidator.isValid(email)
       if (!isValidEmail) {
-        return badRequest(new InvalidParamError('email'))
+        return badRequest(new InvalidParamError('email').serializeErrors())
       }
 
       userDto.confirmUser = false

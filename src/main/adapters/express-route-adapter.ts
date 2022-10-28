@@ -13,7 +13,7 @@ export const expressRouteAdapter = (controller: IController): RequestHandler =>
       response.status(httpResponse.statusCode).json(httpResponse.body)
     } else {
       response.status(httpResponse.statusCode).json({
-        error: httpResponse.body.message
+        error: httpResponse.body
       })
     }
   }
