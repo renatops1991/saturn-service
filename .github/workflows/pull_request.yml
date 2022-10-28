@@ -15,6 +15,7 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x]
+        mongodb-version: ['5.0']
 
     steps:
       - name: Checkout
@@ -40,10 +41,13 @@ jobs:
       - name: Check linting
         run: npm run lint
 
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.7.0
+        with:
+          mongodb-version: ${{ matrix.mongodb-version }}
+          mongodb-port: 27017
+
       - name: Running tests
         run: npm test --coverage
-
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          MONGODB_URL_TEST: 'mongodb://localhost:27017/saturn-service'
