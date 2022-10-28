@@ -1,6 +1,6 @@
 import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
 import { IUserBuilder } from '@/domain/protocols/user-builder'
-import { UserBasicInfo } from '@/types/user-basic-info'
+import { UserBasicInfo } from '@/domain/types/user-basic-info'
 import { User } from '@/domain/entities/user'
 
 export class UserBuilder implements IUserBuilder {

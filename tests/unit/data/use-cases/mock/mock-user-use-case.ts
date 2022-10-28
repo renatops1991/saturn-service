@@ -4,7 +4,7 @@ import { UserBuilder } from '@/domain/builders/user-builder'
 import { CreateUserOutputDto } from '@/presentation/dtos/user/create-user-output.dto'
 import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
 import { fixturesCreateUser, fixturesCreateUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
-import { UserBasicInfo } from '@/types/user-basic-info'
+import { UserBasicInfo } from '@/domain/types/user-basic-info'
 
 export const mockEncrypted = (): IEncrypted => {
   class EncryptedStub {
