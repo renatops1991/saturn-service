@@ -51,3 +51,8 @@ jobs:
         run: npm test --coverage
         env:
           MONGODB_URL_TEST: 'mongodb://localhost:27017/saturn-service'
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
