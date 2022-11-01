@@ -1,15 +1,15 @@
-import { MongoConnect } from '@/infra/mongodb/mongo-helper'
+import { MongoHelper } from '@/infra/mongodb/mongo-helper'
 
-describe('MongoConnect', () => {
+describe('MongoHelper', () => {
   beforeAll(async () => {
-    await MongoConnect.connect(process.env.MONGODB_URL)
+    await MongoHelper.connect(process.env.MONGODB_URL)
   })
 
   afterAll(async () => {
-    await MongoConnect.disconnect()
+    await MongoHelper.disconnect()
   })
   it('Should correctly connect MongoDB ', async () => {
-    const userCollection = MongoConnect.getCollection('users')
+    const userCollection = MongoHelper.getCollection('users')
     expect(userCollection).toBeTruthy()
   })
 })

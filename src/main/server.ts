@@ -1,9 +1,9 @@
 import 'module-alias/register'
-import { MongoConnect } from '@/infra/mongodb/mongo-helper'
+import { MongoHelper } from '@/infra/mongodb/mongo-helper'
 import dotenv from 'dotenv'
 
 dotenv.config()
-MongoConnect.connect(process.env.MONGODB_URI)
+MongoHelper.connect(process.env.MONGODB_URI)
   .then(async () => {
     const { setupApp } = await import('./config/app')
     const app = await setupApp()

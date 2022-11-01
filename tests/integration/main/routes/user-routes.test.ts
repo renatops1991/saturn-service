@@ -1,5 +1,5 @@
 import { setupApp } from '@/main/config/app'
-import { MongoConnect } from '@/infra/mongodb/mongo-helper'
+import { MongoHelper } from '@/infra/mongodb/mongo-helper'
 import { Express } from 'express'
 import { Collection } from 'mongodb'
 import request from 'supertest'
@@ -12,15 +12,15 @@ dotenv.config()
 describe('User routes', () => {
   beforeAll(async () => {
     app = await setupApp()
-    await MongoConnect.connect(process.env.MONGODB_URL_TEST)
+    await MongoHelper.connect(process.env.MONGODB_URL_TEST)
   })
 
   afterAll(async () => {
-    await MongoConnect.disconnect()
+    await MongoHelper.disconnect()
   })
 
   beforeEach(async () => {
-    userCollection = MongoConnect.getCollection('users')
+    userCollection = MongoHelper.getCollection('users')
     await userCollection.deleteMany({})
   })
 

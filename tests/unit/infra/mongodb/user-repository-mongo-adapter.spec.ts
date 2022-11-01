@@ -1,4 +1,4 @@
-import { MongoConnect } from '@/infra/mongodb/mongo-helper'
+import { MongoHelper } from '@/infra/mongodb/mongo-helper'
 import { UserRepositoryMongoAdapter } from '@/infra/mongodb/user-repository-mongo-adapter'
 import { fixturesCreateUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
 
@@ -13,14 +13,14 @@ const makeSut = (): SutTypes => {
 }
 describe('UserRepositoryMongoAdapter', () => {
   beforeAll(async () => {
-    await MongoConnect.connect(process.env.MONGODB_URL)
+    await MongoHelper.connect(process.env.MONGODB_URL)
   })
   afterAll(async () => {
-    await MongoConnect.disconnect()
+    await MongoHelper.disconnect()
   })
 
   beforeEach(async () => {
-    const userCollection = MongoConnect.getCollection('users')
+    const userCollection = MongoHelper.getCollection('users')
     await userCollection.deleteMany({})
   })
 
