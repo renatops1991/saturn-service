@@ -13,4 +13,14 @@ describe('LoginUserController', () => {
     const expectedResponse = await sut.handle(loginUserDto)
     expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('email').serializeErrors()))
   })
+
+  it('Should return 400 error if password no provided', async () => {
+    const sut = new LoginUserController()
+    const loginUserDto: LoginUserDto = {
+      email: 'foo@example.com',
+      password: ''
+    }
+    const expectedResponse = await sut.handle(loginUserDto)
+    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('password').serializeErrors()))
+  })
 })

@@ -6,7 +6,7 @@ import { IHttpResponse } from '@/presentation/protocols/http'
 
 export class LoginUserController implements IController {
   async handle (loginUserDto: LoginUserDto): Promise<IHttpResponse> {
-    const requiredFields = ['email']
+    const requiredFields = ['email', 'password']
     for (const field of requiredFields) {
       if (!loginUserDto[field]) {
         return await new Promise(resolve => resolve(badRequest(new MissingMandatoryParamError(field).serializeErrors())))
