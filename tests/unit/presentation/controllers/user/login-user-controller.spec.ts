@@ -1,6 +1,6 @@
 import { LoginUserController } from '@/presentation/controllers/user/login-user-controller'
 import { LoginUserDto } from '@/presentation/dtos/user/login-user.dto'
-import { MissingMandatoryParamError } from '@/presentation/errors'
+import { InvalidParamError, MissingMandatoryParamError } from '@/presentation/errors'
 import { badRequest } from '@/presentation/http-helper'
 import { IEmailValidator } from '@/presentation/protocols/email-validator'
 import { mockEmailValidator } from '../../mocks/mock-email-validator'
@@ -48,5 +48,16 @@ describe('LoginUserController', () => {
     const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
     await sut.handle(loginUserDto)
     expect(isValidSpy).toHaveBeenCalledWith(loginUserDto.email)
+  })
+
+  it('Should return 400 error if email is invalid', async () => {
+    const { sut, emailValidatorStub } = makeSut()
+    const loginUserDto: LoginUserDto = {
+      email: 'foo@example.com',
+      password: 'foo'
+    }
+    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
+    const expectedResponse = await sut.handle(loginUserDto)
+    expect(expectedResponse).toEqual(badRequest(new InvalidParamError('email').serializeErrors()))
   })
 })
