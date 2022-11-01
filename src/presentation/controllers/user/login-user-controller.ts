@@ -15,7 +15,8 @@ export class LoginUserController implements IController {
       }
     }
 
-    const isValidEmail = this.emailValidator.isValid(loginUserDto.email)
+    const { email } = loginUserDto
+    const isValidEmail = this.emailValidator.isValid(email)
     if (!isValidEmail) {
       return await new Promise(resolve => resolve(badRequest(new InvalidParamError('email').serializeErrors())))
     }
