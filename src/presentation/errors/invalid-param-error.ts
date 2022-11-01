@@ -1,4 +1,4 @@
-import { ErrorsTypeEnum } from '../enum/errors-type-enum'
+import { ErrorsTypeEnum } from '@/presentation/enum/errors-type-enum'
 import { CustomError } from './custom-error'
 
 export class InvalidParamError extends CustomError {
