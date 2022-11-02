@@ -1,7 +1,7 @@
 import { IAuthentication } from '@/domain/protocols/authentication'
 import { LoginUserDto } from '@/presentation/dtos/user/login-user.dto'
 import { InvalidParamError, MissingMandatoryParamError } from '@/presentation/errors'
-import { badRequest, serverError, unauthorized } from '@/presentation/http-helper'
+import { badRequest, serverError, success, unauthorized } from '@/presentation/http-helper'
 import { IController } from '@/presentation/protocols/controller'
 import { IEmailValidator } from '@/presentation/protocols/email-validator'
 import { IHttpResponse } from '@/presentation/protocols/http'
@@ -30,6 +30,8 @@ export class LoginUserController implements IController {
       if (!isAuthenticationValid) {
         return unauthorized()
       }
+
+      return success(isAuthenticationValid)
     } catch (error) {
       return serverError(error)
     }
