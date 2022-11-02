@@ -17,14 +17,13 @@ export class LoginUserController implements IController {
       const requiredFields = ['email', 'password']
       for (const field of requiredFields) {
         if (!loginUserDto[field]) {
-          return await new Promise(resolve => resolve(badRequest(new MissingMandatoryParamError(field).serializeErrors())))
+          return badRequest(new MissingMandatoryParamError(field).serializeErrors())
         }
       }
 
-      const { email } = loginUserDto
-      const isValidEmail = this.emailValidator.isValid(email)
+      const isValidEmail = this.emailValidator.isValid(loginUserDto.email)
       if (!isValidEmail) {
-        return await new Promise(resolve => resolve(badRequest(new InvalidParamError('email').serializeErrors())))
+        return badRequest(new InvalidParamError('email').serializeErrors())
       }
 
       await this.authentication.auth(loginUserDto)
