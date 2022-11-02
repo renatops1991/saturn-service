@@ -1,15 +1,20 @@
 import { IAuthentication } from '@/domain/protocols/authentication'
 import { LoginUserController } from '@/presentation/controllers/user/login-user-controller'
+import { IEmailValidator } from '@/presentation/protocols/email-validator'
+import { fixturesLoginUser, fixturesLoginUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
+import { mockAuthentication } from '@/tests/unit/presentation/mocks/mock-authentication'
+import { mockEmailValidator } from '@/tests/unit/presentation/mocks/mock-email-validator'
 import {
   InvalidParamError,
   MissingMandatoryParamError,
   ServerError
 } from '@/presentation/errors'
-import { badRequest, serverError, unauthorized } from '@/presentation/http-helper'
-import { IEmailValidator } from '@/presentation/protocols/email-validator'
-import { fixturesLoginUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
-import { mockAuthentication } from '@/tests/unit/presentation/mocks/mock-authentication'
-import { mockEmailValidator } from '@/tests/unit/presentation/mocks/mock-email-validator'
+import {
+  badRequest,
+  serverError,
+  success,
+  unauthorized
+} from '@/presentation/http-helper'
 
 type sutTypes = {
   sut: LoginUserController
@@ -87,5 +92,11 @@ describe('LoginUserController', () => {
     jest.spyOn(authenticationStub, 'auth').mockRejectedValueOnce(() => { throw new Error() })
     const expectedResponse = await sut.handle(fixturesLoginUser())
     expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))
+  })
+
+  it('Should return 200 if user provided credentials is valid', async () => {
+    const { sut } = makeSut()
+    const expectedResponse = await sut.handle(fixturesLoginUser())
+    expect(expectedResponse).toEqual(success(fixturesLoginUserOutput()))
   })
 })
