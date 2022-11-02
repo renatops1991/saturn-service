@@ -5,7 +5,7 @@ import {
   MissingMandatoryParamError,
   ServerError
 } from '@/presentation/errors'
-import { badRequest, serverError } from '@/presentation/http-helper'
+import { badRequest, serverError, unauthorized } from '@/presentation/http-helper'
 import { IEmailValidator } from '@/presentation/protocols/email-validator'
 import { fixturesLoginUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockAuthentication } from '@/tests/unit/presentation/mocks/mock-authentication'
@@ -73,5 +73,12 @@ describe('LoginUserController', () => {
     const authSpy = jest.spyOn(authenticationStub, 'auth')
     await sut.handle(fixturesLoginUser())
     expect(authSpy).toHaveBeenCalledWith(fixturesLoginUser())
+  })
+
+  it('Should return 401 error if user provided credentials is invalid', async () => {
+    const { sut, authenticationStub } = makeSut()
+    jest.spyOn(authenticationStub, 'auth').mockReturnValueOnce(null)
+    const expectedResponse = await sut.handle(fixturesLoginUser())
+    expect(expectedResponse).toEqual(unauthorized())
   })
 })

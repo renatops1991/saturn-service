@@ -1,7 +1,7 @@
 import { IAuthentication } from '@/domain/protocols/authentication'
 import { LoginUserDto } from '@/presentation/dtos/user/login-user.dto'
 import { InvalidParamError, MissingMandatoryParamError } from '@/presentation/errors'
-import { badRequest, serverError } from '@/presentation/http-helper'
+import { badRequest, serverError, unauthorized } from '@/presentation/http-helper'
 import { IController } from '@/presentation/protocols/controller'
 import { IEmailValidator } from '@/presentation/protocols/email-validator'
 import { IHttpResponse } from '@/presentation/protocols/http'
@@ -26,7 +26,10 @@ export class LoginUserController implements IController {
         return badRequest(new InvalidParamError('email').serializeErrors())
       }
 
-      await this.authentication.auth(loginUserDto)
+      const isAuthenticationValid = await this.authentication.auth(loginUserDto)
+      if (!isAuthenticationValid) {
+        return unauthorized()
+      }
     } catch (error) {
       return serverError(error)
     }
