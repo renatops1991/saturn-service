@@ -1,3 +1,4 @@
+import { IAuthentication } from '@/domain/protocols/authentication'
 import { LoginUserDto } from '@/presentation/dtos/user/login-user.dto'
 import { InvalidParamError, MissingMandatoryParamError } from '@/presentation/errors'
 import { badRequest, serverError } from '@/presentation/http-helper'
@@ -6,7 +7,11 @@ import { IEmailValidator } from '@/presentation/protocols/email-validator'
 import { IHttpResponse } from '@/presentation/protocols/http'
 
 export class LoginUserController implements IController {
-  constructor (private readonly emailValidator: IEmailValidator) { }
+  constructor (
+    private readonly emailValidator: IEmailValidator,
+    private readonly authentication: IAuthentication
+  ) { }
+
   async handle (loginUserDto: LoginUserDto): Promise<IHttpResponse> {
     try {
       const requiredFields = ['email', 'password']
@@ -21,6 +26,8 @@ export class LoginUserController implements IController {
       if (!isValidEmail) {
         return await new Promise(resolve => resolve(badRequest(new InvalidParamError('email').serializeErrors())))
       }
+
+      await this.authentication.auth(loginUserDto)
     } catch (error) {
       return serverError(error)
     }

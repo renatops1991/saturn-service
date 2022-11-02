@@ -1,21 +1,30 @@
+import { IAuthentication } from '@/domain/protocols/authentication'
 import { LoginUserController } from '@/presentation/controllers/user/login-user-controller'
-import { InvalidParamError, MissingMandatoryParamError, ServerError } from '@/presentation/errors'
+import {
+  InvalidParamError,
+  MissingMandatoryParamError,
+  ServerError
+} from '@/presentation/errors'
 import { badRequest, serverError } from '@/presentation/http-helper'
 import { IEmailValidator } from '@/presentation/protocols/email-validator'
-import { fixturesLoginUser } from '../../fixtures/fixtures-user'
-import { mockEmailValidator } from '../../mocks/mock-email-validator'
+import { fixturesLoginUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
+import { mockAuthentication } from '@/tests/unit/presentation/mocks/mock-authentication'
+import { mockEmailValidator } from '@/tests/unit/presentation/mocks/mock-email-validator'
 
 type sutTypes = {
   sut: LoginUserController
   emailValidatorStub: IEmailValidator
+  authenticationStub: IAuthentication
 }
 
 const makeSut = (): sutTypes => {
+  const authenticationStub = mockAuthentication()
   const emailValidatorStub = mockEmailValidator()
-  const sut = new LoginUserController(emailValidatorStub)
+  const sut = new LoginUserController(emailValidatorStub, authenticationStub)
   return {
     sut,
-    emailValidatorStub
+    emailValidatorStub,
+    authenticationStub
   }
 }
 describe('LoginUserController', () => {
@@ -57,5 +66,12 @@ describe('LoginUserController', () => {
     })
     const expectedResponse = await sut.handle(fixturesLoginUser())
     expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))
+  })
+
+  it('Should call Auth method with correct value', async () => {
+    const { sut, authenticationStub } = makeSut()
+    const authSpy = jest.spyOn(authenticationStub, 'auth')
+    await sut.handle(fixturesLoginUser())
+    expect(authSpy).toHaveBeenCalledWith(fixturesLoginUser())
   })
 })
