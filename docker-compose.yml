@@ -10,9 +10,14 @@ services:
       - "27017:27017"
   api:
     container_name: saturn-service-api
-    build: ./docker/Dockerfile .
+    build: 
+      context: .
+      dockerfile: docker/Dockerfile
     restart: always
     image: saturn-service-api
+    environment:
+      - MONGODB_URI=${MONGODB_URI}
+      - PORT=${PORT}
     command: npm start
     volumes: 
       - ./dist:/usr/app/dist
