@@ -3,7 +3,7 @@
   "version": "2.1.1",
   "description": "The Saturn service is an API used for financial organization",
   "scripts": {
-    "start": "node dist/main/server.js",
+    "start": "npm run build && node dist/main/server.js",
     "start:dev": "npm run build && docker compose up",
     "start:debug": "node --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
     "build": "rimraf dist && tsc",
