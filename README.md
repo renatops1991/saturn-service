@@ -19,9 +19,16 @@ cp example.env .env
 npm install
 ```
 
-## Running the Application
+## Running the Application with node
+```bash
+npm run start
+```
+
+## Running the Application with docker
 ```bash
 npm run start:dev
+or
+docker compose up
 ```
 
 ## API Routes
