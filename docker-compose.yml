@@ -18,10 +18,12 @@ services:
     environment:
       - MONGODB_URI=${MONGODB_URI}
       - PORT=${PORT}
-    command: npm start
+    command: npm run start:debug
     volumes: 
       - ./dist:/usr/app/dist
+      - ./package.json:/usr/app/package.json
     ports:
       - "3001:3001"
+      - "9222:9222"
     links:
       - mongodb

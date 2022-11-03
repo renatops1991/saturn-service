@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node dist/main/server.js",
     "start:dev": "npm run build && docker compose up",
+    "start:debug": "node --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
     "build": "rimraf dist && tsc",
     "test": "jest --passWithNoTests --silent --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
