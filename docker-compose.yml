@@ -20,7 +20,7 @@ services:
       - PORT=${PORT}
     command: npm run start:debug
     volumes: 
-      - ./dist:/usr/app/dist
+      - ./dist/:/usr/app/dist/
       - ./package.json:/usr/app/package.json
     ports:
       - "3001:3001"
