@@ -16,7 +16,7 @@ services:
     restart: always
     image: saturn-service-api
     environment:
-      - MONGODB_URI=${MONGODB_URI}
+      - MONGODB_URI=${MONGODB_DOCKER_URI}
       - PORT=${PORT}
     command: npm run start:debug
     volumes: 
