@@ -1,4 +1,3 @@
-import 'module-alias/register'
 import { MongoHelper } from '@/infra/mongodb/mongo-helper'
 import dotenv from 'dotenv'
 
