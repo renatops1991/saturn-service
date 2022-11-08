@@ -10,24 +10,28 @@ import {
 } from '@/presentation/errors'
 import { badRequest, serverError } from '@/presentation/http-helper'
 import { IEmailValidator } from '@/presentation/protocols/email-validator'
+import { IValidation } from '@/presentation/protocols/validation'
 import { fixturesCreateUserRequest, fixturesCreateUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
-import { mockEmailValidator } from '@/tests/unit/presentation/mocks/mock-email-validator'
+import { mockEmailValidator, mockValidation } from '@/tests/unit/presentation/mocks/mock-user-validation'
 
 type SutTypes = {
   sut: SignUpUserController
   emailValidatorStub: IEmailValidator
   userStub: IUser
+  validationStub: IValidation
 }
 
 const makeSut = (): SutTypes => {
   const emailValidatorStub = mockEmailValidator()
   const userStub = makeCreateUser()
-  const sut = new SignUpUserController(emailValidatorStub, userStub)
+  const validationStub = mockValidation()
+  const sut = new SignUpUserController(emailValidatorStub, userStub, validationStub)
 
   return {
     sut,
     emailValidatorStub,
-    userStub
+    userStub,
+    validationStub
   }
 }
 
@@ -42,42 +46,6 @@ const makeCreateUser = (): IUser => {
 }
 
 describe('User Controller', () => {
-  it('Should return 400 if no name is provided', async () => {
-    const { sut } = makeSut()
-    const userDto = fixturesCreateUserRequest()
-    delete (userDto.name)
-    const expectedResponse = await sut.handle(userDto)
-    expect(expectedResponse.statusCode).toBe(400)
-    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('name').serializeErrors()))
-  })
-
-  it('Should return 400 if no email is provided', async () => {
-    const { sut } = makeSut()
-    const userDto = fixturesCreateUserRequest()
-    delete (userDto.email)
-    const expectedResponse = await sut.handle(userDto)
-    expect(expectedResponse.statusCode).toBe(400)
-    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('email').serializeErrors()))
-  })
-
-  it('Should return 400 if no password is provided', async () => {
-    const { sut } = makeSut()
-    const userDto = fixturesCreateUserRequest()
-    delete (userDto.password)
-    const expectedResponse = await sut.handle(userDto)
-    expect(expectedResponse.statusCode).toBe(400)
-    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('password').serializeErrors()))
-  })
-
-  it('Should return 400 if no passwordConfirmation is provided', async () => {
-    const { sut } = makeSut()
-    const userDto = fixturesCreateUserRequest()
-    delete (userDto.passwordConfirmation)
-    const expectedResponse = await sut.handle(userDto)
-    expect(expectedResponse.statusCode).toBe(400)
-    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('passwordConfirmation').serializeErrors()))
-  })
-
   it('Should call is valid method with correct value', async () => {
     const { sut, emailValidatorStub } = makeSut()
     const userDto = fixturesCreateUserRequest()
@@ -92,7 +60,7 @@ describe('User Controller', () => {
     jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => false)
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
-    expect(expectedResponse.body).toEqual(new InvalidParamError('email').serializeErrors())
+    expect(expectedResponse).toEqual(badRequest(new InvalidParamError('email').serializeErrors()))
   })
 
   it('Should return 400 error if password confirmation provided is fail', async () => {
@@ -102,7 +70,7 @@ describe('User Controller', () => {
     jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => false)
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
-    expect(expectedResponse.body).toEqual(new InvalidParamError('passwordConfirmation').serializeErrors())
+    expect(expectedResponse).toEqual(badRequest(new InvalidParamError('passwordConfirmation').serializeErrors()))
   })
 
   it('Should return 500 error if SignUpController throw exception error', async () => {
@@ -137,5 +105,22 @@ describe('User Controller', () => {
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(200)
     expect(expectedResponse.body).toEqual(fixturesCreateUserOutput())
+  })
+
+  it('Should call Validation with correct values', async () => {
+    const { sut, validationStub } = makeSut()
+    const userDto = fixturesCreateUserRequest()
+    const validateSpy = jest.spyOn(validationStub, 'validate')
+    await sut.handle(userDto)
+    expect(validateSpy).toHaveBeenCalledWith(userDto)
+  })
+
+  it('Should return 400 if Validation return an error', async () => {
+    const { sut, validationStub } = makeSut()
+    jest
+      .spyOn(validationStub, 'validate')
+      .mockReturnValueOnce(new MissingMandatoryParamError('foo').serializeErrors())
+    const expectedResponse = await sut.handle(fixturesCreateUserRequest())
+    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('foo').serializeErrors()))
   })
 })

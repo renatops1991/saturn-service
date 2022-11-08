@@ -3,7 +3,7 @@ import { LoginUserController } from '@/presentation/controllers/user/login-user-
 import { IEmailValidator } from '@/presentation/protocols/email-validator'
 import { fixturesLoginUser, fixturesLoginUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockAuthentication } from '@/tests/unit/presentation/mocks/mock-authentication'
-import { mockEmailValidator } from '@/tests/unit/presentation/mocks/mock-email-validator'
+import { mockEmailValidator } from '@/tests/unit/presentation/mocks/mock-user-validation'
 import {
   InvalidParamError,
   MissingMandatoryParamError,
