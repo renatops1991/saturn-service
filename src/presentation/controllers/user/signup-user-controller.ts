@@ -21,11 +21,7 @@ export class SignUpUserController implements IController {
         return badRequest(isError)
       }
 
-      const { email, password, passwordConfirmation } = userDto
-      if (password !== passwordConfirmation) {
-        return badRequest(new InvalidParamError('passwordConfirmation').serializeErrors())
-      }
-
+      const { email } = userDto
       const isValidEmail = this.emailValidator.isValid(email)
       if (!isValidEmail) {
         return badRequest(new InvalidParamError('email').serializeErrors())
