@@ -18,14 +18,21 @@ const makeSut = (): SutTypes => {
   }
 }
 describe('EmailValidation', () => {
-  it('Should return a InvalidParamError if email is invalid', async () => {
+  it('Should call EmailValidator with corrects values', () => {
+    const { sut, emailValidatorStub } = makeSut()
+    const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
+    sut.validate({ email: 'foo@bar.com' })
+    expect(isValidSpy).toHaveBeenCalledWith('foo@bar.com')
+  })
+
+  it('Should return a InvalidParamError if email is invalid', () => {
     const { sut, emailValidatorStub } = makeSut()
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
     const expectedError = sut.validate({ email: 'foo' })
     expect(expectedError).toEqual(new InvalidParamError('email').serializeErrors())
   })
 
-  it('Should return null if email is valid', async () => {
+  it('Should return null if email is valid', () => {
     const { sut, emailValidatorStub } = makeSut()
     jest.spyOn(emailValidatorStub, 'isValid')
     const expectedError = sut.validate({ email: 'foo@bar.com' })
