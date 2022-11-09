@@ -1,8 +1,10 @@
 import { makeValidationCompositeFactory } from '@/main/factories/validation/validation-composite-factory'
 import { IValidation } from '@/presentation/protocols/validation'
 import { CompareField } from '@/presentation/validation/compare-field'
+import { EmailValidation } from '@/presentation/validation/email-validation'
 import { RequiredField } from '@/presentation/validation/required-field'
 import { ValidationComposite } from '@/presentation/validation/validation-composite'
+import { mockEmailValidator } from '@/tests/unit/presentation/mocks/mock-user-validation'
 
 jest.mock('@/presentation/validation/validation-composite')
 
@@ -15,6 +17,9 @@ describe('ValidationCompositeFactory', () => {
     }
     validations.push(
       new CompareField('password', 'passwordConfirmation')
+    )
+    validations.push(
+      new EmailValidation('email', mockEmailValidator())
     )
     expect(ValidationComposite).toHaveBeenCalledWith(validations)
   })
