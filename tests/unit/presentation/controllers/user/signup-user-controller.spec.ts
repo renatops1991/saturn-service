@@ -9,7 +9,7 @@ import {
   ServerError
 } from '@/presentation/errors'
 import { badRequest, serverError } from '@/presentation/http-helper'
-import { IEmailValidator } from '@/presentation/protocols/email-validator'
+import { IEmailValidator } from '@/validation/protocols/email-validator'
 import { IValidation } from '@/presentation/protocols/validation'
 import { fixturesCreateUserRequest, fixturesCreateUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockEmailValidator, mockValidation } from '@/tests/unit/presentation/mocks/mock-user-validation'
@@ -25,7 +25,7 @@ const makeSut = (): SutTypes => {
   const emailValidatorStub = mockEmailValidator()
   const userStub = makeCreateUser()
   const validationStub = mockValidation()
-  const sut = new SignUpUserController(emailValidatorStub, userStub, validationStub)
+  const sut = new SignUpUserController(userStub, validationStub)
 
   return {
     sut,
@@ -46,27 +46,21 @@ const makeCreateUser = (): IUser => {
 }
 
 describe('User Controller', () => {
-  it('Should call is valid method with correct value', async () => {
-    const { sut, emailValidatorStub } = makeSut()
-    const userDto = fixturesCreateUserRequest()
-    const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
-    await sut.handle(userDto)
-    expect(isValidSpy).toHaveBeenCalledWith(userDto.email)
-  })
-
   it('Should return 400 error if email provided is not valid', async () => {
-    const { sut, emailValidatorStub } = makeSut()
+    const { sut, validationStub } = makeSut()
     const userDto = fixturesCreateUserRequest()
-    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => false)
+    jest
+      .spyOn(validationStub, 'validate')
+      .mockReturnValueOnce(new InvalidParamError('email').serializeErrors())
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(400)
     expect(expectedResponse).toEqual(badRequest(new InvalidParamError('email').serializeErrors()))
   })
 
   it('Should return 500 error if SignUpController throw exception error', async () => {
-    const { sut, emailValidatorStub } = makeSut()
+    const { sut, validationStub } = makeSut()
     const userDto = fixturesCreateUserRequest()
-    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => { throw new Error() })
+    jest.spyOn(validationStub, 'validate').mockImplementationOnce(() => { throw new Error() })
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(500)
     expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))

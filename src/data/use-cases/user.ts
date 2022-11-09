@@ -1,7 +1,7 @@
 import { IUser } from '@/domain/protocols/user'
 import { CreateUserOutputDto } from '@/presentation/dtos/user/create-user-output.dto'
 import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
-import { UserBuilder } from '@/domain/builders/user-builder'
+import { UserBuilder } from '@/data/builders/user-builder'
 import { IEncrypted } from '@/data/protocols/encrypted'
 import { IUserRepository } from '@/data/protocols/user-repository'
 

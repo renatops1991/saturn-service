@@ -1,7 +1,7 @@
 import { MissingMandatoryParamError } from '@/presentation/errors'
 import { IValidation } from '@/presentation/protocols/validation'
-import { ValidationComposite } from '@/presentation/validation/validation-composite'
-import { mockValidation } from '../mocks/mock-user-validation'
+import { ValidationComposite } from '@/validation/validation-composite'
+import { mockValidation } from '../presentation/mocks/mock-user-validation'
 
 type SutTypes = {
   sut: ValidationComposite

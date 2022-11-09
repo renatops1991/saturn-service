@@ -1,9 +1,9 @@
 import { EmailValidatorAdapter } from '@/infra/validators/email-validator-adapter'
 import { IValidation } from '@/presentation/protocols/validation'
-import { CompareField } from '@/presentation/validation/compare-field'
-import { EmailValidation } from '@/presentation/validation/email-validation'
-import { RequiredField } from '@/presentation/validation/required-field'
-import { ValidationComposite } from '@/presentation/validation/validation-composite'
+import { CompareField } from '@/validation/compare-field'
+import { EmailValidation } from '@/validation/email-validation'
+import { RequiredField } from '@/validation/required-field'
+import { ValidationComposite } from '@/validation/validation-composite'
 
 export const makeValidationCompositeFactory = (): ValidationComposite => {
   const validations: IValidation[] = []

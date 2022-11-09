@@ -1,4 +1,4 @@
-import { UserBasicInfo } from '@/domain/types/user-basic-info'
+import { UserBasicInfo } from '@/data/types/user-basic-info'
 import { Address } from './address'
 
 export class User {

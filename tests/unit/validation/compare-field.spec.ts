@@ -1,9 +1,20 @@
 import { InvalidParamError } from '@/presentation/errors'
-import { CompareField } from '@/presentation/validation/compare-field'
+import { CompareField } from '@/validation/compare-field'
+
+type SutTypes = {
+  sut: CompareField
+}
+
+const makeSut = (): SutTypes => {
+  const sut = new CompareField('password', 'passwordConfirmation')
+  return {
+    sut
+  }
+}
 
 describe('CompareField', () => {
   it('Should return a InvalidParamError if validation fails', async () => {
-    const sut = new CompareField('password', 'passwordConfirmation')
+    const { sut } = makeSut()
     const expectedError = sut.validate({
       password: '123', passwordConfirmation: 'foo'
     })
@@ -12,7 +23,7 @@ describe('CompareField', () => {
   })
 
   it('Should return null if validation on succeeds', async () => {
-    const sut = new CompareField('password', 'passwordConfirmation')
+    const { sut } = makeSut()
     const expectedError = sut.validate({
       password: '123', passwordConfirmation: '123'
     })
