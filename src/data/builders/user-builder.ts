@@ -9,7 +9,7 @@ export class UserBuilder implements IUserBuilder {
     user.name = userDto.name
     user.email = userDto.email
     user.password = userDto.password
-    user.confirmUser = false
+    user.confirmUser = userDto?.confirmUser ?? false
 
     return user
   }

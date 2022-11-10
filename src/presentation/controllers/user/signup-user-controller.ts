@@ -18,7 +18,6 @@ export class SignUpUserController implements IController {
         return badRequest(isError)
       }
 
-      userDto.confirmUser = false
       const user = await this.user.create(userDto)
       return success(user)
     } catch (error) {
