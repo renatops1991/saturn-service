@@ -5,7 +5,7 @@ import { EmailValidation } from '@/validation/email-validation'
 import { RequiredField } from '@/validation/required-field'
 import { ValidationComposite } from '@/validation/validation-composite'
 
-export const makeValidationCompositeFactory = (): ValidationComposite => {
+export const makeSignUpValidationCompositeFactory = (): ValidationComposite => {
   const validations: IValidation[] = []
   for (const field of ['name', 'email', 'password', 'passwordConfirmation']) {
     validations.push(new RequiredField(field))
