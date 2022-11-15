@@ -40,13 +40,13 @@ describe('User use case', () => {
       await expect(expectedResponse).rejects.toThrow()
     })
 
-    it('Should forward the error if Cryptography throws error', async () => {
+    it('Should call Cryptography with correct values', async () => {
       const { sut, userRepositoryStub } = makeSut()
       const createSpy = jest.spyOn(userRepositoryStub, 'create')
       const user = fixturesCreateUser()
       const expectedResponse = Object.assign({
         ...fixturesCreateUser(),
-        password: 'hashedPassword'
+        password: 'encrypted'
       })
       await sut.create(user)
       expect(createSpy).toHaveBeenCalledWith(expectedResponse)
@@ -100,7 +100,7 @@ describe('User use case', () => {
       const user = fixturesLoginUser()
       const hashCompareSpy = jest.spyOn(cryptographyStub, 'compare')
       await sut.auth(user)
-      expect(hashCompareSpy).toHaveBeenCalledWith(user.password, 'hashPassword')
+      expect(hashCompareSpy).toHaveBeenCalledWith(user.password, 'encrypted')
     })
 
     it('Should forward the error if HashCompare method of the UserRepository class throws error', async () => {
@@ -139,7 +139,7 @@ describe('User use case', () => {
       jest
         .spyOn(userRepositoryStub, 'updateAccessToken')
       await sut.auth(fixturesLoginUser())
-      expect(updateAccessTokenSpy).toHaveBeenCalledWith('foo', 'hashedPassword')
+      expect(updateAccessTokenSpy).toHaveBeenCalledWith('foo', 'encrypted')
     })
 
     it('Should forward the error if updateAccessToken method of the UserRepository class throws error', async () => {
@@ -149,6 +149,17 @@ describe('User use case', () => {
         .mockRejectedValueOnce(new Error())
       const expectedResponse = sut.auth(fixturesCreateUser())
       await expect(expectedResponse).rejects.toThrow()
+    })
+
+    it('Should return name, email and accessToken if auth method on success', async () => {
+      const { sut } = makeSut()
+      const updateAccessTokenSpy =
+      await sut.auth(fixturesLoginUser())
+      expect(updateAccessTokenSpy).toEqual({
+        name: 'John Foo Bar',
+        email: 'foo@example.com',
+        accessToken: 'encrypted'
+      })
     })
   })
 })
