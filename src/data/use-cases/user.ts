@@ -24,7 +24,10 @@ export class User implements IUser, IAuthentication {
   }
 
   async auth (loginUserDto: LoginUserDto): Promise<LoginUserOutputDto> {
-    await this.userRepository.loadByEmail(loginUserDto.email)
-    return null
+    const user = await this.userRepository.loadByEmail(loginUserDto.email)
+    if (!user) {
+      return null
+    }
+    await this.encrypted.compare(loginUserDto.password, user.password)
   }
 }

@@ -2,6 +2,7 @@ import { IUserRepository } from '@/data/protocols/user-repository'
 import { UserOutputDto } from '@/presentation/dtos/user/user-output.dto'
 import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
 import { MongoHelper } from './mongo-helper'
+import { LoadUserDto } from '@/presentation/dtos/user/load-user.dto'
 
 export class UserRepositoryMongoAdapter implements IUserRepository {
   async create (userDto: Omit<CreateUserDto, 'passwordConfirmation'>): Promise<UserOutputDto> {
@@ -12,5 +13,5 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
     return MongoHelper.map(user)
   }
 
-  loadByEmail: (email: string) => Promise<UserOutputDto>
+  loadByEmail: (email: string) => Promise<LoadUserDto>
 }

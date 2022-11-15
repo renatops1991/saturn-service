@@ -2,6 +2,7 @@ import { UserOutputDto } from '@/presentation/dtos/user/user-output.dto'
 import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
 import { LoginUserOutputDto } from '@/presentation/dtos/user/login-user-output.dto'
 import { LoginUserDto } from '@/presentation/dtos/user/login-user.dto'
+import { LoadUserDto } from '@/presentation/dtos/user/load-user.dto'
 
 export const fixturesCreateUserRequest = (): CreateUserDto => {
   const userDto: CreateUserDto = {
@@ -45,4 +46,14 @@ export const fixturesLoginUserOutput = (): LoginUserOutputDto => {
     accessToken: 'accessToken'
   }
   return loginUserOutputDto
+}
+
+export const fixturesLoadUser = (): LoadUserDto => {
+  const loadUserDto: LoadUserDto = {
+    id: 'foo',
+    name: 'John Foo Bar',
+    email: 'foo@example.com',
+    password: 'hashPassword'
+  }
+  return loadUserDto
 }

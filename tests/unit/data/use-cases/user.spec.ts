@@ -86,5 +86,21 @@ describe('User use case', () => {
       const expectedResponse = sut.auth(user)
       await expect(expectedResponse).rejects.toThrow()
     })
+
+    it('Should return null if loadByEmail method returns null', async () => {
+      const { sut, userRepositoryStub } = makeSut()
+      const user = fixturesLoginUser()
+      jest.spyOn(userRepositoryStub, 'loadByEmail').mockReturnValueOnce(null)
+      const expectedRseponse = await sut.auth(user)
+      expect(expectedRseponse).toBeNull()
+    })
+
+    it('Should call HashCompare method with correct password', async () => {
+      const { sut, encryptedStub } = makeSut()
+      const user = fixturesLoginUser()
+      const hashCompareSpy = jest.spyOn(encryptedStub, 'compare')
+      await sut.auth(user)
+      expect(hashCompareSpy).toHaveBeenCalledWith(user.password, 'hashPassword')
+    })
   })
 })
