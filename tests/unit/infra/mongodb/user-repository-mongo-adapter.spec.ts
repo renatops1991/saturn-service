@@ -31,6 +31,5 @@ describe('UserRepositoryMongoAdapter', () => {
     expect(expectedResponse.id).toBeTruthy()
     expect(expectedResponse.name).toEqual(fixturesCreateUser().name)
     expect(expectedResponse.email).toEqual(fixturesCreateUser().email)
-    expect(expectedResponse.password).toEqual(fixturesCreateUser().password)
   })
 })

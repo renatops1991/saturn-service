@@ -2,7 +2,7 @@ import { IEncrypted } from '@/data/protocols/encrypted'
 import { IUserRepository } from '@/data/protocols/user-repository'
 import { UserBuilder } from '@/data/builders/user-builder'
 import { UserBasicInfo } from '@/data/types/user-basic-info'
-import { CreateUserOutputDto } from '@/presentation/dtos/user/create-user-output.dto'
+import { UserOutputDto } from '@/presentation/dtos/user/user-output.dto'
 import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
 import { fixturesCreateUser, fixturesCreateUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 
@@ -19,11 +19,11 @@ export const mockUserRepository = (): IUserRepository => {
   class UserRepositoryStub implements IUserRepository {
     private readonly fakeUser = fixturesCreateUserOutput()
 
-    async create (userDto: CreateUserDto): Promise<CreateUserOutputDto> {
+    async create (userDto: CreateUserDto): Promise<UserOutputDto> {
       return await new Promise(resolve => resolve(this.fakeUser))
     }
 
-    async loadByEmail (email: string): Promise<CreateUserOutputDto> {
+    async loadByEmail (email: string): Promise<UserOutputDto> {
       return await new Promise(resolve => resolve(this.fakeUser))
     }
   }
