@@ -1,46 +1,46 @@
 
-import { IEncrypted } from '@/data/protocols/encrypted'
+import { ICryptography } from '@/data/protocols/cryptography'
 import { IUserRepository } from '@/data/protocols/user-repository'
 import { User } from '@/data/use-cases/user'
 import { fixturesCreateUser, fixturesCreateUserOutput, fixturesLoginUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
-import { mockEncrypted, mockUserRepository } from './mock/mock-user-use-case'
+import { mockCryptography, mockUserRepository } from './mock/mock-user-use-case'
 
 type SutType = {
   sut: User
-  encryptedStub: IEncrypted
+  cryptographyStub: ICryptography
   userRepositoryStub: IUserRepository
 }
 
 const makeSut = (): SutType => {
-  const encryptedStub = mockEncrypted()
+  const cryptographyStub = mockCryptography()
   const userRepositoryStub = mockUserRepository()
-  const sut = new User(encryptedStub, userRepositoryStub)
+  const sut = new User(cryptographyStub, userRepositoryStub)
   return {
     sut,
-    encryptedStub,
+    cryptographyStub,
     userRepositoryStub
   }
 }
 
 describe('User use case', () => {
   describe('Create', () => {
-    it('Should call Encrypted with correct password', async () => {
-      const { sut, encryptedStub } = makeSut()
-      const encryptSpy = jest.spyOn(encryptedStub, 'encrypt')
+    it('Should call cryptography with correct password', async () => {
+      const { sut, cryptographyStub } = makeSut()
+      const encryptSpy = jest.spyOn(cryptographyStub, 'encrypt')
       const user = fixturesCreateUser()
       await sut.create(user)
       expect(encryptSpy).toHaveBeenCalledWith('12345')
     })
 
-    it('Should forward the error if Encrypted throws error', async () => {
-      const { sut, encryptedStub } = makeSut()
-      jest.spyOn(encryptedStub, 'encrypt').mockRejectedValueOnce(new Error())
+    it('Should forward the error if cryptography throws error', async () => {
+      const { sut, cryptographyStub } = makeSut()
+      jest.spyOn(cryptographyStub, 'encrypt').mockRejectedValueOnce(new Error())
       const user = fixturesCreateUser()
       const expectedResponse = sut.create(user)
       await expect(expectedResponse).rejects.toThrow()
     })
 
-    it('Should forward the error if Encrypted throws error', async () => {
+    it('Should forward the error if cryptography throws error', async () => {
       const { sut, userRepositoryStub } = makeSut()
       const createSpy = jest.spyOn(userRepositoryStub, 'create')
       const user = fixturesCreateUser()
@@ -96,28 +96,28 @@ describe('User use case', () => {
     })
 
     it('Should call HashCompare method with correct password', async () => {
-      const { sut, encryptedStub } = makeSut()
+      const { sut, cryptographyStub } = makeSut()
       const user = fixturesLoginUser()
-      const hashCompareSpy = jest.spyOn(encryptedStub, 'compare')
+      const hashCompareSpy = jest.spyOn(cryptographyStub, 'compare')
       await sut.auth(user)
       expect(hashCompareSpy).toHaveBeenCalledWith(user.password, 'hashPassword')
     })
 
     it('Should forward the error if HashCompare method of the UserRepository class throws error', async () => {
-      const { sut, encryptedStub } = makeSut()
+      const { sut, cryptographyStub } = makeSut()
       const user = fixturesCreateUser()
       jest
-        .spyOn(encryptedStub, 'compare')
+        .spyOn(cryptographyStub, 'compare')
         .mockRejectedValueOnce(new Error())
       const expectedResponse = sut.auth(user)
       await expect(expectedResponse).rejects.toThrow()
     })
 
     it('Should return null if HashCompare method returns false', async () => {
-      const { sut, encryptedStub } = makeSut()
+      const { sut, cryptographyStub } = makeSut()
       const user = fixturesLoginUser()
       jest
-        .spyOn(encryptedStub, 'compare')
+        .spyOn(cryptographyStub, 'compare')
         .mockReturnValueOnce(new Promise(resolve => resolve(false)))
       const expectedRseponse = await sut.auth(user)
       expect(expectedRseponse).toBeNull()

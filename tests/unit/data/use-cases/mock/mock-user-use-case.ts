@@ -1,4 +1,4 @@
-import { IEncrypted } from '@/data/protocols/encrypted'
+import { ICryptography } from '@/data/protocols/cryptography'
 import { IUserRepository } from '@/data/protocols/user-repository'
 import { UserBuilder } from '@/data/builders/user-builder'
 import { UserBasicInfo } from '@/data/types/user-basic-info'
@@ -7,7 +7,7 @@ import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
 import { fixturesCreateUser, fixturesCreateUserOutput, fixturesLoadUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { LoadUserDto } from '@/presentation/dtos/user/load-user.dto'
 
-export const mockEncrypted = (): IEncrypted => {
+export const mockCryptography = (): ICryptography => {
   class EncryptedStub {
     async encrypt (input: string): Promise<string> {
       return await new Promise(resolve => resolve('hashedPassword'))
