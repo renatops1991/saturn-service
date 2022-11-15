@@ -29,6 +29,10 @@ export const mockUserRepository = (): IUserRepository => {
     async loadByEmail (email: string): Promise<LoadUserDto> {
       return await new Promise(resolve => resolve(fixturesLoadUser()))
     }
+
+    async updateAccessToken (id: string, token: string): Promise<void> {
+      return await new Promise(resolve => resolve())
+    }
   }
 
   return new UserRepositoryStub()

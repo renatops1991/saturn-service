@@ -5,4 +5,5 @@ import { LoadUserDto } from '@/presentation/dtos/user/load-user.dto'
 export interface IUserRepository {
   create: (userDto: Omit<CreateUserDto, 'passwordConfirmation'>) => Promise<UserOutputDto>
   loadByEmail: (email: string) => Promise<LoadUserDto>
+  updateAccessToken: (userId: string, token: string) => Promise<void>
 }

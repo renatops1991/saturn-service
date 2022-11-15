@@ -24,7 +24,7 @@ const makeSut = (): SutType => {
 
 describe('User use case', () => {
   describe('Create', () => {
-    it('Should call cryptography with correct password', async () => {
+    it('Should call Cryptography with correct password', async () => {
       const { sut, cryptographyStub } = makeSut()
       const encryptSpy = jest.spyOn(cryptographyStub, 'encrypt')
       const user = fixturesCreateUser()
@@ -32,7 +32,7 @@ describe('User use case', () => {
       expect(encryptSpy).toHaveBeenCalledWith('12345')
     })
 
-    it('Should forward the error if cryptography throws error', async () => {
+    it('Should forward the error if Cryptography throws error', async () => {
       const { sut, cryptographyStub } = makeSut()
       jest.spyOn(cryptographyStub, 'encrypt').mockRejectedValueOnce(new Error())
       const user = fixturesCreateUser()
@@ -40,7 +40,7 @@ describe('User use case', () => {
       await expect(expectedResponse).rejects.toThrow()
     })
 
-    it('Should forward the error if cryptography throws error', async () => {
+    it('Should forward the error if Cryptography throws error', async () => {
       const { sut, userRepositoryStub } = makeSut()
       const createSpy = jest.spyOn(userRepositoryStub, 'create')
       const user = fixturesCreateUser()
@@ -121,6 +121,34 @@ describe('User use case', () => {
         .mockReturnValueOnce(new Promise(resolve => resolve(false)))
       const expectedRseponse = await sut.auth(user)
       expect(expectedRseponse).toBeNull()
+    })
+
+    it('Should call Cryptography with correct id', async () => {
+      const { sut, cryptographyStub } = makeSut()
+      const user = fixturesLoginUser()
+      const encryptSpy =
+      jest
+        .spyOn(cryptographyStub, 'encrypt')
+      await sut.auth(user)
+      expect(encryptSpy).toHaveBeenCalledWith('foo')
+    })
+
+    it('Should call updateAccessToken method of the UserRepository with correct values ', async () => {
+      const { sut, userRepositoryStub } = makeSut()
+      const updateAccessTokenSpy =
+      jest
+        .spyOn(userRepositoryStub, 'updateAccessToken')
+      await sut.auth(fixturesLoginUser())
+      expect(updateAccessTokenSpy).toHaveBeenCalledWith('foo', 'hashedPassword')
+    })
+
+    it('Should forward the error if updateAccessToken method of the UserRepository class throws error', async () => {
+      const { sut, userRepositoryStub } = makeSut()
+      jest
+        .spyOn(userRepositoryStub, 'updateAccessToken')
+        .mockRejectedValueOnce(new Error())
+      const expectedResponse = sut.auth(fixturesCreateUser())
+      await expect(expectedResponse).rejects.toThrow()
     })
   })
 })

@@ -32,5 +32,7 @@ export class User implements IUser, IAuthentication {
     if (!isValidPassword) {
       return null
     }
+    const accessToken = await this.cryptography.encrypt(user.id)
+    await this.userRepository.updateAccessToken(user.id, accessToken)
   }
 }

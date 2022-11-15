@@ -14,4 +14,5 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
   }
 
   loadByEmail: (email: string) => Promise<LoadUserDto>
+  updateAccessToken: (userId: string, token: string) => Promise<void>
 }
