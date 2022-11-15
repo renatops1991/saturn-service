@@ -102,5 +102,25 @@ describe('User use case', () => {
       await sut.auth(user)
       expect(hashCompareSpy).toHaveBeenCalledWith(user.password, 'hashPassword')
     })
+
+    it('Should forward the error if HashCompare method of the UserRepository class throws error', async () => {
+      const { sut, encryptedStub } = makeSut()
+      const user = fixturesCreateUser()
+      jest
+        .spyOn(encryptedStub, 'compare')
+        .mockRejectedValueOnce(new Error())
+      const expectedResponse = sut.auth(user)
+      await expect(expectedResponse).rejects.toThrow()
+    })
+
+    it('Should return null if HashCompare method returns false', async () => {
+      const { sut, encryptedStub } = makeSut()
+      const user = fixturesLoginUser()
+      jest
+        .spyOn(encryptedStub, 'compare')
+        .mockReturnValueOnce(new Promise(resolve => resolve(false)))
+      const expectedRseponse = await sut.auth(user)
+      expect(expectedRseponse).toBeNull()
+    })
   })
 })

@@ -28,6 +28,9 @@ export class User implements IUser, IAuthentication {
     if (!user) {
       return null
     }
-    await this.encrypted.compare(loginUserDto.password, user.password)
+    const isValidPassword = await this.encrypted.compare(loginUserDto.password, user.password)
+    if (!isValidPassword) {
+      return null
+    }
   }
 }
