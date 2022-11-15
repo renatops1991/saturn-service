@@ -10,7 +10,7 @@ import { LoadUserDto } from '@/presentation/dtos/user/load-user.dto'
 export const mockCryptography = (): ICryptography => {
   class EncryptedStub {
     async encrypt (input: string): Promise<string> {
-      return await new Promise(resolve => resolve('hashedPassword'))
+      return await new Promise(resolve => resolve('encrypted'))
     }
 
     async compare (value: string, hash: string): Promise<boolean> {

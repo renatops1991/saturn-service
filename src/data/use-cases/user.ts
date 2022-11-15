@@ -34,5 +34,11 @@ export class User implements IUser, IAuthentication {
     }
     const accessToken = await this.cryptography.encrypt(user.id)
     await this.userRepository.updateAccessToken(user.id, accessToken)
+
+    return {
+      name: user.name,
+      email: user.email,
+      accessToken
+    }
   }
 }
