@@ -76,5 +76,15 @@ describe('User use case', () => {
       await sut.auth(user)
       expect(loadByEmailSpy).toHaveBeenCalledWith(user.email)
     })
+
+    it('Should forward the error if loadByEmail method of the UserRepository class throws error', async () => {
+      const { sut, userRepositoryStub } = makeSut()
+      const user = fixturesCreateUser()
+      jest
+        .spyOn(userRepositoryStub, 'loadByEmail')
+        .mockRejectedValueOnce(new Error())
+      const expectedResponse = sut.auth(user)
+      await expect(expectedResponse).rejects.toThrow()
+    })
   })
 })
