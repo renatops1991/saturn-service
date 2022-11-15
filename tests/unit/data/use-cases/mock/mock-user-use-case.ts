@@ -17,9 +17,14 @@ export const mockEncrypted = (): IEncrypted => {
 
 export const mockUserRepository = (): IUserRepository => {
   class UserRepositoryStub implements IUserRepository {
+    private readonly fakeUser = fixturesCreateUserOutput()
+
     async create (userDto: CreateUserDto): Promise<CreateUserOutputDto> {
-      const fakeUser = fixturesCreateUserOutput()
-      return await new Promise(resolve => resolve(fakeUser))
+      return await new Promise(resolve => resolve(this.fakeUser))
+    }
+
+    async loadByEmail (email: string): Promise<CreateUserOutputDto> {
+      return await new Promise(resolve => resolve(this.fakeUser))
     }
   }
 
