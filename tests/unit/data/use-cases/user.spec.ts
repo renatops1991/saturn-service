@@ -26,15 +26,15 @@ describe('User use case', () => {
   describe('Create', () => {
     it('Should call Cryptography with correct password', async () => {
       const { sut, cryptographyStub } = makeSut()
-      const encryptSpy = jest.spyOn(cryptographyStub, 'encrypt')
+      const hashSpy = jest.spyOn(cryptographyStub, 'hash')
       const user = fixturesCreateUser()
       await sut.create(user)
-      expect(encryptSpy).toHaveBeenCalledWith('12345')
+      expect(hashSpy).toHaveBeenCalledWith('12345')
     })
 
     it('Should forward the error if Cryptography throws error', async () => {
       const { sut, cryptographyStub } = makeSut()
-      jest.spyOn(cryptographyStub, 'encrypt').mockRejectedValueOnce(new Error())
+      jest.spyOn(cryptographyStub, 'hash').mockRejectedValueOnce(new Error())
       const user = fixturesCreateUser()
       const expectedResponse = sut.create(user)
       await expect(expectedResponse).rejects.toThrow()
@@ -46,7 +46,7 @@ describe('User use case', () => {
       const user = fixturesCreateUser()
       const expectedResponse = Object.assign({
         ...fixturesCreateUser(),
-        password: 'encrypted'
+        password: 'hashed'
       })
       await sut.create(user)
       expect(createSpy).toHaveBeenCalledWith(expectedResponse)
@@ -95,12 +95,12 @@ describe('User use case', () => {
       expect(expectedRseponse).toBeNull()
     })
 
-    it('Should call HashCompare method with correct password', async () => {
+    it('Should call Compare method with correct password', async () => {
       const { sut, cryptographyStub } = makeSut()
       const user = fixturesLoginUser()
       const hashCompareSpy = jest.spyOn(cryptographyStub, 'compare')
       await sut.auth(user)
-      expect(hashCompareSpy).toHaveBeenCalledWith(user.password, 'encrypted')
+      expect(hashCompareSpy).toHaveBeenCalledWith(user.password, 'hashed')
     })
 
     it('Should forward the error if HashCompare method of the UserRepository class throws error', async () => {

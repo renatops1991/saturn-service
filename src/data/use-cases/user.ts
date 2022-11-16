@@ -15,7 +15,7 @@ export class User implements IUser, IAuthentication {
   ) { }
 
   async create (userDto: Omit<CreateUserDto, 'passwordConfirmation'>): Promise<UserOutputDto> {
-    const hashedPassword = await this.cryptography.encrypt(userDto.password)
+    const hashedPassword = await this.cryptography.hash(userDto.password)
     const userBuilder = new UserBuilder()
     const buildUser = userBuilder.buildUserBasicInfo(Object.assign({}, userDto, { password: hashedPassword }))
     const user = await this.userRepository.create(buildUser)

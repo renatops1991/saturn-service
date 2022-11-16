@@ -53,7 +53,7 @@ export const fixturesLoadUser = (): LoadUserDto => {
     id: 'foo',
     name: 'John Foo Bar',
     email: 'foo@example.com',
-    password: 'encrypted'
+    password: 'hashed'
   }
   return loadUserDto
 }

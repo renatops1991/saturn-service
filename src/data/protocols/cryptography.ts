@@ -1,4 +1,5 @@
 export interface ICryptography {
-  encrypt: (input: string) => Promise<string>
+  hash: (value: string) => Promise<string>
+  encrypt: (userId: string) => Promise<string>
   compare: (value: string, hash: string) => Promise<boolean>
 }

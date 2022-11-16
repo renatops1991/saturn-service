@@ -8,16 +8,20 @@ import { fixturesCreateUser, fixturesCreateUserOutput, fixturesLoadUser } from '
 import { LoadUserDto } from '@/presentation/dtos/user/load-user.dto'
 
 export const mockCryptography = (): ICryptography => {
-  class EncryptedStub {
-    async encrypt (input: string): Promise<string> {
-      return await new Promise(resolve => resolve('encrypted'))
+  class CryptographyStub implements ICryptography {
+    async hash (input: string): Promise<string> {
+      return await new Promise(resolve => resolve('hashed'))
     }
 
     async compare (value: string, hash: string): Promise<boolean> {
       return await Promise.resolve(true)
     }
+
+    async encrypt (userId: string): Promise<string> {
+      return await Promise.resolve('encrypted')
+    }
   }
-  return new EncryptedStub()
+  return new CryptographyStub()
 }
 
 export const mockUserRepository = (): IUserRepository => {
