@@ -1,11 +1,11 @@
 import { IAuthentication } from '@/domain/protocols/authentication'
-import { LoginUserOutputDto } from '@/presentation/dtos/user/login-user-output.dto'
-import { LoginUserDto } from '@/presentation/dtos/user/login-user.dto'
+import { SignInUserOutputDto } from '@/presentation/dtos/user/signin-user-output.dto'
+import { SignInUserDto } from '@/presentation/dtos/user/signin-user.dto'
 import { fixturesLoginUserOutput } from '../fixtures/fixtures-user'
 
 export const mockAuthentication = (): IAuthentication => {
   class AuthenticationStub implements IAuthentication {
-    async auth (loginUserDto: LoginUserDto): Promise<LoginUserOutputDto> {
+    async auth (signInUserDto: SignInUserDto): Promise<SignInUserOutputDto> {
       return fixturesLoginUserOutput()
     }
   }

@@ -5,9 +5,9 @@ import { UserBuilder } from '@/data/builders/user-builder'
 import { IHashed } from '@/data/protocols/hashed'
 import { IUserRepository } from '@/data/protocols/user-repository'
 import { IAuthentication } from '@/domain/protocols/authentication'
-import { LoginUserOutputDto } from '@/presentation/dtos/user/login-user-output.dto'
-import { LoginUserDto } from '@/presentation/dtos/user/login-user.dto'
 import { ICryptography } from '../protocols/cryptography'
+import { SignInUserOutputDto } from '@/presentation/dtos/user/signin-user-output.dto'
+import { SignInUserDto } from '@/presentation/dtos/user/signin-user.dto'
 
 export class User implements IUser, IAuthentication {
   constructor (
@@ -25,12 +25,12 @@ export class User implements IUser, IAuthentication {
     return user
   }
 
-  async auth (loginUserDto: LoginUserDto): Promise<LoginUserOutputDto> {
-    const user = await this.userRepository.loadByEmail(loginUserDto.email)
+  async auth (signInUserDto: SignInUserDto): Promise<SignInUserOutputDto> {
+    const user = await this.userRepository.loadByEmail(signInUserDto.email)
     if (!user) {
       return null
     }
-    const isValidPassword = await this.hashed.compare(loginUserDto.password, user.password)
+    const isValidPassword = await this.hashed.compare(signInUserDto.password, user.password)
     if (!isValidPassword) {
       return null
     }

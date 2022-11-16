@@ -1,4 +1,5 @@
-import { makeLoginValidationCompositeFactory } from '@/main/factories/validations/login-validation-composite-factory'
+
+import { makeSignInValidationCompositeFactory } from '@/main/factories/validations/signin-validation-composite-factory'
 import { IValidation } from '@/presentation/protocols/validation'
 import { EmailValidation } from '@/validation/email-validation'
 import { RequiredField } from '@/validation/required-field'
@@ -7,9 +8,9 @@ import { mockEmailValidator } from '@/tests/unit/presentation/mocks/mock-user-va
 
 jest.mock('@/validation/validation-composite')
 
-describe('LoginValidationCompositeFactory', () => {
+describe('SignInValidationCompositeFactory', () => {
   it('Should call ValidationComposite with all validations', () => {
-    makeLoginValidationCompositeFactory()
+    makeSignInValidationCompositeFactory()
     const validations: IValidation[] = []
     for (const field of ['email', 'password']) {
       validations.push(new RequiredField(field))

@@ -1,5 +1,5 @@
 import { IAuthentication } from '@/domain/protocols/authentication'
-import { LoginUserController } from '@/presentation/controllers/user/login-user-controller'
+import { SignInUserController } from '@/presentation/controllers/user/signin-user-controller'
 import { IEmailValidator } from '@/validation/protocols/email-validator'
 import { fixturesLoginUser, fixturesLoginUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockAuthentication } from '@/tests/unit/presentation/mocks/mock-authentication'
@@ -17,7 +17,7 @@ import {
 } from '@/presentation/http-helper'
 
 type sutTypes = {
-  sut: LoginUserController
+  sut: SignInUserController
   emailValidatorStub: IEmailValidator
   authenticationStub: IAuthentication
 }
@@ -25,14 +25,14 @@ type sutTypes = {
 const makeSut = (): sutTypes => {
   const authenticationStub = mockAuthentication()
   const emailValidatorStub = mockEmailValidator()
-  const sut = new LoginUserController(emailValidatorStub, authenticationStub)
+  const sut = new SignInUserController(emailValidatorStub, authenticationStub)
   return {
     sut,
     emailValidatorStub,
     authenticationStub
   }
 }
-describe('LoginUserController', () => {
+describe('SignInUserController', () => {
   it('Should return 400 error if email no provided', async () => {
     const { sut } = makeSut()
     const loginUserDto = fixturesLoginUser()
@@ -64,7 +64,7 @@ describe('LoginUserController', () => {
     expect(expectedResponse).toEqual(badRequest(new InvalidParamError('email').serializeErrors()))
   })
 
-  it('Should return 500 error if LoginUserController throws exception error', async () => {
+  it('Should return 500 error if SignInUserController throws exception error', async () => {
     const { sut, emailValidatorStub } = makeSut()
     jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
       throw new Error()
