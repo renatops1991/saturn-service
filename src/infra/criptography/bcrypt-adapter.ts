@@ -1,14 +1,13 @@
-import { ICryptography } from '@/data/protocols/cryptography'
+import { IHashed } from '@/data/protocols/hashed'
 import bcrypt from 'bcrypt'
 
-export class BcryptAdapter implements ICryptography {
+export class BcryptAdapter implements IHashed {
   constructor (private readonly salt: number) {}
 
   async hash (value: string): Promise<string> {
-    const cryptographyValue = await bcrypt.hash(value, this.salt)
-    return cryptographyValue
+    const hashed = await bcrypt.hash(value, this.salt)
+    return hashed
   }
 
-  encrypt: (userId: string) => Promise<string>
   compare: (value: string, hash: string) => Promise<boolean>
 }

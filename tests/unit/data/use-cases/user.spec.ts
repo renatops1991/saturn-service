@@ -1,22 +1,26 @@
 
 import { ICryptography } from '@/data/protocols/cryptography'
+import { IHashed } from '@/data/protocols/hashed'
 import { IUserRepository } from '@/data/protocols/user-repository'
 import { User } from '@/data/use-cases/user'
 import { fixturesCreateUser, fixturesCreateUserOutput, fixturesLoginUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
-import { mockCryptography, mockUserRepository } from './mock/mock-user-use-case'
+import { mockCryptography, mockHashed, mockUserRepository } from './mock/mock-user-use-case'
 
 type SutType = {
   sut: User
+  hashedStub: IHashed
   cryptographyStub: ICryptography
   userRepositoryStub: IUserRepository
 }
 
 const makeSut = (): SutType => {
+  const hashedStub = mockHashed()
   const cryptographyStub = mockCryptography()
   const userRepositoryStub = mockUserRepository()
-  const sut = new User(cryptographyStub, userRepositoryStub)
+  const sut = new User(hashedStub, cryptographyStub, userRepositoryStub)
   return {
     sut,
+    hashedStub,
     cryptographyStub,
     userRepositoryStub
   }
@@ -24,23 +28,23 @@ const makeSut = (): SutType => {
 
 describe('User use case', () => {
   describe('Create', () => {
-    it('Should call Cryptography with correct password', async () => {
-      const { sut, cryptographyStub } = makeSut()
-      const hashSpy = jest.spyOn(cryptographyStub, 'hash')
+    it('Should call Hashed with correct password', async () => {
+      const { sut, hashedStub } = makeSut()
+      const hashSpy = jest.spyOn(hashedStub, 'hash')
       const user = fixturesCreateUser()
       await sut.create(user)
       expect(hashSpy).toHaveBeenCalledWith('12345')
     })
 
-    it('Should forward the error if Cryptography throws error', async () => {
-      const { sut, cryptographyStub } = makeSut()
-      jest.spyOn(cryptographyStub, 'hash').mockRejectedValueOnce(new Error())
+    it('Should forward the error if Hashed throws error', async () => {
+      const { sut, hashedStub } = makeSut()
+      jest.spyOn(hashedStub, 'hash').mockRejectedValueOnce(new Error())
       const user = fixturesCreateUser()
       const expectedResponse = sut.create(user)
       await expect(expectedResponse).rejects.toThrow()
     })
 
-    it('Should call Cryptography with correct values', async () => {
+    it('Should call Hashed with correct values', async () => {
       const { sut, userRepositoryStub } = makeSut()
       const createSpy = jest.spyOn(userRepositoryStub, 'create')
       const user = fixturesCreateUser()
@@ -95,29 +99,29 @@ describe('User use case', () => {
       expect(expectedRseponse).toBeNull()
     })
 
-    it('Should call Compare method with correct password', async () => {
-      const { sut, cryptographyStub } = makeSut()
+    it('Should call compare method with correct password', async () => {
+      const { sut, hashedStub } = makeSut()
       const user = fixturesLoginUser()
-      const hashCompareSpy = jest.spyOn(cryptographyStub, 'compare')
+      const hashCompareSpy = jest.spyOn(hashedStub, 'compare')
       await sut.auth(user)
       expect(hashCompareSpy).toHaveBeenCalledWith(user.password, 'hashed')
     })
 
-    it('Should forward the error if HashCompare method of the UserRepository class throws error', async () => {
-      const { sut, cryptographyStub } = makeSut()
+    it('Should forward the error if compare method of the UserRepository class throws error', async () => {
+      const { sut, hashedStub } = makeSut()
       const user = fixturesCreateUser()
       jest
-        .spyOn(cryptographyStub, 'compare')
+        .spyOn(hashedStub, 'compare')
         .mockRejectedValueOnce(new Error())
       const expectedResponse = sut.auth(user)
       await expect(expectedResponse).rejects.toThrow()
     })
 
-    it('Should return null if HashCompare method returns false', async () => {
-      const { sut, cryptographyStub } = makeSut()
+    it('Should return null if compare method returns false', async () => {
+      const { sut, hashedStub } = makeSut()
       const user = fixturesLoginUser()
       jest
-        .spyOn(cryptographyStub, 'compare')
+        .spyOn(hashedStub, 'compare')
         .mockReturnValueOnce(new Promise(resolve => resolve(false)))
       const expectedRseponse = await sut.auth(user)
       expect(expectedRseponse).toBeNull()

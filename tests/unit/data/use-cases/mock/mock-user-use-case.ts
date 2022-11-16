@@ -1,14 +1,13 @@
-import { ICryptography } from '@/data/protocols/cryptography'
+import { IHashed } from '@/data/protocols/hashed'
 import { IUserRepository } from '@/data/protocols/user-repository'
-import { UserBuilder } from '@/data/builders/user-builder'
-import { UserBasicInfo } from '@/data/types/user-basic-info'
 import { UserOutputDto } from '@/presentation/dtos/user/user-output.dto'
 import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
-import { fixturesCreateUser, fixturesCreateUserOutput, fixturesLoadUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
+import { fixturesCreateUserOutput, fixturesLoadUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { LoadUserDto } from '@/presentation/dtos/user/load-user.dto'
+import { ICryptography } from '@/data/protocols/cryptography'
 
-export const mockCryptography = (): ICryptography => {
-  class CryptographyStub implements ICryptography {
+export const mockHashed = (): IHashed => {
+  class HashedStub implements IHashed {
     async hash (input: string): Promise<string> {
       return await new Promise(resolve => resolve('hashed'))
     }
@@ -16,12 +15,17 @@ export const mockCryptography = (): ICryptography => {
     async compare (value: string, hash: string): Promise<boolean> {
       return await Promise.resolve(true)
     }
+  }
+  return new HashedStub()
+}
 
+export const mockCryptography = (): ICryptography => {
+  class CryptographyStubg implements ICryptography {
     async encrypt (userId: string): Promise<string> {
       return await Promise.resolve('encrypted')
     }
   }
-  return new CryptographyStub()
+  return new CryptographyStubg()
 }
 
 export const mockUserRepository = (): IUserRepository => {
@@ -40,14 +44,4 @@ export const mockUserRepository = (): IUserRepository => {
   }
 
   return new UserRepositoryStub()
-}
-
-export const mockUserBuilder = (): UserBuilder => {
-  class UserBuilderStub implements UserBuilder {
-    buildUserBasicInfo (userDto: CreateUserDto): UserBasicInfo {
-      return fixturesCreateUser()
-    }
-  }
-
-  return new UserBuilderStub()
 }
