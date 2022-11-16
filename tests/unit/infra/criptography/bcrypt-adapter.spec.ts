@@ -41,7 +41,9 @@ describe('BcryptAdapter', () => {
 
     it('Should pass error if hash method throws exception error', async () => {
       const { sut } = makeSut()
-      jest.spyOn(bcrypt, 'hash').mockImplementationOnce(() => { throw new Error() })
+      jest
+        .spyOn(bcrypt, 'hash')
+        .mockImplementationOnce(() => { throw new Error() })
       const expectedResponse = sut.hash('password')
       await expect(expectedResponse).rejects.toThrow()
     })
@@ -59,6 +61,24 @@ describe('BcryptAdapter', () => {
       const { sut } = makeSut()
       const isValidCompare = await sut.compare('password', 'hashPassword')
       expect(isValidCompare).toBeTruthy()
+    })
+
+    it('Should return false if compare method on fails', async () => {
+      const { sut } = makeSut()
+      jest
+        .spyOn(bcrypt, 'compare')
+        .mockImplementationOnce(() => false)
+      const isValidCompare = await sut.compare('password', 'hashPassword')
+      expect(isValidCompare).toBeFalsy()
+    })
+
+    it('Should pass error if compare method throws exception error', async () => {
+      const { sut } = makeSut()
+      jest
+        .spyOn(bcrypt, 'compare')
+        .mockImplementationOnce(() => { throw new Error() })
+      const expectedResponse = sut.compare('password', 'hashPassword')
+      await expect(expectedResponse).rejects.toThrow()
     })
   })
 })
