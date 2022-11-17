@@ -29,7 +29,6 @@ describe('UserRepositoryMongoAdapter', () => {
     expect(expectedResponse.name).toEqual(fixturesCreateUser().name)
     expect(expectedResponse.email).toEqual(fixturesCreateUser().email)
   })
-
   it('Should return correct an user on loadByEmail success', async () => {
     const sut = makeSut()
     await userCollection.insertOne(fixturesCreateUser())
@@ -39,5 +38,11 @@ describe('UserRepositoryMongoAdapter', () => {
     expect(expectedUser.name).toEqual(fixturesCreateUser().name)
     expect(expectedUser.email).toEqual(fixturesCreateUser().email)
     expect(expectedUser.password).toEqual(fixturesCreateUser().password)
+  })
+
+  it('Should return null if loadByEmail method is fail', async () => {
+    const sut = makeSut()
+    const expectedUser = await sut.loadByEmail('foo@foo.com')
+    expect(expectedUser).toBeFalsy()
   })
 })
