@@ -13,6 +13,11 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
     return MongoHelper.map(user)
   }
 
-  loadByEmail: (email: string) => Promise<LoadUserDto>
+  async loadByEmail (email: string): Promise<LoadUserDto> {
+    const userCollection = MongoHelper.getCollection('users')
+    const user = await userCollection.findOne({ email })
+    return MongoHelper.map(user)
+  }
+
   updateAccessToken: (userId: string, token: string) => Promise<void>
 }
