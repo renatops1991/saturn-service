@@ -22,7 +22,8 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
 
   async loadByEmail (email: string): Promise<LoadUserDto> {
     const userCollection = MongoHelper.getCollection('users')
-    const user = await userCollection.findOne({ email },
+    const user = await userCollection.findOne(
+      { email },
       {
         projection: {
           _id: 1,
@@ -34,5 +35,17 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
     return user && MongoHelper.map(user)
   }
 
-  updateAccessToken: (userId: string, token: string) => Promise<void>
+  async updateAccessToken (userId: string, token: string): Promise<void> {
+    const userCollection = MongoHelper.getCollection('users')
+    await userCollection.updateOne(
+      {
+        _id: userId
+      },
+      {
+        $set: {
+          accessToken: token
+        }
+      }
+    )
+  }
 }
