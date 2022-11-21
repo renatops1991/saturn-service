@@ -2,6 +2,7 @@ import { setupApp } from '@/main/config/app'
 import { MongoHelper } from '@/infra/mongodb/mongo-helper'
 import { Express } from 'express'
 import { Collection } from 'mongodb'
+import { hash } from 'bcrypt'
 import request from 'supertest'
 import dotenv from 'dotenv'
 
@@ -23,17 +24,36 @@ describe('User routes', () => {
     userCollection = MongoHelper.getCollection('users')
     await userCollection.deleteMany({})
   })
+  describe('Create', () => {
+    it('Should return an user on success', async () => {
+      await request(app)
+        .post('/api/create')
+        .send({
+          name: 'John Foo Bar',
+          email: 'foo@bar.com',
+          password: '123',
+          passwordConfirmation: '123',
+          confirmUser: false
+        })
+        .expect(200)
+    })
+  })
 
-  it('Should return an user on success', async () => {
-    await request(app)
-      .post('/api/create')
-      .send({
+  describe('Login', () => {
+    it('Should return name, email and accessToken', async () => {
+      const password = await hash('123', 12)
+      await userCollection.insertOne({
         name: 'John Foo Bar',
-        email: 'foo@bar.com',
-        password: '123',
-        passwordConfirmation: '123',
-        confirmUser: false
+        email: 'john@example.com',
+        password
       })
-      .expect(200)
+      await request(app)
+        .post('/api/sign-in')
+        .send({
+          email: 'john@example.com',
+          password: '123'
+        })
+        .expect(200)
+    })
   })
 })

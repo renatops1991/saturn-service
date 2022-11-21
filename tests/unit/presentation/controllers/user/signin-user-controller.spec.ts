@@ -25,7 +25,7 @@ type sutTypes = {
 const makeSut = (): sutTypes => {
   const authenticationStub = mockAuthentication()
   const validationStub = mockValidation()
-  const sut = new SignInUserController(validationStub, authenticationStub)
+  const sut = new SignInUserController(authenticationStub, validationStub)
   return {
     sut,
     validationStub,
