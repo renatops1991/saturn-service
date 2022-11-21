@@ -1,11 +1,10 @@
 import { IAuthentication } from '@/domain/protocols/authentication'
 import { SignInUserController } from '@/presentation/controllers/user/signin-user-controller'
-import { IEmailValidator } from '@/validation/protocols/email-validator'
 import { fixturesLoginUser, fixturesLoginUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockAuthentication } from '@/tests/unit/presentation/mocks/mock-authentication'
-import { mockEmailValidator } from '@/tests/unit/presentation/mocks/mock-user-validation'
+import { mockValidation } from '@/tests/unit/presentation/mocks/mock-user-validation'
 import {
-  InvalidParamError,
+
   MissingMandatoryParamError,
   ServerError
 } from '@/presentation/errors'
@@ -15,69 +14,61 @@ import {
   success,
   unauthorized
 } from '@/presentation/http-helper'
+import { IValidation } from '@/presentation/protocols/validation'
 
 type sutTypes = {
   sut: SignInUserController
-  emailValidatorStub: IEmailValidator
+  validationStub: IValidation
   authenticationStub: IAuthentication
 }
 
 const makeSut = (): sutTypes => {
   const authenticationStub = mockAuthentication()
-  const emailValidatorStub = mockEmailValidator()
-  const sut = new SignInUserController(emailValidatorStub, authenticationStub)
+  const validationStub = mockValidation()
+  const sut = new SignInUserController(validationStub, authenticationStub)
   return {
     sut,
-    emailValidatorStub,
+    validationStub,
     authenticationStub
   }
 }
 describe('SignInUserController', () => {
-  it('Should return 400 error if email no provided', async () => {
-    const { sut } = makeSut()
-    const loginUserDto = fixturesLoginUser()
-    delete loginUserDto.email
-    const expectedResponse = await sut.handle(loginUserDto)
-    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('email').serializeErrors()))
-  })
-
-  it('Should return 400 error if password no provided', async () => {
-    const { sut } = makeSut()
-    const loginUserDto = fixturesLoginUser()
-    delete loginUserDto.password
-    const expectedResponse = await sut.handle(loginUserDto)
-    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('password').serializeErrors()))
-  })
-
-  it('Should call isValid method of the EmailValidator class with correct value', async () => {
-    const { sut, emailValidatorStub } = makeSut()
-    const loginUserDto = fixturesLoginUser()
-    const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
-    await sut.handle(fixturesLoginUser())
-    expect(isValidSpy).toHaveBeenCalledWith(loginUserDto.email)
-  })
-
-  it('Should return 400 error if email is invalid', async () => {
-    const { sut, emailValidatorStub } = makeSut()
-    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
-    const expectedResponse = await sut.handle(fixturesLoginUser())
-    expect(expectedResponse).toEqual(badRequest(new InvalidParamError('email').serializeErrors()))
-  })
-
-  it('Should return 500 error if SignInUserController throws exception error', async () => {
-    const { sut, emailValidatorStub } = makeSut()
-    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+  it('Should return 500 error if Validation throws exception error', async () => {
+    const { sut, validationStub } = makeSut()
+    jest.spyOn(validationStub, 'validate').mockImplementationOnce(() => {
       throw new Error()
     })
     const expectedResponse = await sut.handle(fixturesLoginUser())
     expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))
   })
 
-  it('Should call Auth method with correct value', async () => {
-    const { sut, authenticationStub } = makeSut()
-    const authSpy = jest.spyOn(authenticationStub, 'auth')
+  it('Should return 400 error if email is invalid', async () => {
+    const { sut, validationStub } = makeSut()
+    jest
+      .spyOn(validationStub, 'validate')
+      .mockReturnValueOnce(new MissingMandatoryParamError('email').serializeErrors())
+    const expectedResponse = await sut.handle(fixturesLoginUser())
+    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('email').serializeErrors()))
+  })
+
+  it('Should return 400 error if password is invalid', async () => {
+    const { sut, validationStub } = makeSut()
+    jest
+      .spyOn(validationStub, 'validate')
+      .mockReturnValueOnce(new MissingMandatoryParamError('password').serializeErrors())
+    const expectedResponse = await sut.handle(fixturesLoginUser())
+    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('password').serializeErrors()))
+  })
+
+  it('Should call Validation class with correct value', async () => {
+    const { sut, validationStub } = makeSut()
+    const loginUserDto = fixturesLoginUser()
+    const isValidSpy = jest.spyOn(validationStub, 'validate')
     await sut.handle(fixturesLoginUser())
-    expect(authSpy).toHaveBeenCalledWith(fixturesLoginUser())
+    expect(isValidSpy).toHaveBeenCalledWith({
+      email: loginUserDto.email,
+      password: loginUserDto.password
+    })
   })
 
   it('Should return 401 error if user provided credentials is invalid', async () => {
@@ -92,6 +83,13 @@ describe('SignInUserController', () => {
     jest.spyOn(authenticationStub, 'auth').mockRejectedValueOnce(() => { throw new Error() })
     const expectedResponse = await sut.handle(fixturesLoginUser())
     expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))
+  })
+
+  it('Should call Auth method with correct value', async () => {
+    const { sut, authenticationStub } = makeSut()
+    const authSpy = jest.spyOn(authenticationStub, 'auth')
+    await sut.handle(fixturesLoginUser())
+    expect(authSpy).toHaveBeenCalledWith(fixturesLoginUser())
   })
 
   it('Should return 200 if user provided credentials is valid', async () => {
