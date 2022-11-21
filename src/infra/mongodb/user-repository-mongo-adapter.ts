@@ -6,16 +6,11 @@ import { LoadUserDto } from '@/presentation/dtos/user/load-user.dto'
 import { Collection } from 'mongodb'
 
 export class UserRepositoryMongoAdapter implements IUserRepository {
-  private readonly userCollection: Collection
-  constructor () {
-    if (!this.userCollection) {
-      this.userCollection = MongoHelper.getCollection('users')
-    }
-  }
+  private userCollection: Collection
 
   async create (userDto: Omit<CreateUserDto, 'passwordConfirmation'>): Promise<UserOutputDto> {
-    const createUser = await this.userCollection.insertOne(userDto)
-    const user = await this.userCollection.findOne(
+    const createUser = await this.getUserCollection().insertOne(userDto)
+    const user = await this.getUserCollection().findOne(
       { _id: createUser.insertedId },
       {
         projection: {
@@ -28,7 +23,7 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
   }
 
   async loadByEmail (email: string): Promise<LoadUserDto> {
-    const user = await this.userCollection.findOne(
+    const user = await this.getUserCollection().findOne(
       { email },
       {
         projection: {
@@ -42,7 +37,7 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
   }
 
   async updateAccessToken (userId: string, token: string): Promise<void> {
-    await this.userCollection.updateOne(
+    await this.getUserCollection().updateOne(
       {
         _id: userId
       },
@@ -52,5 +47,13 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
         }
       }
     )
+  }
+
+  private getUserCollection (): Collection {
+    if (!this.userCollection) {
+      this.userCollection = MongoHelper.getCollection('users')
+    }
+
+    return this.userCollection
   }
 }

@@ -7,8 +7,8 @@ import { IValidation } from '@/presentation/protocols/validation'
 
 export class SignInUserController implements IController {
   constructor (
-    private readonly validation: IValidation,
-    private readonly authentication: IAuthentication
+    private readonly authentication: IAuthentication,
+    private readonly validation: IValidation
   ) { }
 
   async handle (signInUserDto: SignInUserDto): Promise<IHttpResponse> {

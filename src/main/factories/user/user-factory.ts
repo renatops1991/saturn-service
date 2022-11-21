@@ -7,16 +7,23 @@ import { makeSignUpValidationCompositeFactory } from '@/main/factories/validatio
 import { SignInUserController } from '@/presentation/controllers/user/signin-user-controller'
 import { makeSignInValidationCompositeFactory } from '../validations/signin-validation-composite-factory'
 import { JwtAdapter } from '@/infra/criptography/jwt-adapter'
+import dotenv from 'dotenv'
 
+dotenv.config()
 export const signUpFactory = (): IController => {
-  const user = new User(new BcryptAdapter(12), new JwtAdapter(''), new UserRepositoryMongoAdapter())
+  const user = new User(
+    new BcryptAdapter(12),
+    new JwtAdapter(process.env.JWT_SECRET),
+    new UserRepositoryMongoAdapter()
+  )
   return new SignUpUserController(user, makeSignUpValidationCompositeFactory())
 }
 
 export const signInFactory = (): IController => {
   const authentication = new User(
     new BcryptAdapter(12),
-    new JwtAdapter(''),
-    new UserRepositoryMongoAdapter())
-  return new SignInUserController(makeSignInValidationCompositeFactory(), authentication)
+    new JwtAdapter(process.env.JWT_SECRET),
+    new UserRepositoryMongoAdapter()
+  )
+  return new SignInUserController(authentication, makeSignInValidationCompositeFactory())
 }
