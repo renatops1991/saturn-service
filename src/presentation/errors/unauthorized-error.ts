@@ -3,14 +3,14 @@ import { CustomError } from './custom-error'
 
 export class UnauthorizedError extends CustomError {
   constructor () {
-    super('Unauthorized error')
+    super('Email or password incorrect')
     Object.setPrototypeOf(this, UnauthorizedError.prototype)
   }
 
   serializeErrors (): any {
     return {
       type: ErrorsTypeEnum.UNAUTHORIZED_ERROR,
-      message: 'Unauthorized error'
+      message: 'Email or password incorrect'
     }
   }
 }
