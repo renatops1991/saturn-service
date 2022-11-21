@@ -18,12 +18,12 @@ export class SignInUserController implements IController {
         return badRequest(isError)
       }
 
-      const isAuthenticationValid = await this.authentication.auth(signInUserDto)
-      if (!isAuthenticationValid) {
+      const isValidAuthentication = await this.authentication.auth(signInUserDto)
+      if (!isValidAuthentication) {
         return unauthorized()
       }
 
-      return success(isAuthenticationValid)
+      return success(isValidAuthentication)
     } catch (error) {
       return serverError(error)
     }
