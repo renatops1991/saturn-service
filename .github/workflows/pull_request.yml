@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: ["16.x"]
+        node-version: [16.x]
         mongodb-version: ["5.0"]
 
     steps:
@@ -30,13 +30,12 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.cache/npm
-          node-version: ${{ matrix.node-version }}
           key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Check linting
         run: npm run lint
@@ -50,6 +49,7 @@ jobs:
       - name: Running tests
         run: npm test --coverage
         env:
+          JWT_SECRET: "OhmiNEsgd3qnF9$397h@Jp"
           MONGODB_URL_TEST: "mongodb://localhost:27017/saturn-service"
 
       - name: Coveralls
