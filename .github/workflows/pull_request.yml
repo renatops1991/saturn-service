@@ -30,10 +30,10 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.cache/npm
-          node-version: ${{ matrix.node-version}}
-          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json')}}
+          node-version: ${{ matrix.node-version }}
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os}}-npm-
+            ${{ runner.os }}-npm-
 
       - name: Install dependencies
         run: npm install

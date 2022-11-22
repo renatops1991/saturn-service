@@ -6,7 +6,7 @@
     "start": "node -r module-alias/register ./dist/main/server.js",
     "start:dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules --watch src ./src/main/server.ts",
     "start:debug": "nodemon -L --watch ./dist -r module-alias/register --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
-    "build": "rimraf dist && tsc -w",
+    "build": "rimraf dist && tsc -p tsconfig-build.json -w",
     "test": "jest --passWithNoTests --silent --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "npm test -- --watch -c jest-unit.config.js",
