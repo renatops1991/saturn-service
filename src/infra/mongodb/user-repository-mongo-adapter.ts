@@ -1,13 +1,57 @@
+import { CreateUserDto, LoadUserDto, UserOutputDto } from '@/presentation/dtos/user'
 import { IUserRepository } from '@/data/protocols/user-repository'
-import { CreateUserOutputDto } from '@/presentation/dtos/user/create-user-output.dto'
-import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
-import { MongoConnect } from './mongo-helper'
+import { MongoHelper } from './mongo-helper'
+import { Collection } from 'mongodb'
 
 export class UserRepositoryMongoAdapter implements IUserRepository {
-  async create (userDto: Omit<CreateUserDto, 'passwordConfirmation'>): Promise<CreateUserOutputDto> {
-    const userCollection = MongoConnect.getCollection('users')
-    const createUser = await userCollection.insertOne(userDto)
-    const user = await userCollection.findOne(createUser.insertedId)
-    return MongoConnect.map(user)
+  private userCollection: Collection
+
+  async create (userDto: Omit<CreateUserDto, 'passwordConfirmation'>): Promise<UserOutputDto> {
+    const createUser = await this.getUserCollection().insertOne(userDto)
+    const user = await this.getUserCollection().findOne(
+      { _id: createUser.insertedId },
+      {
+        projection: {
+          _id: 1,
+          name: 1,
+          email: 1
+        }
+      })
+    return MongoHelper.map(user)
+  }
+
+  async loadByEmail (email: string): Promise<LoadUserDto> {
+    const user = await this.getUserCollection().findOne(
+      { email },
+      {
+        projection: {
+          _id: 1,
+          name: 1,
+          email: 1,
+          password: 1
+        }
+      })
+    return user && MongoHelper.map(user)
+  }
+
+  async updateAccessToken (userId: string, token: string): Promise<void> {
+    await this.getUserCollection().updateOne(
+      {
+        _id: userId
+      },
+      {
+        $set: {
+          accessToken: token
+        }
+      }
+    )
+  }
+
+  private getUserCollection (): Collection {
+    if (!this.userCollection) {
+      this.userCollection = MongoHelper.getCollection('users')
+    }
+
+    return this.userCollection
   }
 }

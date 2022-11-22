@@ -4,5 +4,5 @@ export interface CreateUserDto {
   email: string
   password: string
   passwordConfirmation: string
-  confirmUser: boolean
+  confirmUser?: boolean
 }

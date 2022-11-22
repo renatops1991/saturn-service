@@ -1,4 +1,4 @@
-export interface CreateUserOutputDto {
+export interface LoadUserDto {
   id: string
   name: string
   email: string

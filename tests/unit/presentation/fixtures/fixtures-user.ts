@@ -1,5 +1,10 @@
-import { CreateUserOutputDto } from '@/presentation/dtos/user/create-user-output.dto'
-import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
+import {
+  CreateUserDto,
+  LoadUserDto,
+  UserOutputDto,
+  SignInUserOutputDto,
+  SignInUserDto
+} from '@/presentation/dtos/user/'
 
 export const fixturesCreateUserRequest = (): CreateUserDto => {
   const userDto: CreateUserDto = {
@@ -12,11 +17,10 @@ export const fixturesCreateUserRequest = (): CreateUserDto => {
   return userDto
 }
 
-export const fixturesCreateUserOutput = (): CreateUserOutputDto => ({
+export const fixturesCreateUserOutput = (): UserOutputDto => ({
   id: 'foo',
   name: 'John Foo Bar',
-  email: 'foo@example.com',
-  password: 'hashedPassword'
+  email: 'foo@example.com'
 })
 
 export const fixturesCreateUser = (): Omit<CreateUserDto, 'passwordConfirmation'> => {
@@ -27,4 +31,31 @@ export const fixturesCreateUser = (): Omit<CreateUserDto, 'passwordConfirmation'
     confirmUser: false
   }
   return userDto
+}
+
+export const fixturesLoginUser = (): SignInUserDto => {
+  const loginUserDto: SignInUserDto = {
+    email: 'foo@example.com',
+    password: '12345'
+  }
+  return loginUserDto
+}
+
+export const fixturesLoginUserOutput = (): SignInUserOutputDto => {
+  const loginUserOutputDto: SignInUserOutputDto = {
+    name: 'John Foo Bar',
+    email: 'foo@example.com',
+    accessToken: 'accessToken'
+  }
+  return loginUserOutputDto
+}
+
+export const fixturesLoadUser = (): LoadUserDto => {
+  const loadUserDto: LoadUserDto = {
+    id: 'foo',
+    name: 'John Foo Bar',
+    email: 'foo@example.com',
+    password: 'hashed'
+  }
+  return loadUserDto
 }

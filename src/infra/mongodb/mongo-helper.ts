@@ -1,6 +1,6 @@
 import { MongoClient, Collection } from 'mongodb'
 
-export const MongoConnect = {
+export const MongoHelper = {
   client: null as MongoClient,
   uri: null as string,
 

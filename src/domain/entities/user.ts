@@ -1,4 +1,4 @@
-import { UserBasicInfo } from '@/domain/types/user-basic-info'
+import { UserBasicInfoType } from '@/data/types/user-basic-info-type'
 import { Address } from './address'
 
 export class User {
@@ -14,7 +14,7 @@ export class User {
   password: string
   confirmUser?: boolean
 
-  public getUserBasicInfo (): UserBasicInfo {
+  public getUserBasicInfo (): UserBasicInfoType {
     return {
       name: this.name,
       email: this.email,

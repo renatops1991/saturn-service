@@ -1,37 +1,47 @@
-import { IEncrypted } from '@/data/protocols/encrypted'
+import { IHashed } from '@/data/protocols/hashed'
 import { IUserRepository } from '@/data/protocols/user-repository'
-import { UserBuilder } from '@/domain/builders/user-builder'
-import { CreateUserOutputDto } from '@/presentation/dtos/user/create-user-output.dto'
+import { UserOutputDto } from '@/presentation/dtos/user/user-output.dto'
 import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
-import { fixturesCreateUser, fixturesCreateUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
-import { UserBasicInfo } from '@/domain/types/user-basic-info'
+import { fixturesCreateUserOutput, fixturesLoadUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
+import { LoadUserDto } from '@/presentation/dtos/user/load-user.dto'
+import { ICryptography } from '@/data/protocols/cryptography'
 
-export const mockEncrypted = (): IEncrypted => {
-  class EncryptedStub {
-    async encrypt (input: string): Promise<string> {
-      return await new Promise(resolve => resolve('hashedPassword'))
+export const mockHashed = (): IHashed => {
+  class HashedStub implements IHashed {
+    async hash (input: string): Promise<string> {
+      return await new Promise(resolve => resolve('hashed'))
+    }
+
+    async compare (value: string, hash: string): Promise<boolean> {
+      return await Promise.resolve(true)
     }
   }
-  return new EncryptedStub()
+  return new HashedStub()
+}
+
+export const mockCryptography = (): ICryptography => {
+  class CryptographyStubg implements ICryptography {
+    async encrypt (userId: string): Promise<string> {
+      return await Promise.resolve('encrypted')
+    }
+  }
+  return new CryptographyStubg()
 }
 
 export const mockUserRepository = (): IUserRepository => {
   class UserRepositoryStub implements IUserRepository {
-    async create (userDto: CreateUserDto): Promise<CreateUserOutputDto> {
-      const fakeUser = fixturesCreateUserOutput()
-      return await new Promise(resolve => resolve(fakeUser))
+    async create (userDto: CreateUserDto): Promise<UserOutputDto> {
+      return await new Promise(resolve => resolve(fixturesCreateUserOutput()))
+    }
+
+    async loadByEmail (email: string): Promise<LoadUserDto> {
+      return await new Promise(resolve => resolve(fixturesLoadUser()))
+    }
+
+    async updateAccessToken (id: string, token: string): Promise<void> {
+      return await new Promise(resolve => resolve())
     }
   }
 
   return new UserRepositoryStub()
-}
-
-export const mockUserBuilder = (): UserBuilder => {
-  class UserBuilderStub implements UserBuilder {
-    buildUserBasicInfo (userDto: CreateUserDto): UserBasicInfo {
-      return fixturesCreateUser()
-    }
-  }
-
-  return new UserBuilderStub()
 }
