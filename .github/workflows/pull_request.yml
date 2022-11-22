@@ -49,8 +49,8 @@ jobs:
       - name: Running tests
         run: npm test --coverage
         env:
-          JWT_SECRET: "OhmiNEsgd3qnF9$397h@Jp"
-          MONGODB_URL_TEST: "mongodb://localhost:27017/saturn-service"
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          MONGODB_URL_TEST: ${{ secrets.MONGODB_URL_TEST }}
 
       - name: Coveralls
         uses: coverallsapp/github-action@master
