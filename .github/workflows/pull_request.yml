@@ -3,10 +3,10 @@ name: Continuous Integration Testing
 on:
   pull_request:
     branches:
-      - 'production'
+      - "production"
   push:
     branches:
-      - 'production'
+      - "production"
 
 jobs:
   build:
@@ -14,8 +14,8 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
-        mongodb-version: ['5.0']
+        node-version: ["16.x"]
+        mongodb-version: ["5.0"]
 
     steps:
       - name: Checkout
@@ -34,7 +34,7 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json')}}
           restore-keys: |
             ${{ runner.os}}-npm-
-            
+
       - name: Install dependencies
         run: npm install
 
@@ -50,7 +50,7 @@ jobs:
       - name: Running tests
         run: npm test --coverage
         env:
-          MONGODB_URL_TEST: 'mongodb://localhost:27017/saturn-service'
+          MONGODB_URL_TEST: "mongodb://localhost:27017/saturn-service"
 
       - name: Coveralls
         uses: coverallsapp/github-action@master

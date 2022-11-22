@@ -45,7 +45,8 @@ describe('User routes', () => {
       await userCollection.insertOne({
         name: 'John Foo Bar',
         email: 'john@example.com',
-        password
+        password,
+        confirmUser: false
       })
       await request(app)
         .post('/api/sign-in')
