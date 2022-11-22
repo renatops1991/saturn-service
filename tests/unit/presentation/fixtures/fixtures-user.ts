@@ -1,8 +1,10 @@
-import { UserOutputDto } from '@/presentation/dtos/user/user-output.dto'
-import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
-import { SignInUserOutputDto } from '@/presentation/dtos/user/signin-user-output.dto'
-import { SignInUserDto } from '@/presentation/dtos/user/signin-user.dto'
-import { LoadUserDto } from '@/presentation/dtos/user/load-user.dto'
+import {
+  CreateUserDto,
+  LoadUserDto,
+  UserOutputDto,
+  SignInUserOutputDto,
+  SignInUserDto
+} from '@/presentation/dtos/user/'
 
 export const fixturesCreateUserRequest = (): CreateUserDto => {
   const userDto: CreateUserDto = {

@@ -1,13 +1,15 @@
 import { IUser } from '@/domain/protocols/user'
-import { UserOutputDto } from '@/presentation/dtos/user/user-output.dto'
-import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
+import { IAuthentication } from '@/domain/protocols/authentication'
+import {
+  CreateUserDto,
+  UserOutputDto,
+  SignInUserOutputDto,
+  SignInUserDto
+} from '@/presentation/dtos/user'
 import { UserBuilder } from '@/data/builders/user-builder'
 import { IHashed } from '@/data/protocols/hashed'
 import { IUserRepository } from '@/data/protocols/user-repository'
-import { IAuthentication } from '@/domain/protocols/authentication'
-import { ICryptography } from '../protocols/cryptography'
-import { SignInUserOutputDto } from '@/presentation/dtos/user/signin-user-output.dto'
-import { SignInUserDto } from '@/presentation/dtos/user/signin-user.dto'
+import { ICryptography } from '@/data/protocols/cryptography'
 
 export class User implements IUser, IAuthentication {
   constructor (

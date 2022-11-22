@@ -1,8 +1,7 @@
 
 import { IUser } from '@/domain/protocols/user'
 import { SignUpUserController } from '@/presentation/controllers/user/signup-user-controller'
-import { UserOutputDto } from '@/presentation/dtos/user/user-output.dto'
-import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
+import { CreateUserDto, UserOutputDto } from '@/presentation/dtos/user'
 import {
   MissingMandatoryParamError,
   InvalidParamError,
