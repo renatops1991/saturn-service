@@ -3,7 +3,6 @@ import { IAuthentication } from '@/domain/protocols/authentication'
 import {
   SignUpUserDto,
   UserOutputDto,
-  SignInUserOutputDto,
   SignInUserDto
 } from '@/presentation/dtos/user'
 import { UserBuilder } from '@/data/builders/user-builder'
@@ -27,7 +26,7 @@ export class User implements IUser, IAuthentication {
     return user
   }
 
-  async auth (signInUserDto: SignInUserDto): Promise<SignInUserOutputDto> {
+  async auth (signInUserDto: SignInUserDto): Promise<UserOutputDto> {
     const user = await this.userRepository.loadByEmail(signInUserDto.email)
     if (!user) {
       return null

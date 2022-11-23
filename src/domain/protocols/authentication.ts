@@ -1,5 +1,5 @@
-import { SignInUserOutputDto, SignInUserDto } from '@/presentation/dtos/user'
+import { UserOutputDto, SignInUserDto } from '@/presentation/dtos/user'
 
 export interface IAuthentication {
-  auth: (signInUserDto: SignInUserDto) => Promise<SignInUserOutputDto>
+  auth: (signInUserDto: SignInUserDto) => Promise<UserOutputDto>
 }
