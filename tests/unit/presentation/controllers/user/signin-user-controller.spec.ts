@@ -1,6 +1,6 @@
 import { IAuthentication } from '@/domain/protocols/authentication'
 import { SignInUserController } from '@/presentation/controllers/user/signin-user-controller'
-import { fixturesLoginUser, fixturesLoginUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
+import { fixturesLoginUser, fixturesUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockAuthentication } from '@/tests/unit/presentation/mocks/mock-authentication'
 import { mockValidation } from '@/tests/unit/presentation/mocks/mock-user-validation'
 import {
@@ -95,6 +95,6 @@ describe('SignInUserController', () => {
   it('Should return 200 if user provided credentials is valid', async () => {
     const { sut } = makeSut()
     const expectedResponse = await sut.handle(fixturesLoginUser())
-    expect(expectedResponse).toEqual(success(fixturesLoginUserOutput()))
+    expect(expectedResponse).toEqual(success(fixturesUserOutput()))
   })
 })

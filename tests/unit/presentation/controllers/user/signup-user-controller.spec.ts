@@ -1,5 +1,7 @@
 
 import { IUser } from '@/domain/protocols/user'
+import { IAuthentication } from '@/domain/protocols/authentication'
+import { IEmailValidator } from '@/validation/protocols/email-validator'
 import { SignUpUserController } from '@/presentation/controllers/user/signup-user-controller'
 import { SignUpUserDto, UserOutputDto } from '@/presentation/dtos/user'
 import {
@@ -8,36 +10,39 @@ import {
   ServerError
 } from '@/presentation/errors'
 import { badRequest, serverError } from '@/presentation/http-helper'
-import { IEmailValidator } from '@/validation/protocols/email-validator'
 import { IValidation } from '@/presentation/protocols/validation'
-import { fixturesCreateUserRequest, fixturesCreateUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
+import { fixturesCreateUserRequest, fixturesUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockEmailValidator, mockValidation } from '@/tests/unit/presentation/mocks/mock-user-validation'
+import { mockAuthentication } from '@/tests/unit/presentation/mocks/mock-authentication'
 
 type SutTypes = {
   sut: SignUpUserController
   emailValidatorStub: IEmailValidator
   userStub: IUser
   validationStub: IValidation
+  authenticationStub: IAuthentication
 }
 
 const makeSut = (): SutTypes => {
   const emailValidatorStub = mockEmailValidator()
   const userStub = makeCreateUser()
   const validationStub = mockValidation()
-  const sut = new SignUpUserController(userStub, validationStub)
+  const authenticationStub = mockAuthentication()
+  const sut = new SignUpUserController(userStub, validationStub, authenticationStub)
 
   return {
     sut,
     emailValidatorStub,
     userStub,
-    validationStub
+    validationStub,
+    authenticationStub
   }
 }
 
 const makeCreateUser = (): IUser => {
   class UserStub implements IUser {
     async create (user: SignUpUserDto): Promise<UserOutputDto> {
-      return await new Promise(resolve => resolve(fixturesCreateUserOutput()))
+      return await new Promise(resolve => resolve(fixturesUserOutput()))
     }
   }
 
@@ -87,7 +92,7 @@ describe('User Controller', () => {
     const userDto = fixturesCreateUserRequest()
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(200)
-    expect(expectedResponse.body).toEqual(fixturesCreateUserOutput())
+    expect(expectedResponse.body).toEqual(fixturesUserOutput())
   })
 
   it('Should call Validation with correct values', async () => {
@@ -116,5 +121,25 @@ describe('User Controller', () => {
       .mockReturnValue(new InvalidParamError('passwordConfirmation').serializeErrors())
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse).toEqual(badRequest(new InvalidParamError('passwordConfirmation').serializeErrors()))
+  })
+
+  it('Should call Authentication with correct values', async () => {
+    const { sut, authenticationStub } = makeSut()
+    const userDto = fixturesCreateUserRequest()
+    const authSpy = jest.spyOn(authenticationStub, 'auth')
+    await sut.handle(userDto)
+    expect(authSpy).toHaveBeenCalledWith({
+      email: 'foo@example.com',
+      password: '12345'
+    })
+  })
+
+  it('Should return 500 error if Authentication throw exception error', async () => {
+    const { sut, authenticationStub } = makeSut()
+    const userDto = fixturesCreateUserRequest()
+    jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(() => { throw new Error() })
+    const expectedResponse = await sut.handle(userDto)
+    expect(expectedResponse.statusCode).toBe(500)
+    expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))
   })
 })

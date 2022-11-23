@@ -2,7 +2,6 @@ import {
   SignUpUserDto,
   LoadUserDto,
   UserOutputDto,
-  SignInUserOutputDto,
   SignInUserDto
 } from '@/presentation/dtos/user/'
 
@@ -16,12 +15,6 @@ export const fixturesCreateUserRequest = (): SignUpUserDto => {
   }
   return userDto
 }
-
-export const fixturesCreateUserOutput = (): UserOutputDto => ({
-  id: 'foo',
-  name: 'John Foo Bar',
-  email: 'foo@example.com'
-})
 
 export const fixturesCreateUser = (): Omit<SignUpUserDto, 'passwordConfirmation'> => {
   const userDto: Omit<SignUpUserDto, 'passwordConfirmation'> = {
@@ -41,8 +34,8 @@ export const fixturesLoginUser = (): SignInUserDto => {
   return loginUserDto
 }
 
-export const fixturesLoginUserOutput = (): SignInUserOutputDto => {
-  const loginUserOutputDto: SignInUserOutputDto = {
+export const fixturesUserOutput = (): UserOutputDto => {
+  const loginUserOutputDto: UserOutputDto = {
     name: 'John Foo Bar',
     email: 'foo@example.com',
     accessToken: 'accessToken'

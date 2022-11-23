@@ -3,7 +3,7 @@ import { ICryptography } from '@/data/protocols/cryptography'
 import { IHashed } from '@/data/protocols/hashed'
 import { IUserRepository } from '@/data/protocols/user-repository'
 import { User } from '@/data/use-cases/user'
-import { fixturesCreateUser, fixturesCreateUserOutput, fixturesLoginUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
+import { fixturesCreateUser, fixturesUserOutput, fixturesLoginUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockCryptography, mockHashed, mockUserRepository } from './mock/mock-user-use-case'
 
 type SutType = {
@@ -68,7 +68,7 @@ describe('User use case', () => {
       const { sut } = makeSut()
       const user = fixturesCreateUser()
       const expectedResponse = await sut.create(user)
-      expect(expectedResponse).toEqual(fixturesCreateUserOutput())
+      expect(expectedResponse).toEqual(fixturesUserOutput())
     })
   })
 

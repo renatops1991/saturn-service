@@ -26,7 +26,6 @@ describe('UserRepositoryMongoAdapter', () => {
       const sut = makeSut()
       const expectedResponse = await sut.create(fixturesCreateUser())
       expect(expectedResponse).toBeTruthy()
-      expect(expectedResponse.id).toBeTruthy()
       expect(expectedResponse.name).toEqual(fixturesCreateUser().name)
       expect(expectedResponse.email).toEqual(fixturesCreateUser().email)
     })
