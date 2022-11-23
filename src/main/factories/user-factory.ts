@@ -16,7 +16,7 @@ export const signUpFactory = (): IController => {
     new JwtAdapter(process.env.JWT_SECRET),
     new UserRepositoryMongoAdapter()
   )
-  return new SignUpUserController(user, makeSignUpValidationCompositeFactory())
+  return new SignUpUserController(user, makeSignUpValidationCompositeFactory(), user)
 }
 
 export const signInFactory = (): IController => {

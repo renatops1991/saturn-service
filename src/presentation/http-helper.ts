@@ -7,6 +7,11 @@ export const badRequest = (error: Error): IHttpResponse => ({
   body: error
 })
 
+export const forbidden = (error: Error): IHttpResponse => ({
+  statusCode: 403,
+  body: error
+})
+
 export const serverError = (error: Error): IHttpResponse => ({
   statusCode: 500,
   body: new ServerError(error.stack).serializeErrors()

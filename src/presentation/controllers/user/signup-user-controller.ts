@@ -2,7 +2,13 @@
 import { IAuthentication } from '@/domain/protocols/authentication'
 import { IUser } from '@/domain/protocols/user'
 import { SignUpUserDto } from '@/presentation/dtos/user/signup-user.dto'
-import { badRequest, serverError, success } from '@/presentation/http-helper'
+import { EmailInUseError } from '@/presentation/errors'
+import {
+  badRequest,
+  forbidden,
+  serverError,
+  success
+} from '@/presentation/http-helper'
 import { IController } from '@/presentation/protocols/controller'
 import { IHttpResponse } from '@/presentation/protocols/http'
 import { IValidation } from '@/presentation/protocols/validation'
@@ -21,12 +27,17 @@ export class SignUpUserController implements IController {
       }
 
       const { email, password } = userDto
-      await this.user.create(userDto)
-      const user = await this.authentication.auth({
+      const user = await this.user.create(userDto)
+
+      if (!user) {
+        return forbidden(new EmailInUseError())
+      }
+
+      const accessToken = await this.authentication.auth({
         email,
         password
       })
-      return success(user)
+      return success(accessToken)
     } catch (error) {
       return serverError(error)
     }
