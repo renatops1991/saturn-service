@@ -9,11 +9,12 @@ import {
   InvalidParamError,
   ServerError
 } from '@/presentation/errors'
-import { badRequest, serverError } from '@/presentation/http-helper'
+import { badRequest, forbidden, serverError } from '@/presentation/http-helper'
 import { IValidation } from '@/presentation/protocols/validation'
 import { fixturesCreateUserRequest, fixturesUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockEmailValidator, mockValidation } from '@/tests/unit/presentation/mocks/mock-user-validation'
 import { mockAuthentication } from '@/tests/unit/presentation/mocks/mock-authentication'
+import { EmailInUseError } from '@/presentation/errors/email-in-use-error'
 
 type SutTypes = {
   sut: SignUpUserController
@@ -141,5 +142,14 @@ describe('User Controller', () => {
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(500)
     expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))
+  })
+
+  it('Should return 403 error if UserUseCase returns null', async () => {
+    const { sut, userStub } = makeSut()
+    const userDto = fixturesCreateUserRequest()
+    jest.spyOn(userStub, 'create').mockResolvedValueOnce(null)
+    const expectedResponse = await sut.handle(userDto)
+    expect(expectedResponse.statusCode).toBe(403)
+    expect(expectedResponse).toEqual(forbidden((new EmailInUseError())))
   })
 })
