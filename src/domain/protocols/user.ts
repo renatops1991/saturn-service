@@ -1,4 +1,4 @@
-import { CreateUserDto, UserOutputDto } from '@/presentation/dtos/user/'
+import { SignUpUserDto, UserOutputDto } from '@/presentation/dtos/user/'
 export interface IUser {
-  create: (user: CreateUserDto) => Promise<UserOutputDto>
+  create: (user: SignUpUserDto) => Promise<UserOutputDto>
 }

@@ -1,7 +1,7 @@
 import { IHashed } from '@/data/protocols/hashed'
 import { IUserRepository } from '@/data/protocols/user-repository'
 import { UserOutputDto } from '@/presentation/dtos/user/user-output.dto'
-import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
+import { SignUpUserDto } from '@/presentation/dtos/user/signup-user.dto'
 import { fixturesCreateUserOutput, fixturesLoadUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { LoadUserDto } from '@/presentation/dtos/user/load-user.dto'
 import { ICryptography } from '@/data/protocols/cryptography'
@@ -30,7 +30,7 @@ export const mockCryptography = (): ICryptography => {
 
 export const mockUserRepository = (): IUserRepository => {
   class UserRepositoryStub implements IUserRepository {
-    async create (userDto: CreateUserDto): Promise<UserOutputDto> {
+    async create (userDto: SignUpUserDto): Promise<UserOutputDto> {
       return await new Promise(resolve => resolve(fixturesCreateUserOutput()))
     }
 

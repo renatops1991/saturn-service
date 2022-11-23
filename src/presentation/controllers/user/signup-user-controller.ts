@@ -1,6 +1,6 @@
 
 import { IUser } from '@/domain/protocols/user'
-import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
+import { SignUpUserDto } from '@/presentation/dtos/user/signup-user.dto'
 import { badRequest, serverError, success } from '@/presentation/http-helper'
 import { IController } from '@/presentation/protocols/controller'
 import { IHttpResponse } from '@/presentation/protocols/http'
@@ -11,7 +11,7 @@ export class SignUpUserController implements IController {
     private readonly validation: IValidation
   ) {}
 
-  async handle (userDto: CreateUserDto): Promise<IHttpResponse> {
+  async handle (userDto: SignUpUserDto): Promise<IHttpResponse> {
     try {
       const isError = this.validation.validate(userDto)
       if (isError) {

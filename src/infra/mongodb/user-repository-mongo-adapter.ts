@@ -1,4 +1,4 @@
-import { CreateUserDto, LoadUserDto, UserOutputDto } from '@/presentation/dtos/user'
+import { SignUpUserDto, LoadUserDto, UserOutputDto } from '@/presentation/dtos/user'
 import { IUserRepository } from '@/data/protocols/user-repository'
 import { MongoHelper } from './mongo-helper'
 import { Collection } from 'mongodb'
@@ -6,7 +6,7 @@ import { Collection } from 'mongodb'
 export class UserRepositoryMongoAdapter implements IUserRepository {
   private userCollection: Collection
 
-  async create (userDto: Omit<CreateUserDto, 'passwordConfirmation'>): Promise<UserOutputDto> {
+  async create (userDto: Omit<SignUpUserDto, 'passwordConfirmation'>): Promise<UserOutputDto> {
     const createUser = await this.getUserCollection().insertOne(userDto)
     const user = await this.getUserCollection().findOne(
       { _id: createUser.insertedId },

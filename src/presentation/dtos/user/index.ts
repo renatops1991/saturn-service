@@ -1,4 +1,4 @@
-export * from './create-user.dto'
+export * from './signup-user.dto'
 export * from './load-user.dto'
 export * from './signin-user-output.dto'
 export * from './signin-user.dto'

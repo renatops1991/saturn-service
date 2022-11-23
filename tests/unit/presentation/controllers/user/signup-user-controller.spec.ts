@@ -1,7 +1,7 @@
 
 import { IUser } from '@/domain/protocols/user'
 import { SignUpUserController } from '@/presentation/controllers/user/signup-user-controller'
-import { CreateUserDto, UserOutputDto } from '@/presentation/dtos/user'
+import { SignUpUserDto, UserOutputDto } from '@/presentation/dtos/user'
 import {
   MissingMandatoryParamError,
   InvalidParamError,
@@ -36,7 +36,7 @@ const makeSut = (): SutTypes => {
 
 const makeCreateUser = (): IUser => {
   class UserStub implements IUser {
-    async create (user: CreateUserDto): Promise<UserOutputDto> {
+    async create (user: SignUpUserDto): Promise<UserOutputDto> {
       return await new Promise(resolve => resolve(fixturesCreateUserOutput()))
     }
   }

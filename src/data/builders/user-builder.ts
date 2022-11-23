@@ -1,11 +1,11 @@
 import { User } from '@/domain/entities/user'
-import { CreateUserDto } from '@/presentation/dtos/user/create-user.dto'
+import { SignUpUserDto } from '@/presentation/dtos/user/signup-user.dto'
 import { IUserBuilder } from '@/data/protocols/user-builder'
 import { UserBasicInfoType } from '@/data/types/user-basic-info-type'
 
 export class UserBuilder implements IUserBuilder {
   buildUserBasicInfo (
-    userDto: Omit<CreateUserDto, 'passwordConfirmation'>
+    userDto: Omit<SignUpUserDto, 'passwordConfirmation'>
   ): UserBasicInfoType {
     const user = new User().getUserBasicInfo()
     user.name = userDto.name

@@ -1,7 +1,7 @@
 import { IUser } from '@/domain/protocols/user'
 import { IAuthentication } from '@/domain/protocols/authentication'
 import {
-  CreateUserDto,
+  SignUpUserDto,
   UserOutputDto,
   SignInUserOutputDto,
   SignInUserDto
@@ -18,7 +18,7 @@ export class User implements IUser, IAuthentication {
     private readonly userRepository: IUserRepository
   ) { }
 
-  async create (userDto: Omit<CreateUserDto, 'passwordConfirmation'>): Promise<UserOutputDto> {
+  async create (userDto: Omit<SignUpUserDto, 'passwordConfirmation'>): Promise<UserOutputDto> {
     const hashedPassword = await this.hashed.hash(userDto.password)
     const userBuilder = new UserBuilder()
     const buildUser = userBuilder.buildUserBasicInfo(Object.assign({}, userDto, { password: hashedPassword }))
