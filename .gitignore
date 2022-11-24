@@ -5,5 +5,5 @@ coverage/
 .env
 data
 !src/data
-!tests/data
+!tests/unit/data
 globalConfig.json

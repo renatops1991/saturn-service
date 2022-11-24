@@ -4,4 +4,5 @@ dist/
 coverage/
 globalConfig.json
 !src/data
+!tests/unit/data
 ./data
