@@ -5,8 +5,8 @@ import { SignInUserController } from '@/presentation/controllers/user/signin-use
 import { makeSignUpValidationCompositeFactory } from '@/main/factories/validations/signup-validation-composite-factory'
 import { makeSignInValidationCompositeFactory } from '@/main/factories/validations/signin-validation-composite-factory'
 import { UserRepositoryMongoAdapter } from '@/infra/mongodb/user-repository-mongo-adapter'
-import { BcryptAdapter } from '@/infra/criptography/bcrypt-adapter'
-import { JwtAdapter } from '@/infra/criptography/jwt-adapter'
+import { BcryptAdapter } from '@/infra/cryptography/bcrypt-adapter'
+import { JwtAdapter } from '@/infra/cryptography/jwt-adapter'
 import dotenv from 'dotenv'
 
 dotenv.config()
