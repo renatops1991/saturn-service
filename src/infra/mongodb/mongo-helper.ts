@@ -22,5 +22,4 @@ export const MongoHelper = {
     const { _id, ...collectionWithoutId } = data
     return Object.assign({}, collectionWithoutId, { id: _id })
   }
-
 }
