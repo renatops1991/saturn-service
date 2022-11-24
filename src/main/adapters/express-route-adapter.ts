@@ -10,9 +10,8 @@ export const expressRouteAdapter = (controller: IController): RequestHandler =>
 
     const httpResponse = await controller.handle(httpRequest)
 
-    const successStatusesCode: number [] = [200, 201, 204]
-    for (const statusCode of successStatusesCode) {
-      if (httpResponse.statusCode === statusCode) {
+    for (const successStatusCode of [200, 201, 204]) {
+      if (httpResponse.statusCode === successStatusCode) {
         return response.status(httpResponse.statusCode).json(httpResponse.body)
       }
     }
