@@ -1,6 +1,6 @@
-import { SignUpUserDto, LoadUserDto, UserOutputDto } from '@/presentation/dtos/user'
 import { IUserRepository } from '@/data/protocols/user-repository'
 import { MongoHelper } from './mongo-helper'
+import { SignUpUserDto, LoadUserDto, UserOutputDto } from '@/main/dtos/user'
 import { Collection } from 'mongodb'
 
 export class UserRepositoryMongoAdapter implements IUserRepository {

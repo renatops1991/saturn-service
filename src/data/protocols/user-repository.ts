@@ -1,4 +1,4 @@
-import { SignUpUserDto, LoadUserDto, UserOutputDto } from '@/presentation/dtos/user'
+import { SignUpUserDto, LoadUserDto, UserOutputDto } from '@/main/dtos/user'
 
 export interface IUserRepository {
   create: (userDto: Omit<SignUpUserDto, 'passwordConfirmation'>) => Promise<UserOutputDto>

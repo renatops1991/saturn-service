@@ -1,5 +1,5 @@
 import { IAuthentication } from '@/domain/protocols/authentication'
-import { SignInUserDto, UserOutputDto } from '@/presentation/dtos/user'
+import { SignInUserDto, UserOutputDto } from '@/main/dtos/user'
 import { fixturesUserOutput } from '../fixtures/fixtures-user'
 
 export const mockAuthentication = (): IAuthentication => {

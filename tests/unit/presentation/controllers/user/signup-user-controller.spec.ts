@@ -3,7 +3,7 @@ import { IUser } from '@/domain/protocols/user'
 import { IAuthentication } from '@/domain/protocols/authentication'
 import { IEmailValidator } from '@/validation/protocols/email-validator'
 import { SignUpUserController } from '@/presentation/controllers/user/signup-user-controller'
-import { SignUpUserDto, UserOutputDto } from '@/presentation/dtos/user'
+import { SignUpUserDto, UserOutputDto } from '@/main/dtos/user'
 import {
   MissingMandatoryParamError,
   InvalidParamError,

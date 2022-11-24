@@ -3,7 +3,7 @@ import {
   LoadUserDto,
   UserOutputDto,
   SignInUserDto
-} from '@/presentation/dtos/user/'
+} from '@/main/dtos/user'
 
 export const fixturesCreateUserRequest = (): SignUpUserDto => {
   const userDto: SignUpUserDto = {

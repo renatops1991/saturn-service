@@ -1,9 +1,9 @@
 import { IHashed } from '@/data/protocols/hashed'
 import { IUserRepository } from '@/data/protocols/user-repository'
-import { UserOutputDto } from '@/presentation/dtos/user/user-output.dto'
-import { SignUpUserDto } from '@/presentation/dtos/user/signup-user.dto'
+import { UserOutputDto } from '@/main/dtos/user/user-output.dto'
+import { SignUpUserDto } from '@/main/dtos/user/signup-user.dto'
 import { fixturesUserOutput, fixturesLoadUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
-import { LoadUserDto } from '@/presentation/dtos/user/load-user.dto'
+import { LoadUserDto } from '@/main/dtos/user/load-user.dto'
 import { ICryptography } from '@/data/protocols/cryptography'
 
 export const mockHashed = (): IHashed => {

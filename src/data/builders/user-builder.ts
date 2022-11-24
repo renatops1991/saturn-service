@@ -1,7 +1,7 @@
 import { User } from '@/domain/entities/user'
-import { SignUpUserDto } from '@/presentation/dtos/user/signup-user.dto'
 import { IUserBuilder } from '@/data/protocols/user-builder'
 import { UserBasicInfoType } from '@/data/types/user-basic-info-type'
+import { SignUpUserDto } from '@/main/dtos/user/signup-user.dto'
 
 export class UserBuilder implements IUserBuilder {
   buildUserBasicInfo (

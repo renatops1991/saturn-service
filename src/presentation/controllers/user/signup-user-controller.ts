@@ -1,7 +1,7 @@
 
 import { IAuthentication } from '@/domain/protocols/authentication'
 import { IUser } from '@/domain/protocols/user'
-import { SignUpUserDto } from '@/presentation/dtos/user/signup-user.dto'
+import { SignUpUserDto } from '@/main/dtos/user/signup-user.dto'
 import { EmailInUseError } from '@/presentation/errors'
 import {
   badRequest,
