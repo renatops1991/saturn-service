@@ -18,6 +18,10 @@ export class User implements IUser, IAuthentication {
   ) { }
 
   async create (userDto: Omit<SignUpUserDto, 'passwordConfirmation'>): Promise<UserOutputDto> {
+    const isEmailInUse = await this.userRepository.loadByEmail(userDto.email)
+    if (isEmailInUse !== null) {
+      return null
+    }
     const hashedPassword = await this.hashed.hash(userDto.password)
     const userBuilder = new UserBuilder()
     const buildUser = userBuilder.buildUserBasicInfo(Object.assign({}, userDto, { password: hashedPassword }))

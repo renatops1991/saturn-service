@@ -29,7 +29,8 @@ const makeSut = (): SutType => {
 describe('User use case', () => {
   describe('Create', () => {
     it('Should call Hashed with correct password', async () => {
-      const { sut, hashedStub } = makeSut()
+      const { sut, hashedStub, userRepositoryStub } = makeSut()
+      jest.spyOn(userRepositoryStub, 'loadByEmail').mockResolvedValue(null)
       const hashSpy = jest.spyOn(hashedStub, 'hash')
       const user = fixturesCreateUser()
       await sut.create(user)
@@ -37,7 +38,8 @@ describe('User use case', () => {
     })
 
     it('Should forward the error if Hashed throws error', async () => {
-      const { sut, hashedStub } = makeSut()
+      const { sut, hashedStub, userRepositoryStub } = makeSut()
+      jest.spyOn(userRepositoryStub, 'loadByEmail').mockResolvedValue(null)
       jest.spyOn(hashedStub, 'hash').mockRejectedValueOnce(new Error())
       const user = fixturesCreateUser()
       const expectedResponse = sut.create(user)
@@ -46,6 +48,7 @@ describe('User use case', () => {
 
     it('Should call Hashed with correct values', async () => {
       const { sut, userRepositoryStub } = makeSut()
+      jest.spyOn(userRepositoryStub, 'loadByEmail').mockResolvedValue(null)
       const createSpy = jest.spyOn(userRepositoryStub, 'create')
       const user = fixturesCreateUser()
       const expectedResponse = Object.assign({
@@ -58,14 +61,32 @@ describe('User use case', () => {
 
     it('Should forward the error if UserRepository throws error', async () => {
       const { sut, userRepositoryStub } = makeSut()
+      jest.spyOn(userRepositoryStub, 'loadByEmail').mockResolvedValue(null)
       jest.spyOn(userRepositoryStub, 'create').mockRejectedValueOnce(new Error())
       const user = fixturesCreateUser()
       const expectedResponse = sut.create(user)
       await expect(expectedResponse).rejects.toThrow()
     })
 
+    it('Should call loadByEmail method with correct value', async () => {
+      const { sut, userRepositoryStub } = makeSut()
+      const loadByEmailSpy = jest.spyOn(userRepositoryStub, 'loadByEmail')
+      const user = fixturesCreateUser()
+      await sut.create(user)
+      expect(loadByEmailSpy).toHaveBeenCalledWith('foo@example.com')
+    })
+
+    it('Should return null if email is in used', async () => {
+      const { sut, userRepositoryStub } = makeSut()
+      const user = fixturesCreateUser()
+      jest.spyOn(userRepositoryStub, 'loadByEmail')
+      const expectedRseponse = await sut.create(user)
+      expect(expectedRseponse).toBeNull()
+    })
+
     it('Should return an user on success', async () => {
-      const { sut } = makeSut()
+      const { sut, userRepositoryStub } = makeSut()
+      jest.spyOn(userRepositoryStub, 'loadByEmail').mockResolvedValue(null)
       const user = fixturesCreateUser()
       const expectedResponse = await sut.create(user)
       expect(expectedResponse).toEqual(fixturesUserOutput())
