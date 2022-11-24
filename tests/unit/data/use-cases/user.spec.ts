@@ -5,6 +5,7 @@ import { IUserRepository } from '@/data/protocols/user-repository'
 import { User } from '@/data/use-cases/user'
 import { fixturesCreateUser, fixturesUserOutput, fixturesLoginUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockCryptography, mockHashed, mockUserRepository } from './mock/mock-user-use-case'
+import MockDate from 'mockdate'
 
 type SutType = {
   sut: User
@@ -27,6 +28,12 @@ const makeSut = (): SutType => {
 }
 
 describe('User use case', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+  afterAll(() => {
+    MockDate.reset()
+  })
   describe('Create', () => {
     it('Should call Hashed with correct password', async () => {
       const { sut, hashedStub, userRepositoryStub } = makeSut()
@@ -53,7 +60,9 @@ describe('User use case', () => {
       const user = fixturesCreateUser()
       const expectedResponse = Object.assign({
         ...fixturesCreateUser(),
-        password: 'hashed'
+        password: 'hashed',
+        createdAt: new Date(),
+        updatedAt: new Date()
       })
       await sut.create(user)
       expect(createSpy).toHaveBeenCalledWith(expectedResponse)
@@ -80,8 +89,8 @@ describe('User use case', () => {
       const { sut, userRepositoryStub } = makeSut()
       const user = fixturesCreateUser()
       jest.spyOn(userRepositoryStub, 'loadByEmail')
-      const expectedRseponse = await sut.create(user)
-      expect(expectedRseponse).toBeNull()
+      const expectedResponse = await sut.create(user)
+      expect(expectedResponse).toBeNull()
     })
 
     it('Should return an user on success', async () => {

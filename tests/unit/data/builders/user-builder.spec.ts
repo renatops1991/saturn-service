@@ -1,7 +1,14 @@
 import { UserBuilder } from '@/data/builders/user-builder'
 import { fixturesCreateUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
+import MockDate from 'mockdate'
 
 describe('UserBuilder', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+  afterAll(() => {
+    MockDate.reset()
+  })
   it('Should build user with corrects values', async () => {
     const sut = new UserBuilder()
     const expectedResponse = sut.buildUserBasicInfo(fixturesCreateUser())
@@ -9,7 +16,9 @@ describe('UserBuilder', () => {
       name: 'John Foo Bar',
       email: 'foo@example.com',
       password: '12345',
-      confirmUser: false
+      confirmUser: false,
+      createdAt: new Date(),
+      updatedAt: new Date()
     })
   })
 
@@ -22,7 +31,9 @@ describe('UserBuilder', () => {
       name: 'John Foo Bar',
       email: 'foo@example.com',
       password: '12345',
-      confirmUser: false
+      confirmUser: false,
+      createdAt: new Date(),
+      updatedAt: new Date()
     })
   })
 })

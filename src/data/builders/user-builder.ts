@@ -12,6 +12,8 @@ export class UserBuilder implements IUserBuilder {
     user.email = userDto.email
     user.password = userDto.password
     user.confirmUser = userDto?.confirmUser ?? false
+    user.createdAt = new Date()
+    user.updatedAt = new Date()
 
     return user
   }

@@ -5,4 +5,6 @@ export interface SignUpUserDto {
   password: string
   passwordConfirmation: string
   confirmUser?: boolean
+  createdAt?: Date
+  updatedAt?: Date
 }

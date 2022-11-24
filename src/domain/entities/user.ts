@@ -13,13 +13,17 @@ export class User {
   document?: string
   password: string
   confirmUser?: boolean
+  createdAt: Date
+  updatedAt: Date
 
   public getUserBasicInfo (): UserBasicInfoType {
     return {
       name: this.name,
       email: this.email,
       password: this.password,
-      confirmUser: this.confirmUser
+      confirmUser: this.confirmUser,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt
     }
   }
 }

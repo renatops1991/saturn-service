@@ -3,4 +3,6 @@ export type UserBasicInfoType = {
   email: string
   password: string
   confirmUser?: boolean
+  createdAt?: Date
+  updatedAt?: Date
 }
