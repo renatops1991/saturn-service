@@ -22,6 +22,11 @@ export const success = <T= any>(data: T): IHttpResponse => ({
   body: data
 })
 
+export const created = <T= any>(data: T): IHttpResponse => ({
+  statusCode: 201,
+  body: data
+})
+
 export const unauthorized = (): IHttpResponse => ({
   statusCode: 401,
   body: new UnauthorizedError().serializeErrors()

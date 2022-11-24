@@ -5,9 +5,9 @@ import { SignUpUserDto } from '@/presentation/dtos/user/signup-user.dto'
 import { EmailInUseError } from '@/presentation/errors'
 import {
   badRequest,
+  created,
   forbidden,
-  serverError,
-  success
+  serverError
 } from '@/presentation/http-helper'
 import { IController } from '@/presentation/protocols/controller'
 import { IHttpResponse } from '@/presentation/protocols/http'
@@ -30,14 +30,14 @@ export class SignUpUserController implements IController {
       const user = await this.user.create(userDto)
 
       if (!user) {
-        return forbidden(new EmailInUseError())
+        return forbidden(new EmailInUseError().serializeErrors())
       }
 
       const accessToken = await this.authentication.auth({
         email,
         password
       })
-      return success(accessToken)
+      return created(accessToken)
     } catch (error) {
       return serverError(error)
     }

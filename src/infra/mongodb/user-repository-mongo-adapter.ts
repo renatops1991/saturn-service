@@ -12,7 +12,6 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
       { _id: createUser.insertedId },
       {
         projection: {
-          _id: 1,
           name: 1,
           email: 1
         }

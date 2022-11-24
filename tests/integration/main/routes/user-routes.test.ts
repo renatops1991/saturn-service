@@ -27,7 +27,7 @@ describe('User routes', () => {
   describe('Create', () => {
     it('Should return an user on success', async () => {
       await request(app)
-        .post('/api/create')
+        .post('/api/sign-up')
         .send({
           name: 'John Foo Bar',
           email: 'foo@bar.com',
@@ -35,7 +35,7 @@ describe('User routes', () => {
           passwordConfirmation: '123',
           confirmUser: false
         })
-        .expect(200)
+        .expect(201)
     })
   })
 

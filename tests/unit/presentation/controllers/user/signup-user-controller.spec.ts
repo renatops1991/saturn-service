@@ -92,7 +92,7 @@ describe('User Controller', () => {
     const { sut } = makeSut()
     const userDto = fixturesCreateUserRequest()
     const expectedResponse = await sut.handle(userDto)
-    expect(expectedResponse.statusCode).toBe(200)
+    expect(expectedResponse.statusCode).toBe(201)
     expect(expectedResponse.body).toEqual(fixturesUserOutput())
   })
 
@@ -150,6 +150,6 @@ describe('User Controller', () => {
     jest.spyOn(userStub, 'create').mockResolvedValueOnce(null)
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(403)
-    expect(expectedResponse).toEqual(forbidden((new EmailInUseError())))
+    expect(expectedResponse).toEqual(forbidden((new EmailInUseError().serializeErrors())))
   })
 })
