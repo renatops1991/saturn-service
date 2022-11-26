@@ -3,7 +3,12 @@ import { ICryptography } from '@/data/protocols/cryptography'
 import { IHashed } from '@/data/protocols/hashed'
 import { IUserRepository } from '@/data/protocols/user-repository'
 import { User } from '@/data/use-cases/user'
-import { fixturesCreateUser, fixturesUserOutput, fixturesLoginUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
+import {
+  fixturesCreateUser,
+  fixturesUserOutput,
+  fixturesLoginUser,
+  fixturesLoadUser
+} from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockCryptography, mockHashed, mockUserRepository } from './mock/mock-user-use-case'
 import MockDate from 'mockdate'
 
@@ -194,6 +199,30 @@ describe('User use case', () => {
         email: 'foo@example.com',
         accessToken: 'encrypted'
       })
+    })
+  })
+
+  describe('LoadUserByToken', () => {
+    it('Should call loadByToken method of the UserRepository class with correct values', async () => {
+      const { sut, userRepositoryStub } = makeSut()
+      const loadByTokenSpy = jest.spyOn(userRepositoryStub, 'loadByToken')
+      await sut.loadUserByToken('accessToken', 'admin')
+      expect(loadByTokenSpy).toHaveBeenCalledWith('accessToken', 'admin')
+    })
+
+    it('Should return null if loadByToken method of the UserRepository returns null', async () => {
+      const { sut, userRepositoryStub } = makeSut()
+      jest
+        .spyOn(userRepositoryStub, 'loadByToken')
+        .mockResolvedValueOnce(null)
+      const expectedResponse = await sut.loadUserByToken('accessToken', 'admin')
+      expect(expectedResponse).toBeNull()
+    })
+
+    it('Should return an user on success', async () => {
+      const { sut } = makeSut()
+      const expectedResponse = await sut.loadUserByToken('accessToken', 'admin')
+      expect(expectedResponse).toEqual(fixturesLoadUser())
     })
   })
 })
