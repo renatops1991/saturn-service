@@ -236,6 +236,15 @@ describe('User use case', () => {
       expect(expectedResponse).toBeNull()
     })
 
+    it('Should forward the error if loadByToken method of the Cryptography class throws error', async () => {
+      const { sut, userRepositoryStub } = makeSut()
+      jest
+        .spyOn(userRepositoryStub, 'loadByToken')
+        .mockRejectedValueOnce(new Error())
+      const expectedResponse = sut.loadUserByToken('accessToken', 'admin')
+      await expect(expectedResponse).rejects.toThrow()
+    })
+
     it('Should return an user on success', async () => {
       const { sut } = makeSut()
       const expectedResponse = await sut.loadUserByToken('accessToken', 'admin')
