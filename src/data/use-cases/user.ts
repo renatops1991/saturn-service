@@ -50,5 +50,12 @@ export class User implements IUser, IAuthentication {
     }
   }
 
-  loadUserByToken: (accessToken: string, role?: string) => Promise<Partial<LoadUserDto>>
+  async loadUserByToken (accessToken: string, role?: string): Promise<Partial<LoadUserDto>> {
+    const user = await this.userRepository.loadByToken(accessToken, role)
+    if (!user) {
+      return null
+    }
+
+    return user
+  }
 }

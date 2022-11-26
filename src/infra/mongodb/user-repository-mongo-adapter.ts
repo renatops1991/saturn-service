@@ -46,6 +46,8 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
     )
   }
 
+  loadByToken: (accessToken: string, role?: string) => Promise<Partial<LoadUserDto>>
+
   private getUserCollection (): Collection {
     if (!this.userCollection) {
       this.userCollection = MongoHelper.getCollection('users')
