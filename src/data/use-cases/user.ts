@@ -7,7 +7,8 @@ import { ICryptography } from '@/data/protocols/cryptography'
 import {
   SignUpUserDto,
   UserOutputDto,
-  SignInUserDto
+  SignInUserDto,
+  LoadUserDto
 } from '@/main/dtos/user'
 
 export class User implements IUser, IAuthentication {
@@ -48,4 +49,6 @@ export class User implements IUser, IAuthentication {
       accessToken
     }
   }
+
+  loadUserByToken: (accessToken: string, role?: string) => Promise<Partial<LoadUserDto>>
 }

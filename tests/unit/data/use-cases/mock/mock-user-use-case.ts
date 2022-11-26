@@ -20,12 +20,12 @@ export const mockHashed = (): IHashed => {
 }
 
 export const mockCryptography = (): ICryptography => {
-  class CryptographyStubg implements ICryptography {
+  class CryptographyStub implements ICryptography {
     async encrypt (userId: string): Promise<string> {
       return await Promise.resolve('encrypted')
     }
   }
-  return new CryptographyStubg()
+  return new CryptographyStub()
 }
 
 export const mockUserRepository = (): IUserRepository => {
