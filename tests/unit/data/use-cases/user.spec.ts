@@ -125,8 +125,8 @@ describe('User use case', () => {
       const { sut, userRepositoryStub } = makeSut()
       const user = fixturesLoginUser()
       jest.spyOn(userRepositoryStub, 'loadByEmail').mockReturnValueOnce(null)
-      const expectedRseponse = await sut.auth(user)
-      expect(expectedRseponse).toBeNull()
+      const expectedResponse = await sut.auth(user)
+      expect(expectedResponse).toBeNull()
     })
 
     it('Should call compare method with correct password', async () => {
@@ -153,8 +153,8 @@ describe('User use case', () => {
       jest
         .spyOn(hashedStub, 'compare')
         .mockReturnValueOnce(new Promise(resolve => resolve(false)))
-      const expectedRseponse = await sut.auth(user)
-      expect(expectedRseponse).toBeNull()
+      const expectedResponse = await sut.auth(user)
+      expect(expectedResponse).toBeNull()
     })
 
     it('Should call Cryptography with correct id', async () => {
