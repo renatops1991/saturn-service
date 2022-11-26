@@ -211,6 +211,15 @@ describe('User use case', () => {
       expect(decryptSpy).toHaveBeenCalledWith('accessToken')
     })
 
+    it('Should return null if decrypt method of the Cryptography returns null', async () => {
+      const { sut, userRepositoryStub } = makeSut()
+      jest
+        .spyOn(userRepositoryStub, 'loadByToken')
+        .mockResolvedValueOnce(null)
+      const expectedResponse = await sut.loadUserByToken('accessToken', 'admin')
+      expect(expectedResponse).toBeNull()
+    })
+
     it('Should call loadByToken method of the UserRepository class with correct values', async () => {
       const { sut, userRepositoryStub } = makeSut()
       const loadByTokenSpy = jest.spyOn(userRepositoryStub, 'loadByToken')
