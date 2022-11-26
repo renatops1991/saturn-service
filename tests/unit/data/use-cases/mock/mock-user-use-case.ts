@@ -24,6 +24,10 @@ export const mockCryptography = (): ICryptography => {
     async encrypt (userId: string): Promise<string> {
       return await Promise.resolve('encrypted')
     }
+
+    async decrypt (password: string): Promise<string> {
+      return await Promise.resolve('decrypt')
+    }
   }
   return new CryptographyStub()
 }

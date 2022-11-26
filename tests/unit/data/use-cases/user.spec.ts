@@ -203,6 +203,14 @@ describe('User use case', () => {
   })
 
   describe('LoadUserByToken', () => {
+    it('Should call Decrypt method of the Cryptography with correct value', async () => {
+      const { sut, cryptographyStub } = makeSut()
+      const decryptSpy = jest
+        .spyOn(cryptographyStub, 'decrypt')
+      await sut.loadUserByToken('accessToken', 'admin')
+      expect(decryptSpy).toHaveBeenCalledWith('accessToken')
+    })
+
     it('Should call loadByToken method of the UserRepository class with correct values', async () => {
       const { sut, userRepositoryStub } = makeSut()
       const loadByTokenSpy = jest.spyOn(userRepositoryStub, 'loadByToken')
