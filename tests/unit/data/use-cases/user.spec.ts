@@ -212,9 +212,9 @@ describe('User use case', () => {
     })
 
     it('Should return null if decrypt method of the Cryptography returns null', async () => {
-      const { sut, userRepositoryStub } = makeSut()
+      const { sut, cryptographyStub } = makeSut()
       jest
-        .spyOn(userRepositoryStub, 'loadByToken')
+        .spyOn(cryptographyStub, 'decrypt')
         .mockResolvedValueOnce(null)
       const expectedResponse = await sut.loadUserByToken('accessToken', 'admin')
       expect(expectedResponse).toBeNull()
