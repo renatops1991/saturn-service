@@ -7,7 +7,7 @@ import { mockValidation } from '../../mocks/mock-user-validation'
 import { IValidation } from '@/presentation/protocols/validation'
 import { IUser } from '@/domain/protocols/user'
 import { MissingMandatoryParamError } from '@/presentation/errors'
-import { badRequest } from '@/presentation/http-helper'
+import { badRequest, noContent } from '@/presentation/http-helper'
 
 type SutTypes = {
   validationStub: IValidation
@@ -68,5 +68,12 @@ describe('UpdateUserConfirmationController', () => {
       .spyOn(userStub, 'updateConfirmUser')
     await sut.handle(fixturesUpdateUserConfirm())
     expect(updateUseConfirmSpy).toHaveBeenCalledWith({ confirmUser: true })
+  })
+
+  it('Should return 204 if update confirm user on succeeds', async () => {
+    const { sut } = makeSut()
+    const expectedResponse = await sut.handle(fixturesUpdateUserConfirm())
+    expect(expectedResponse).toEqual(noContent())
+    expect(expectedResponse.statusCode).toEqual(204)
   })
 })
