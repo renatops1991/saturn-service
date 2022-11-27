@@ -3,7 +3,7 @@ import { IUser } from '@/domain/protocols/user'
 import { IAuthentication } from '@/domain/protocols/authentication'
 import { IEmailValidator } from '@/validation/protocols/email-validator'
 import { SignUpUserController } from '@/presentation/controllers/user/signup-user-controller'
-import { SignUpUserDto, UserOutputDto } from '@/main/dtos/user'
+import { SignUpUserDto, UpdateConfirmUserDto, UserOutputDto } from '@/main/dtos/user'
 import {
   MissingMandatoryParamError,
   InvalidParamError,
@@ -42,6 +42,7 @@ const makeSut = (): SutTypes => {
 
 const makeCreateUser = (): IUser => {
   class UserStub implements IUser {
+    updateConfirmUser: (updateConfirmUser: UpdateConfirmUserDto) => Promise<void>
     async create (user: SignUpUserDto): Promise<UserOutputDto> {
       return await new Promise(resolve => resolve(fixturesUserOutput()))
     }
