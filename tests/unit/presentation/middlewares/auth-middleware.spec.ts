@@ -51,7 +51,8 @@ describe('Auth Middleware', () => {
       .spyOn(authenticationStub, 'loadUserByToken')
       .mockRejectedValue(new Error())
     const expectedResponse = await sut.handle({ accessToken: 'accessToken' })
-    expect(expectedResponse).toEqual(serverError(new Error()))
+    expect(expectedResponse.body.message).toEqual(serverError(new Error()).body.message)
+    expect(expectedResponse.body.statusCode).toEqual(serverError(new Error()).body.statusCode)
   })
 
   it('Should return 200 if loadUserByToken method return an user', async () => {
