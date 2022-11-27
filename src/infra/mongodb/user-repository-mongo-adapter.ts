@@ -46,7 +46,20 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
     )
   }
 
-  loadByToken: (accessToken: string, role?: string) => Promise<Partial<LoadUserDto>>
+  async loadByToken (accessToken: string, role?: string): Promise<Partial<LoadUserDto>> {
+    const user = await this.getUserCollection().findOne({
+      accessToken,
+      role
+    }, {
+      projection: {
+        _id: 1,
+        name: 1,
+        email: 1
+      }
+    })
+
+    return user && MongoHelper.map(user)
+  }
 
   private getUserCollection (): Collection {
     if (!this.userCollection) {
