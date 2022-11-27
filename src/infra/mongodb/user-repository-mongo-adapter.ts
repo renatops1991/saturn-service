@@ -49,7 +49,10 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
   async loadByToken (accessToken: string, role?: string): Promise<Partial<LoadUserDto>> {
     const user = await this.getUserCollection().findOne({
       accessToken,
-      role
+      $or: [
+        { role },
+        { role: 'admin' }
+      ]
     }, {
       projection: {
         _id: 1,
