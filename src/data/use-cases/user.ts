@@ -8,7 +8,8 @@ import {
   SignUpUserDto,
   UserOutputDto,
   SignInUserDto,
-  LoadUserDto
+  LoadUserDto,
+  UpdateConfirmUserDto
 } from '@/main/dtos/user'
 
 export class User implements IUser, IAuthentication {
@@ -17,6 +18,8 @@ export class User implements IUser, IAuthentication {
     private readonly cryptography: ICryptography,
     private readonly userRepository: IUserRepository
   ) { }
+
+  updateConfirmUser: (updateConfirmUser: UpdateConfirmUserDto) => Promise<void>
 
   async create (userDto: Omit<SignUpUserDto, 'passwordConfirmation'>): Promise<UserOutputDto> {
     const isEmailInUse = await this.userRepository.loadByEmail(userDto.email)

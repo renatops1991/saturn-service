@@ -11,15 +11,18 @@ import { badRequest } from '@/presentation/http-helper'
 
 type SutTypes = {
   validationStub: IValidation
+  userStub: IUser
   sut: UpdateConfirmUserController
 }
 
 const makeSut = (): SutTypes => {
   const validationStub = mockValidation()
-  const sut = new UpdateConfirmUserController(validationStub)
+  const userStub = mockUserUseCase()
+  const sut = new UpdateConfirmUserController(validationStub, userStub)
   return {
     validationStub,
-    sut
+    sut,
+    userStub
   }
 }
 
@@ -33,7 +36,7 @@ export const mockUserUseCase = (): IUser => {
       return await new Promise(resolve => resolve(fixturesUserOutput()))
     }
 
-    async updateUserConfirm (confirm: UpdateConfirmUserDto): Promise<void> {
+    async updateConfirmUser (confirm: UpdateConfirmUserDto): Promise<void> {
       return await Promise.resolve()
     }
   }
@@ -57,5 +60,13 @@ describe('UpdateUserConfirmationController', () => {
       .mockReturnValueOnce(new MissingMandatoryParamError('confirmUser').serializeErrors())
     const expectedResponse = await sut.handle(fixturesUpdateUserConfirm())
     expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('confirmUser').serializeErrors()))
+  })
+
+  it('Should call updateUserConfirm method with correct value', async () => {
+    const { sut, userStub } = makeSut()
+    const updateUseConfirmSpy = jest
+      .spyOn(userStub, 'updateConfirmUser')
+    await sut.handle(fixturesUpdateUserConfirm())
+    expect(updateUseConfirmSpy).toHaveBeenCalledWith({ confirmUser: true })
   })
 })
