@@ -30,6 +30,7 @@ describe('UserRepositoryMongoAdapter', () => {
       expect(expectedResponse.email).toEqual(fixturesCreateUser().email)
     })
   })
+
   describe('LoadByEmail', () => {
     it('Should return correct an user if loadByEmail method on succeeds', async () => {
       const sut = makeSut()
@@ -41,7 +42,7 @@ describe('UserRepositoryMongoAdapter', () => {
       expect(expectedUser.email).toEqual(fixturesCreateUser().email)
       expect(expectedUser.password).toEqual(fixturesCreateUser().password)
     })
-    it('Should return null if loadByEmail method is fail', async () => {
+    it('Should return false if loadByEmail method is fail', async () => {
       const sut = makeSut()
       const expectedUser = await sut.loadByEmail('foo@foo.com')
       expect(expectedUser).toBeFalsy()
@@ -62,6 +63,41 @@ describe('UserRepositoryMongoAdapter', () => {
 
       expect(expectedResponse.accessToken).toBeTruthy()
       expect(expectedResponse.accessToken).toEqual('token')
+    })
+  })
+
+  describe('LoadUserByToken', () => {
+    it('Should return null if loadByToken method is fail', async () => {
+      const sut = makeSut()
+      const expectedResponse = await sut.loadByToken('accessToken', 'admin')
+      expect(expectedResponse).toBeNull()
+    })
+
+    it('Should return correct an user on succeeds if loadByToken method without role property', async () => {
+      const sut = makeSut()
+      await userCollection.insertOne(Object.assign({
+        ...fixturesCreateUser(),
+        accessToken: 'accessToken'
+      }))
+      const expectedResponse = await sut.loadByToken('accessToken')
+      expect(expectedResponse).toBeTruthy()
+      expect(expectedResponse.id).toBeTruthy()
+      expect(expectedResponse.name).toEqual(fixturesCreateUser().name)
+      expect(expectedResponse.email).toEqual(fixturesCreateUser().email)
+    })
+
+    it('Should return correct an user on succeeds if loadByToken method with role property', async () => {
+      const sut = makeSut()
+      await userCollection.insertOne(Object.assign({
+        ...fixturesCreateUser(),
+        accessToken: 'accessToken',
+        role: 'admin'
+      }))
+      const expectedResponse = await sut.loadByToken('accessToken', 'admin')
+      expect(expectedResponse).toBeTruthy()
+      expect(expectedResponse.id).toBeTruthy()
+      expect(expectedResponse.name).toEqual(fixturesCreateUser().name)
+      expect(expectedResponse.email).toEqual(fixturesCreateUser().email)
     })
   })
 })
