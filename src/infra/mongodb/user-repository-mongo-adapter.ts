@@ -46,7 +46,7 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
     )
   }
 
-  async loadByToken (accessToken: string, role?: string): Promise<Partial<LoadUserDto>> {
+  async loadByToken (accessToken: string, role?: string): Promise<LoadUserDto> {
     const user = await this.getUserCollection().findOne({
       accessToken,
       $or: [
@@ -55,9 +55,7 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
       ]
     }, {
       projection: {
-        _id: 1,
-        name: 1,
-        email: 1
+        _id: 1
       }
     })
 

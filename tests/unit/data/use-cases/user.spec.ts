@@ -201,13 +201,12 @@ describe('User use case', () => {
       })
     })
   })
-
-  describe('LoadUserByToken', () => {
+  describe('LoadByToken', () => {
     it('Should call Decrypt method of the Cryptography with correct value', async () => {
       const { sut, cryptographyStub } = makeSut()
       const decryptSpy = jest
         .spyOn(cryptographyStub, 'decrypt')
-      await sut.loadUserByToken('accessToken', 'admin')
+      await sut.loadByToken('accessToken', 'admin')
       expect(decryptSpy).toHaveBeenCalledWith('accessToken')
     })
 
@@ -216,14 +215,13 @@ describe('User use case', () => {
       jest
         .spyOn(cryptographyStub, 'decrypt')
         .mockResolvedValueOnce(null)
-      const expectedResponse = await sut.loadUserByToken('accessToken', 'admin')
+      const expectedResponse = await sut.loadByToken('accessToken', 'admin')
       expect(expectedResponse).toBeNull()
     })
-
     it('Should call loadByToken method of the UserRepository class with correct values', async () => {
       const { sut, userRepositoryStub } = makeSut()
       const loadByTokenSpy = jest.spyOn(userRepositoryStub, 'loadByToken')
-      await sut.loadUserByToken('accessToken', 'admin')
+      await sut.loadByToken('accessToken', 'admin')
       expect(loadByTokenSpy).toHaveBeenCalledWith('accessToken', 'admin')
     })
 
@@ -232,7 +230,7 @@ describe('User use case', () => {
       jest
         .spyOn(userRepositoryStub, 'loadByToken')
         .mockResolvedValueOnce(null)
-      const expectedResponse = await sut.loadUserByToken('accessToken', 'admin')
+      const expectedResponse = await sut.loadByToken('accessToken', 'admin')
       expect(expectedResponse).toBeNull()
     })
 
@@ -241,13 +239,13 @@ describe('User use case', () => {
       jest
         .spyOn(userRepositoryStub, 'loadByToken')
         .mockRejectedValueOnce(new Error())
-      const expectedResponse = sut.loadUserByToken('accessToken', 'admin')
+      const expectedResponse = sut.loadByToken('accessToken', 'admin')
       await expect(expectedResponse).rejects.toThrow()
     })
 
     it('Should return an user on success', async () => {
       const { sut } = makeSut()
-      const expectedResponse = await sut.loadUserByToken('accessToken', 'admin')
+      const expectedResponse = await sut.loadByToken('accessToken', 'admin')
       expect(expectedResponse).toEqual(fixturesLoadUser())
     })
   })

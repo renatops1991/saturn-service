@@ -50,7 +50,7 @@ export class User implements IUser, IAuthentication {
     }
   }
 
-  async loadUserByToken (accessToken: string, role?: string): Promise<Partial<LoadUserDto>> {
+  async loadByToken (accessToken: string, role?: string): Promise<LoadUserDto> {
     const isValidAccessToken = await this.cryptography.decrypt(accessToken)
     if (!isValidAccessToken) {
       return null

@@ -46,7 +46,7 @@ export const mockUserRepository = (): IUserRepository => {
       return await new Promise(resolve => resolve())
     }
 
-    async loadByToken (accessToken: string, role?: string): Promise<Partial<LoadUserDto>> {
+    async loadByToken (accessToken: string, role?: string): Promise<LoadUserDto> {
       return await new Promise(resolve => resolve(fixturesLoadUser()))
     }
   }

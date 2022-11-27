@@ -2,8 +2,8 @@ import { IMiddleware } from '@/presentation/protocols/middleware'
 import { AccessDeniedError } from '@/presentation/errors/access-denied-error'
 import { IHttpResponse } from '@/presentation/protocols/http'
 import { forbidden, serverError, success } from '../http-helper'
-import { AuthenticationDto } from '@/main/dtos/authentication.dto'
 import { IAuthentication } from '@/domain/protocols/authentication'
+import { AuthenticationDto } from '@/main/dtos/authentication.dto'
 
 export class AuthMiddleware implements IMiddleware {
   constructor (
@@ -18,7 +18,7 @@ export class AuthMiddleware implements IMiddleware {
         return forbidden(new AccessDeniedError().serializeErrors())
       }
 
-      const userAuthenticate = await this.authentication.loadUserByToken(accessToken, this.role)
+      const userAuthenticate = await this.authentication.loadByToken(accessToken, this.role)
       if (!userAuthenticate) {
         return forbidden(new AccessDeniedError().serializeErrors())
       }

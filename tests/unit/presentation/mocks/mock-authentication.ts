@@ -8,7 +8,7 @@ export const mockAuthentication = (): IAuthentication => {
       return fixturesUserOutput()
     }
 
-    async loadUserByToken (accessToken: string, role?: string): Promise<Partial<LoadUserDto>> {
+    async loadByToken (accessToken: string, role?: string): Promise<LoadUserDto> {
       return fixturesLoadUser()
     }
   }

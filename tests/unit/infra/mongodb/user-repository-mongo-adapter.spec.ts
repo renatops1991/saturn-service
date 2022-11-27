@@ -66,7 +66,7 @@ describe('UserRepositoryMongoAdapter', () => {
     })
   })
 
-  describe('LoadUserByToken', () => {
+  describe('LoadByToken', () => {
     it('Should return null if loadByToken method is fail', async () => {
       const sut = makeSut()
       const expectedResponse = await sut.loadByToken('accessToken', 'admin')
@@ -82,8 +82,6 @@ describe('UserRepositoryMongoAdapter', () => {
       const expectedResponse = await sut.loadByToken('accessToken')
       expect(expectedResponse).toBeTruthy()
       expect(expectedResponse.id).toBeTruthy()
-      expect(expectedResponse.name).toEqual(fixturesCreateUser().name)
-      expect(expectedResponse.email).toEqual(fixturesCreateUser().email)
     })
 
     it('Should return correct an user on succeeds if loadByToken method with role property', async () => {
@@ -96,8 +94,6 @@ describe('UserRepositoryMongoAdapter', () => {
       const expectedResponse = await sut.loadByToken('accessToken', 'admin')
       expect(expectedResponse).toBeTruthy()
       expect(expectedResponse.id).toBeTruthy()
-      expect(expectedResponse.name).toEqual(fixturesCreateUser().name)
-      expect(expectedResponse.email).toEqual(fixturesCreateUser().email)
     })
   })
 })
