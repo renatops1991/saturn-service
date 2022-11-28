@@ -11,14 +11,14 @@ export class UpdateConfirmUserController implements IController {
     private readonly user: IUser
   ) {}
 
-  async handle (updateConfirmUser: UpdateConfirmUserDto): Promise<IHttpResponse> {
+  async handle (updateConfirmUserDto: UpdateConfirmUserDto): Promise<IHttpResponse> {
     try {
-      const isError = this.validation.validate(updateConfirmUser)
+      const isError = this.validation.validate(updateConfirmUserDto)
       if (isError) {
         return badRequest(isError)
       }
 
-      await this.user.updateConfirmUser(updateConfirmUser)
+      await this.user.updateConfirmUser(updateConfirmUserDto)
 
       return noContent()
     } catch (error) {

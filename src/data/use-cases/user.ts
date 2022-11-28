@@ -65,7 +65,7 @@ export class User implements IUser, IAuthentication {
     return user
   }
 
-  async updateConfirmUser (updateConfirmUser: UpdateConfirmUserDto): Promise<void> {
-    await this.userRepository.updateConfirmUser(updateConfirmUser)
+  async updateConfirmUser (updateConfirmUserDto: UpdateConfirmUserDto): Promise<void> {
+    await this.userRepository.updateConfirmUser(updateConfirmUserDto)
   }
 }
