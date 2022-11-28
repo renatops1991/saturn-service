@@ -7,7 +7,8 @@ import {
   fixturesCreateUser,
   fixturesUserOutput,
   fixturesLoginUser,
-  fixturesLoadUser
+  fixturesLoadUser,
+  fixturesUpdateConfirmUser
 } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockCryptography, mockHashed, mockUserRepository } from './mock/mock-user-use-case'
 import MockDate from 'mockdate'
@@ -201,6 +202,7 @@ describe('User use case', () => {
       })
     })
   })
+
   describe('LoadByToken', () => {
     it('Should call Decrypt method of the Cryptography with correct value', async () => {
       const { sut, cryptographyStub } = makeSut()
@@ -247,6 +249,25 @@ describe('User use case', () => {
       const { sut } = makeSut()
       const expectedResponse = await sut.loadByToken('accessToken', 'admin')
       expect(expectedResponse).toEqual(fixturesLoadUser())
+    })
+  })
+
+  describe('updateConfirmUser', () => {
+    it('Should call updateConfirmUser method of the UserRepository class with corrects values', async () => {
+      const { sut, userRepositoryStub } = makeSut()
+      const updateConfirmUserSpy = jest
+        .spyOn(userRepositoryStub, 'updateConfirmUser')
+      await sut.updateConfirmUser({ confirmUser: true, userId: 'foo' })
+      expect(updateConfirmUserSpy).toHaveBeenCalledWith(fixturesUpdateConfirmUser())
+    })
+
+    it('Should forward the error if updateConfirmUser of the UserRepository throws error', async () => {
+      const { sut, userRepositoryStub } = makeSut()
+      jest
+        .spyOn(userRepositoryStub, 'updateConfirmUser')
+        .mockRejectedValueOnce(new Error())
+      const expectedResponse = sut.updateConfirmUser(fixturesUpdateConfirmUser())
+      await expect(expectedResponse).rejects.toThrow()
     })
   })
 })

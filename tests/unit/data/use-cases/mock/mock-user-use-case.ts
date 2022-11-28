@@ -5,6 +5,7 @@ import { SignUpUserDto } from '@/main/dtos/user/signup-user.dto'
 import { fixturesUserOutput, fixturesLoadUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { LoadUserDto } from '@/main/dtos/user/load-user.dto'
 import { ICryptography } from '@/data/protocols/cryptography'
+import { UpdateConfirmUserDto } from '@/main/dtos/user'
 
 export const mockHashed = (): IHashed => {
   class HashedStub implements IHashed {
@@ -48,6 +49,10 @@ export const mockUserRepository = (): IUserRepository => {
 
     async loadByToken (accessToken: string, role?: string): Promise<LoadUserDto> {
       return await new Promise(resolve => resolve(fixturesLoadUser()))
+    }
+
+    async updateConfirmUser (updateConfirmUserDto: UpdateConfirmUserDto): Promise<void> {
+      return await Promise.resolve()
     }
   }
 
