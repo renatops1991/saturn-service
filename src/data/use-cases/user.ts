@@ -19,8 +19,6 @@ export class User implements IUser, IAuthentication {
     private readonly userRepository: IUserRepository
   ) { }
 
-  updateConfirmUser: (updateConfirmUser: UpdateConfirmUserDto) => Promise<void>
-
   async create (userDto: Omit<SignUpUserDto, 'passwordConfirmation'>): Promise<UserOutputDto> {
     const isEmailInUse = await this.userRepository.loadByEmail(userDto.email)
     if (isEmailInUse !== null) {
@@ -65,5 +63,9 @@ export class User implements IUser, IAuthentication {
     }
 
     return user
+  }
+
+  async updateConfirmUser (updateConfirmUser: UpdateConfirmUserDto): Promise<void> {
+    await this.userRepository.updateConfirmUser(updateConfirmUser)
   }
 }
