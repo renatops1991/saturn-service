@@ -1,7 +1,7 @@
 import { IUserRepository } from '@/data/protocols/user-repository'
 import { MongoHelper } from './mongo-helper'
 import { SignUpUserDto, LoadUserDto, UserOutputDto, UpdateConfirmUserDto } from '@/main/dtos/user'
-import { Collection } from 'mongodb'
+import { Collection, ObjectId } from 'mongodb'
 
 export class UserRepositoryMongoAdapter implements IUserRepository {
   private userCollection: Collection
@@ -62,7 +62,22 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
     return user && MongoHelper.map(user)
   }
 
-  updateConfirmUser: (updateConfirmUserDto: UpdateConfirmUserDto) => Promise<void>
+  async updateConfirmUser (updateConfirmUserDto: UpdateConfirmUserDto): Promise<void> {
+    const { confirmUser, userId } = updateConfirmUserDto
+    await this.getUserCollection().findOneAndUpdate(
+      {
+        _id: new ObjectId(userId)
+      },
+      {
+        $set: {
+          confirmUser
+        }
+      },
+      {
+        upsert: true
+      }
+    )
+  }
 
   private getUserCollection (): Collection {
     if (!this.userCollection) {
