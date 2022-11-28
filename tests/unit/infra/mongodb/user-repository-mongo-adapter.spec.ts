@@ -96,4 +96,24 @@ describe('UserRepositoryMongoAdapter', () => {
       expect(expectedResponse.id).toBeTruthy()
     })
   })
+
+  describe('updateConfirmUser', () => {
+    it('Should update confirmUser field to true', async () => {
+      const sut = makeSut()
+      const createUser = await userCollection.insertOne(Object.assign({
+        ...fixturesCreateUser(),
+        accessToken: 'accessToken'
+      }))
+
+      const user = await userCollection.findOne({ _id: createUser.insertedId })
+      const userId = MongoHelper.map(user).id
+      await sut.updateConfirmUser({
+        confirmUser: true,
+        userId
+      })
+
+      const expectedResponse = await userCollection.findOne({ _id: userId })
+      expect(expectedResponse.confirmUser).toBeTruthy()
+    })
+  })
 })
