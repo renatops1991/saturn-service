@@ -3,7 +3,6 @@ import { IUser } from '@/domain/protocols/user'
 import { IAuthentication } from '@/domain/protocols/authentication'
 import { IEmailValidator } from '@/validation/protocols/email-validator'
 import { SignUpUserController } from '@/presentation/controllers/user/signup-user-controller'
-import { SignUpUserDto, UpdateConfirmUserDto, UserOutputDto } from '@/main/dtos/user'
 import {
   MissingMandatoryParamError,
   InvalidParamError,
@@ -15,6 +14,7 @@ import { fixturesCreateUserRequest, fixturesUserOutput } from '@/tests/unit/pres
 import { mockEmailValidator, mockValidation } from '@/tests/unit/presentation/mocks/mock-user-validation'
 import { mockAuthentication } from '@/tests/unit/presentation/mocks/mock-authentication'
 import { EmailInUseError } from '@/presentation/errors/email-in-use-error'
+import { mockUserController } from '../../mocks/mock-user-controller'
 
 type SutTypes = {
   sut: SignUpUserController
@@ -26,7 +26,7 @@ type SutTypes = {
 
 const makeSut = (): SutTypes => {
   const emailValidatorStub = mockEmailValidator()
-  const userStub = makeCreateUser()
+  const userStub = mockUserController()
   const validationStub = mockValidation()
   const authenticationStub = mockAuthentication()
   const sut = new SignUpUserController(userStub, validationStub, authenticationStub)
@@ -38,17 +38,6 @@ const makeSut = (): SutTypes => {
     validationStub,
     authenticationStub
   }
-}
-
-const makeCreateUser = (): IUser => {
-  class UserStub implements IUser {
-    updateConfirmUser: (updateConfirmUser: UpdateConfirmUserDto) => Promise<void>
-    async create (user: SignUpUserDto): Promise<UserOutputDto> {
-      return await new Promise(resolve => resolve(fixturesUserOutput()))
-    }
-  }
-
-  return new UserStub()
 }
 
 describe('User Controller', () => {
