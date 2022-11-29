@@ -70,7 +70,8 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
       },
       {
         $set: {
-          confirmUser
+          confirmUser,
+          updatedAt: new Date()
         }
       },
       {

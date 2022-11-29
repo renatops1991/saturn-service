@@ -2,6 +2,7 @@ import { MongoHelper } from '@/infra/mongodb/mongo-helper'
 import { UserRepositoryMongoAdapter } from '@/infra/mongodb/user-repository-mongo-adapter'
 import { fixturesCreateUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { Collection } from 'mongodb'
+import MockDate from 'mockdate'
 
 const makeSut = (): UserRepositoryMongoAdapter => {
   return new UserRepositoryMongoAdapter()
@@ -11,9 +12,11 @@ let userCollection: Collection
 describe('UserRepositoryMongoAdapter', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGODB_URL)
+    MockDate.set(new Date())
   })
   afterAll(async () => {
     await MongoHelper.disconnect()
+    MockDate.reset()
   })
 
   beforeEach(async () => {
@@ -98,7 +101,7 @@ describe('UserRepositoryMongoAdapter', () => {
   })
 
   describe('updateConfirmUser', () => {
-    it('Should update confirmUser field to true', async () => {
+    it('Should update confirmUser and updateAt field correctly', async () => {
       const sut = makeSut()
       const createUser = await userCollection.insertOne(Object.assign({
         ...fixturesCreateUser(),
@@ -114,6 +117,7 @@ describe('UserRepositoryMongoAdapter', () => {
 
       const expectedResponse = await userCollection.findOne({ _id: userId })
       expect(expectedResponse.confirmUser).toBeTruthy()
+      expect(expectedResponse.updatedAt).toEqual(new Date())
     })
   })
 })
