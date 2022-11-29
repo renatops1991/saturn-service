@@ -1,55 +1,35 @@
 
 import { fixturesUpdateConfirmUser } from '../../fixtures/fixtures-user'
 import { UpdateConfirmUserController } from '@/presentation/controllers/user/update-confirm-user-controller'
-import { mockValidation } from '../../mocks/mock-user-validation'
-import { IValidation } from '@/presentation/protocols/validation'
 import { IUser } from '@/domain/protocols/user'
 import { MissingMandatoryParamError, ServerError } from '@/presentation/errors'
-import { badRequest, noContent, serverError } from '@/presentation/http-helper'
+import { noContent, serverError } from '@/presentation/http-helper'
 import { mockUserController } from '../../mocks/mock-user-controller'
+import { RequiredField } from '@/validation/required-field'
 
 type SutTypes = {
-  validationStub: IValidation
+  requiredFieldStub: RequiredField
   userStub: IUser
   sut: UpdateConfirmUserController
 }
 
 const makeSut = (): SutTypes => {
-  const validationStub = mockValidation()
+  const requiredFieldStub = new RequiredField('confirmUser')
   const userStub = mockUserController()
-  const sut = new UpdateConfirmUserController(validationStub, userStub)
+  const sut = new UpdateConfirmUserController(userStub)
   return {
-    validationStub,
+    requiredFieldStub,
     sut,
     userStub
   }
 }
 describe('UpdateUserConfirmationController', () => {
-  it('Should call validation method with corrects values', async () => {
-    const { sut, validationStub } = makeSut()
-    const loadByTokenSpy = jest
-      .spyOn(validationStub, 'validate')
-    await sut.handle(fixturesUpdateConfirmUser())
-    expect(loadByTokenSpy).toHaveBeenCalledWith({ confirmUser: true, userId: 'foo' })
-  })
-
-  it('Should return 400 error if validate method return an error', async () => {
-    const { sut, validationStub } = makeSut()
+  it('Should return MissingMandatoryParamError if validation fails', async () => {
+    const { sut, requiredFieldStub } = makeSut()
     jest
-      .spyOn(validationStub, 'validate')
-      .mockReturnValueOnce(new MissingMandatoryParamError('confirmUser').serializeErrors())
-    const expectedResponse = await sut.handle(fixturesUpdateConfirmUser())
-    expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('confirmUser').serializeErrors()))
-  })
-
-  it('Should return 500 error if validate method throw exception error', async () => {
-    const { sut, validationStub } = makeSut()
-    jest
-      .spyOn(validationStub, 'validate')
-      .mockImplementationOnce(() => { throw new Error() })
-    const expectedResponse = await sut.handle(fixturesUpdateConfirmUser())
-    expect(expectedResponse.statusCode).toEqual(500)
-    expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))
+      .spyOn(requiredFieldStub, 'validate')
+    const expectedResponse = await sut.handle({ confirmUser: undefined, userId: 'foo' })
+    expect(expectedResponse).toEqual(new MissingMandatoryParamError('confirmUser').serializeErrors())
   })
 
   it('Should call updateUserConfirm method with corrects values', async () => {
