@@ -23,7 +23,7 @@ export class AuthMiddleware implements IMiddleware {
         return forbidden(new AccessDeniedError().serializeErrors())
       }
       return success({
-        accountId: userAuthenticate.id
+        userId: userAuthenticate.id
       })
     } catch (error) {
       return serverError(error)

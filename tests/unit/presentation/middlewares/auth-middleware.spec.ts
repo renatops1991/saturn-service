@@ -58,6 +58,6 @@ describe('Auth Middleware', () => {
   it('Should return 200 if loadByToken method return an user', async () => {
     const { sut } = makeSut()
     const expectedResponse = await sut.handle({ accessToken: 'accessToken' })
-    expect(expectedResponse).toEqual(success({ accountId: 'foo' }))
+    expect(expectedResponse).toEqual(success({ userId: 'foo' }))
   })
 })
