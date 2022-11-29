@@ -5,7 +5,8 @@ export const expressRouteAdapter = (controller: IController): RequestHandler =>
   async (request: Request, response: Response) => {
     const httpRequest = {
       ...(request.body || {}),
-      ...(request.params || {})
+      ...(request.params || {}),
+      userId: request.userId
     }
 
     const httpResponse = await controller.handle(httpRequest)

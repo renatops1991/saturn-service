@@ -8,6 +8,8 @@ import { UserRepositoryMongoAdapter } from '@/infra/mongodb/user-repository-mong
 import { BcryptAdapter } from '@/infra/cryptography/bcrypt-adapter'
 import { JwtAdapter } from '@/infra/cryptography/jwt-adapter'
 import dotenv from 'dotenv'
+import { UpdateConfirmUserController } from '@/presentation/controllers/user/update-confirm-user-controller'
+import { makeUpdateConfirmUserValidationCompositeFactory } from './validations/update-confirm-user-validation-composite-factory'
 
 dotenv.config()
 export const signUpFactory = (): IController => {
@@ -26,4 +28,13 @@ export const signInFactory = (): IController => {
     new UserRepositoryMongoAdapter()
   )
   return new SignInUserController(authentication, makeSignInValidationCompositeFactory())
+}
+
+export const updateConfirmUserFactory = (): IController => {
+  const user = new User(
+    new BcryptAdapter(12),
+    new JwtAdapter(process.env.JWT_SECRET),
+    new UserRepositoryMongoAdapter()
+  )
+  return new UpdateConfirmUserController(makeUpdateConfirmUserValidationCompositeFactory(), user)
 }
