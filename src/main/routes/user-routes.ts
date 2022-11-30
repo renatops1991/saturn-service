@@ -6,5 +6,5 @@ import { authUser } from '@/main/middlewares'
 export default (router: Router): void => {
   router.post('/sign-up', expressRouteAdapter(signUpFactory()))
   router.post('/sign-in', expressRouteAdapter(signInFactory()))
-  router.put('/users/confirm', authUser, expressRouteAdapter(updateConfirmUserFactory()))
+  router.put('/user/confirm', authUser, expressRouteAdapter(updateConfirmUserFactory()))
 }

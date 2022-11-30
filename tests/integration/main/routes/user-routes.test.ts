@@ -90,7 +90,7 @@ describe('User routes', () => {
         }
       )
       await request(app)
-        .put('/api/users/confirm')
+        .put('/api/user/confirm')
         .set('x-access-token', accessToken)
         .send({
           confirmUser: true
