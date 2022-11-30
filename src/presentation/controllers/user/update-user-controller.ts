@@ -1,3 +1,4 @@
+import { IUser } from '@/domain/protocols/user'
 import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
 import { badRequest } from '@/presentation/http-helper'
 import { IController } from '@/presentation/protocols/controller'
@@ -6,6 +7,7 @@ import { IValidation } from '@/presentation/protocols/validation'
 
 export class UpdateUserController implements IController {
   constructor (
+    private readonly user: IUser,
     private readonly validation: IValidation
   ) {}
 
@@ -14,6 +16,8 @@ export class UpdateUserController implements IController {
     if (isError) {
       return badRequest(isError)
     }
+
+    await this.user.update(updateUserDto)
     return null
   }
 }

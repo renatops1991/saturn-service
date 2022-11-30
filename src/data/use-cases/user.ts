@@ -11,6 +11,8 @@ import {
   LoadUserDto,
   UpdateConfirmUserDto
 } from '@/main/dtos/user'
+import { UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
+import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
 
 export class User implements IUser, IAuthentication {
   constructor (
@@ -68,4 +70,6 @@ export class User implements IUser, IAuthentication {
   async updateConfirmUser (updateConfirmUserDto: UpdateConfirmUserDto): Promise<void> {
     await this.userRepository.updateConfirmUser(updateConfirmUserDto)
   }
+
+  update: (UpdateUserDto: UpdateUserDto) => Promise<UpdateUserOutputDto>
 }

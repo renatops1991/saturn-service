@@ -7,6 +7,7 @@ import {
   SignInUserDto,
   UpdateConfirmUserDto
 } from '@/main/dtos/user'
+import { UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
 import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
 
 export const fixturesCreateUserRequest = (): SignUpUserDto => ({
@@ -48,6 +49,7 @@ export const fixturesUpdateConfirmUser = (): UpdateConfirmUserDto => ({
 })
 
 export const fixturesUpdateUser = (): UpdateUserDto => ({
+  userId: 'foo',
   name: 'John Foo Bar',
   birthDate: new Date('1991-08-01'),
   age: 31,
@@ -66,4 +68,15 @@ const fixturesAddress = (): AddressDto => ({
   complements: 'xis',
   city: 'foo',
   state: 'SP'
+})
+
+export const fixturesUpdateUserOutput = (): UpdateUserOutputDto => ({
+  id: 'foo',
+  name: 'John Foo Bar',
+  birthDate: new Date('1991-08-01'),
+  age: 31,
+  address: fixturesAddress(),
+  phone: ['11554678952'],
+  type: 'PERSON',
+  document: '000000000000'
 })

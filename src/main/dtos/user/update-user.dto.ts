@@ -1,6 +1,7 @@
 import { AddressDto } from '@/main/dtos/address/address.dto'
 
 export interface UpdateUserDto {
+  userId?: string
   name?: string
   birthDate: Date
   age?: number
