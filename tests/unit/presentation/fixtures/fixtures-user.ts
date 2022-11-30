@@ -1,4 +1,5 @@
 
+import { AddressDto } from '@/main/dtos/address/address.dto'
 import {
   SignUpUserDto,
   LoadUserDto,
@@ -6,6 +7,7 @@ import {
   SignInUserDto,
   UpdateConfirmUserDto
 } from '@/main/dtos/user'
+import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
 
 export const fixturesCreateUserRequest = (): SignUpUserDto => ({
   name: 'John Foo Bar',
@@ -43,4 +45,25 @@ export const fixturesLoadUser = (): LoadUserDto => ({
 export const fixturesUpdateConfirmUser = (): UpdateConfirmUserDto => ({
   confirmUser: true,
   userId: 'foo'
+})
+
+export const fixturesUpdateUser = (): UpdateUserDto => ({
+  name: 'John Foo Bar',
+  birthDate: new Date('1991-08-01'),
+  age: 31,
+  address: fixturesAddress(),
+  phone: ['11554678952'],
+  type: 'PERSON',
+  document: '000000000000',
+  password: '12345',
+  passwordConfirmation: '12345'
+})
+
+const fixturesAddress = (): AddressDto => ({
+  street: 'foo',
+  number: 'A1',
+  neighborhood: 'bar',
+  complements: 'xis',
+  city: 'foo',
+  state: 'SP'
 })
