@@ -1,7 +1,7 @@
 import { IUser } from '@/domain/protocols/user'
 import { UpdateUserController } from '@/presentation/controllers/user/update-user-controller'
-import { MissingMandatoryParamError } from '@/presentation/errors'
-import { badRequest } from '@/presentation/http-helper'
+import { MissingMandatoryParamError, ServerError } from '@/presentation/errors'
+import { badRequest, serverError } from '@/presentation/http-helper'
 import { IValidation } from '@/presentation/protocols/validation'
 import { mockValidation } from '@/tests/unit/presentation/mocks/mock-user-validation'
 import { fixturesUpdateUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
@@ -53,5 +53,16 @@ describe('UpdateUserController', () => {
       .spyOn(userStub, 'update')
     await sut.handle(updateUser)
     expect(updateSpy).toHaveBeenCalledWith(updateUser)
+  })
+
+  it('Should return 500 error if update method throw exception error', async () => {
+    const { sut, userStub } = makeSut()
+    const updateUser = fixturesUpdateUser()
+    jest
+      .spyOn(userStub, 'update')
+      .mockImplementationOnce(() => { throw new Error() })
+    const expectedResponse = await sut.handle(updateUser)
+    expect(expectedResponse.statusCode).toBe(500)
+    expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))
   })
 })
