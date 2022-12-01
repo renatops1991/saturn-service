@@ -4,7 +4,7 @@ import { MissingMandatoryParamError, ServerError } from '@/presentation/errors'
 import { badRequest, serverError } from '@/presentation/http-helper'
 import { IValidation } from '@/presentation/protocols/validation'
 import { mockValidation } from '@/tests/unit/presentation/mocks/mock-user-validation'
-import { fixturesUpdateUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
+import { fixturesUpdateUser, fixturesUpdateUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockUserController } from '@/tests/unit/presentation/mocks/mock-user-controller'
 
 type SutTypes = {
@@ -64,5 +64,13 @@ describe('UpdateUserController', () => {
     const expectedResponse = await sut.handle(updateUser)
     expect(expectedResponse.statusCode).toBe(500)
     expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))
+  })
+
+  it('Should return 200 status if update method on succeeds', async () => {
+    const { sut } = makeSut()
+    const updateUser = fixturesUpdateUser()
+    const expectedResponse = await sut.handle(updateUser)
+    expect(expectedResponse.statusCode).toBe(200)
+    expect(expectedResponse.body).toStrictEqual(fixturesUpdateUserOutput())
   })
 })
