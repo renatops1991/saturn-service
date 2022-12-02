@@ -12,6 +12,8 @@ import {
   fixturesUpdateUser
 } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockCryptography, mockHashed, mockUserRepository } from '@/tests/unit/data/use-cases/mock/mock-user-use-case'
+import { IUserBuilder } from '@/data/protocols/user-builder'
+import { mockUserBuilder } from '../builders/mock/mock-user-builder'
 import MockDate from 'mockdate'
 
 type SutType = {
@@ -19,18 +21,21 @@ type SutType = {
   hashedStub: IHashed
   cryptographyStub: ICryptography
   userRepositoryStub: IUserRepository
+  userBuilderStub: IUserBuilder
 }
 
 const makeSut = (): SutType => {
   const hashedStub = mockHashed()
   const cryptographyStub = mockCryptography()
   const userRepositoryStub = mockUserRepository()
-  const sut = new User(hashedStub, cryptographyStub, userRepositoryStub)
+  const userBuilderStub = mockUserBuilder()
+  const sut = new User(hashedStub, cryptographyStub, userRepositoryStub, userBuilderStub)
   return {
     sut,
     hashedStub,
     cryptographyStub,
-    userRepositoryStub
+    userRepositoryStub,
+    userBuilderStub
   }
 }
 
@@ -73,6 +78,20 @@ describe('User use case', () => {
       })
       await sut.create(user)
       expect(createSpy).toHaveBeenCalledWith(expectedResponse)
+    })
+
+    it('Should call buildUserBasicInfo method of the UserBuilder Class with corrects values', async () => {
+      const { sut, hashedStub, userBuilderStub, userRepositoryStub } = makeSut()
+      jest.spyOn(userRepositoryStub, 'loadByEmail').mockResolvedValue(null)
+      jest.spyOn(hashedStub, 'hash')
+      const buildUserBasicInfoSpy = jest.spyOn(userBuilderStub, 'buildUserBasicInfo')
+      await sut.create(fixturesCreateUser())
+      expect(buildUserBasicInfoSpy).toHaveBeenCalledWith({
+        name: 'John Foo Bar',
+        email: 'foo@example.com',
+        password: 'hashed',
+        confirmUser: false
+      })
     })
 
     it('Should forward the error if UserRepository throws error', async () => {
@@ -274,6 +293,14 @@ describe('User use case', () => {
 
   describe('update', () => {
     it('Should call hash method with correct password if is provided', async () => {
+      const { sut, hashedStub } = makeSut()
+      const hashSpy = jest
+        .spyOn(hashedStub, 'hash')
+      await sut.update(fixturesUpdateUser())
+      expect(hashSpy).toHaveBeenCalledWith('12345')
+    })
+
+    it('Should build the user update with the data provided', async () => {
       const { sut, hashedStub } = makeSut()
       const hashSpy = jest
         .spyOn(hashedStub, 'hash')
