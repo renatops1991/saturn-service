@@ -9,13 +9,15 @@ import { BcryptAdapter } from '@/infra/cryptography/bcrypt-adapter'
 import { JwtAdapter } from '@/infra/cryptography/jwt-adapter'
 import dotenv from 'dotenv'
 import { UpdateConfirmUserController } from '@/presentation/controllers/user/update-confirm-user-controller'
+import { UserBuilder } from '@/data/builders/user-builder'
 
 dotenv.config()
 export const signUpFactory = (): IController => {
   const user = new User(
     new BcryptAdapter(12),
     new JwtAdapter(process.env.JWT_SECRET),
-    new UserRepositoryMongoAdapter()
+    new UserRepositoryMongoAdapter(),
+    new UserBuilder()
   )
   return new SignUpUserController(user, makeSignUpValidationCompositeFactory(), user)
 }
