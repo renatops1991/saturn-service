@@ -8,9 +8,10 @@ import {
   fixturesUserOutput,
   fixturesLoginUser,
   fixturesLoadUser,
-  fixturesUpdateConfirmUser
+  fixturesUpdateConfirmUser,
+  fixturesUpdateUser
 } from '@/tests/unit/presentation/fixtures/fixtures-user'
-import { mockCryptography, mockHashed, mockUserRepository } from './mock/mock-user-use-case'
+import { mockCryptography, mockHashed, mockUserRepository } from '@/tests/unit/data/use-cases/mock/mock-user-use-case'
 import MockDate from 'mockdate'
 
 type SutType = {
@@ -59,7 +60,7 @@ describe('User use case', () => {
       await expect(expectedResponse).rejects.toThrow()
     })
 
-    it('Should call Hashed with correct values', async () => {
+    it('Should call create method of the UserRepository with correct values', async () => {
       const { sut, userRepositoryStub } = makeSut()
       jest.spyOn(userRepositoryStub, 'loadByEmail').mockResolvedValue(null)
       const createSpy = jest.spyOn(userRepositoryStub, 'create')
@@ -167,8 +168,8 @@ describe('User use case', () => {
       const { sut, cryptographyStub } = makeSut()
       const user = fixturesLoginUser()
       const encryptSpy =
-      jest
-        .spyOn(cryptographyStub, 'encrypt')
+        jest
+          .spyOn(cryptographyStub, 'encrypt')
       await sut.auth(user)
       expect(encryptSpy).toHaveBeenCalledWith('foo')
     })
@@ -176,8 +177,8 @@ describe('User use case', () => {
     it('Should call updateAccessToken method of the UserRepository with correct values ', async () => {
       const { sut, userRepositoryStub } = makeSut()
       const updateAccessTokenSpy =
-      jest
-        .spyOn(userRepositoryStub, 'updateAccessToken')
+        jest
+          .spyOn(userRepositoryStub, 'updateAccessToken')
       await sut.auth(fixturesLoginUser())
       expect(updateAccessTokenSpy).toHaveBeenCalledWith('foo', 'encrypted')
     })
@@ -194,7 +195,7 @@ describe('User use case', () => {
     it('Should return name, email and accessToken if auth method on success', async () => {
       const { sut } = makeSut()
       const updateAccessTokenSpy =
-      await sut.auth(fixturesLoginUser())
+        await sut.auth(fixturesLoginUser())
       expect(updateAccessTokenSpy).toEqual({
         name: 'John Foo Bar',
         email: 'foo@example.com',
@@ -268,6 +269,16 @@ describe('User use case', () => {
         .mockRejectedValueOnce(new Error())
       const expectedResponse = sut.updateConfirmUser(fixturesUpdateConfirmUser())
       await expect(expectedResponse).rejects.toThrow()
+    })
+  })
+
+  describe('update', () => {
+    it('Should call hash method with correct password if is provided', async () => {
+      const { sut, hashedStub } = makeSut()
+      const hashSpy = jest
+        .spyOn(hashedStub, 'hash')
+      await sut.update(fixturesUpdateUser())
+      expect(hashSpy).toHaveBeenCalledWith('12345')
     })
   })
 })

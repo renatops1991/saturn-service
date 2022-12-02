@@ -71,5 +71,10 @@ export class User implements IUser, IAuthentication {
     await this.userRepository.updateConfirmUser(updateConfirmUserDto)
   }
 
-  update: (UpdateUserDto: UpdateUserDto) => Promise<UpdateUserOutputDto>
+  async update (updateUserDto: UpdateUserDto): Promise<UpdateUserOutputDto> {
+    const { password } = updateUserDto
+    await this.hashed.hash(password)
+
+    return null
+  }
 }

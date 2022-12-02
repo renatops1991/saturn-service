@@ -4,5 +4,5 @@ import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
 export interface IUser {
   create: (user: SignUpUserDto) => Promise<UserOutputDto>
   updateConfirmUser: (updateConfirmUserDto: UpdateConfirmUserDto) => Promise<void>
-  update: (UpdateUserDto: UpdateUserDto) => Promise<UpdateUserOutputDto>
+  update: (updateUserDto: UpdateUserDto) => Promise<UpdateUserOutputDto>
 }

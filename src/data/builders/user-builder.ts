@@ -1,7 +1,8 @@
 import { User } from '@/domain/entities/user'
 import { IUserBuilder } from '@/data/protocols/user-builder'
-import { UserBasicInfoType } from '@/data/types/user-basic-info-type'
+import { UserBasicInfoType, UserType } from '@/data/types'
 import { SignUpUserDto } from '@/main/dtos/user/signup-user.dto'
+import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
 
 export class UserBuilder implements IUserBuilder {
   buildUserBasicInfo (
@@ -17,4 +18,6 @@ export class UserBuilder implements IUserBuilder {
 
     return user
   }
+
+  buildUser: (updateUserDto: UpdateUserDto) => UserType
 }

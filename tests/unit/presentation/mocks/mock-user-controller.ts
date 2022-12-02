@@ -14,7 +14,7 @@ export const mockUserController = (): IUser => {
       return await Promise.resolve()
     }
 
-    async update (UpdateUserDto: UpdateUserDto): Promise<UpdateUserOutputDto> {
+    async update (updateUserDto: UpdateUserDto): Promise<UpdateUserOutputDto> {
       return await Promise.resolve(fixturesUpdateUserOutput())
     }
   }
