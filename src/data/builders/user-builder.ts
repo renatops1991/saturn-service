@@ -19,5 +19,5 @@ export class UserBuilder implements IUserBuilder {
     return user
   }
 
-  buildUser: (updateUserDto: UpdateUserDto) => UserType
+  buildUser: (userDto: UpdateUserDto) => UserType
 }
