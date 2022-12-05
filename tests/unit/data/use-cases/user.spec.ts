@@ -81,9 +81,8 @@ describe('User use case', () => {
     })
 
     it('Should call buildUserBasicInfo method of the UserBuilder Class with corrects values', async () => {
-      const { sut, hashedStub, userBuilderStub, userRepositoryStub } = makeSut()
+      const { sut, userBuilderStub, userRepositoryStub } = makeSut()
       jest.spyOn(userRepositoryStub, 'loadByEmail').mockResolvedValue(null)
-      jest.spyOn(hashedStub, 'hash')
       const buildUserBasicInfoSpy = jest.spyOn(userBuilderStub, 'buildUserBasicInfo')
       await sut.create(fixturesCreateUser())
       expect(buildUserBasicInfoSpy).toHaveBeenCalledWith({
@@ -300,12 +299,30 @@ describe('User use case', () => {
       expect(hashSpy).toHaveBeenCalledWith('12345')
     })
 
-    it('Should build the user update with the data provided', async () => {
-      const { sut, hashedStub } = makeSut()
-      const hashSpy = jest
-        .spyOn(hashedStub, 'hash')
+    it('Should call buildUser method with corrects values', async () => {
+      const { sut, userBuilderStub } = makeSut()
+      const buildUserSpy = jest
+        .spyOn(userBuilderStub, 'buildUser')
       await sut.update(fixturesUpdateUser())
-      expect(hashSpy).toHaveBeenCalledWith('12345')
+      expect(buildUserSpy).toHaveBeenCalledWith(
+        Object.assign({ ...fixturesUpdateUser(), password: 'hashed' })
+      )
+    })
+
+    it('Should call buildUser method with corrects values without password field', async () => {
+      const { sut, userBuilderStub } = makeSut()
+      const fakeUpdateUser = fixturesUpdateUser()
+      delete fakeUpdateUser.password
+      delete fakeUpdateUser.passwordConfirmation
+      const buildUserSpy = jest
+        .spyOn(userBuilderStub, 'buildUser')
+
+      await sut.update(fakeUpdateUser)
+      const expectedResponse = fixturesUpdateUser()
+      delete expectedResponse.password
+      delete expectedResponse.passwordConfirmation
+
+      expect(buildUserSpy).toHaveBeenCalledWith(expectedResponse)
     })
   })
 })
