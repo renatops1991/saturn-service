@@ -77,6 +77,10 @@ export class User implements IUser, IAuthentication {
     const { password } = updateUserDto
     const hashedPassword = await this.hashed.hash(password)
 
+    if (!password) {
+      this.userBuilder.buildUser(updateUserDto)
+    }
+
     this.userBuilder.buildUser(Object.assign({}, updateUserDto, { password: hashedPassword }))
     return null
   }
