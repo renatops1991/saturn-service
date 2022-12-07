@@ -9,7 +9,8 @@ import {
   fixturesLoginUser,
   fixturesLoadUser,
   fixturesUpdateConfirmUser,
-  fixturesUpdateUser
+  fixturesUpdateUser,
+  fixturesUpdateUserOutput
 } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockCryptography, mockHashed, mockUserRepository } from '@/tests/unit/data/use-cases/mock/mock-user-use-case'
 import { IUserBuilder } from '@/data/protocols/user-builder'
@@ -358,6 +359,21 @@ describe('User use case', () => {
       const expectedResponse = fixturesBuildUser()
       delete expectedResponse.password
       expect(updateSpy).toHaveBeenCalledWith(expectedResponse)
+    })
+
+    it('Should forward the error if UserRepository throws error', async () => {
+      const { sut, userRepositoryStub } = makeSut()
+      jest.spyOn(userRepositoryStub, 'update').mockRejectedValueOnce(new Error())
+      const updateUser = fixturesUpdateUser()
+      const expectedResponse = sut.update(updateUser)
+      await expect(expectedResponse).rejects.toThrow()
+    })
+
+    it('Should return an update user on succeeds', async () => {
+      const { sut } = makeSut()
+      const updateUser = fixturesUpdateUser()
+      const expectedResponse = await sut.update(updateUser)
+      expect(expectedResponse).toEqual(fixturesUpdateUserOutput())
     })
   })
 })
