@@ -78,5 +78,7 @@ export const fixturesUpdateUserOutput = (): UpdateUserOutputDto => ({
   address: fixturesAddress(),
   phone: ['11554678952'],
   type: 'PERSON',
-  document: '000000000000'
+  document: '000000000000',
+  createdAt: new Date(),
+  updatedAt: new Date()
 })

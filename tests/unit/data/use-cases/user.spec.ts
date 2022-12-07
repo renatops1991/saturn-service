@@ -15,6 +15,7 @@ import { mockCryptography, mockHashed, mockUserRepository } from '@/tests/unit/d
 import { IUserBuilder } from '@/data/protocols/user-builder'
 import { mockUserBuilder } from '../builders/mock/mock-user-builder'
 import MockDate from 'mockdate'
+import { fixturesBuildUser } from '../builders/fixtures-user-builder'
 
 type SutType = {
   sut: User
@@ -323,6 +324,40 @@ describe('User use case', () => {
       delete expectedResponse.passwordConfirmation
 
       expect(buildUserSpy).toHaveBeenCalledWith(expectedResponse)
+    })
+
+    it('Should call update method with corrects values with password', async () => {
+      const { sut, userRepositoryStub, userBuilderStub } = makeSut()
+      const updateSpy = jest
+        .spyOn(userRepositoryStub, 'update')
+      jest
+        .spyOn(userBuilderStub, 'buildUser').mockReturnValueOnce(Object.assign(
+          {
+            ...fixturesBuildUser(),
+            password: 'hashed'
+          }
+        ))
+
+      await sut.update(fixturesUpdateUser())
+      const expectedResponse = Object.assign(
+        {
+          ...fixturesBuildUser(),
+          password: 'hashed'
+        })
+      expect(updateSpy).toHaveBeenCalledWith(expectedResponse)
+    })
+
+    it('Should call update method with corrects values without password', async () => {
+      const { sut, userRepositoryStub } = makeSut()
+      const fakeUpdateUser = fixturesUpdateUser()
+      delete fakeUpdateUser.password
+      delete fakeUpdateUser.passwordConfirmation
+      const updateSpy = jest
+        .spyOn(userRepositoryStub, 'update')
+      await sut.update(fakeUpdateUser)
+      const expectedResponse = fixturesBuildUser()
+      delete expectedResponse.password
+      expect(updateSpy).toHaveBeenCalledWith(expectedResponse)
     })
   })
 })

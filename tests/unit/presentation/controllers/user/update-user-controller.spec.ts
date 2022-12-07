@@ -6,6 +6,7 @@ import { IValidation } from '@/presentation/protocols/validation'
 import { mockValidation } from '@/tests/unit/presentation/mocks/mock-user-validation'
 import { fixturesUpdateUser, fixturesUpdateUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockUserController } from '@/tests/unit/presentation/mocks/mock-user-controller'
+import MockDate from 'mockdate'
 
 type SutTypes = {
   validationStub: IValidation
@@ -25,6 +26,12 @@ const makeSut = (): SutTypes => {
 }
 
 describe('UpdateUserController', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+  afterAll(() => {
+    MockDate.reset()
+  })
   it('Should call validation with correct values', async () => {
     const { sut, validationStub } = makeSut()
     const updateUser = fixturesUpdateUser()
