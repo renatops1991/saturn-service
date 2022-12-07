@@ -9,4 +9,6 @@ export interface UpdateUserOutputDto {
   phone: string[]
   type: string
   document: string
+  createdAt: Date
+  updatedAt: Date
 }

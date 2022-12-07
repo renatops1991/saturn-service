@@ -13,6 +13,7 @@ import {
 } from '@/main/dtos/user'
 import { UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
 import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
+import { UserType } from '@/data/types'
 
 export class User implements IUser, IAuthentication {
   constructor (
@@ -75,13 +76,16 @@ export class User implements IUser, IAuthentication {
 
   async update (updateUserDto: UpdateUserDto): Promise<UpdateUserOutputDto> {
     const { password } = updateUserDto
+    let updateUser: UserType
     const hashedPassword = await this.hashed.hash(password)
 
     if (!password) {
-      this.userBuilder.buildUser(updateUserDto)
+      updateUser = this.userBuilder.buildUser(updateUserDto)
+    } else {
+      updateUser = this.userBuilder.buildUser(Object.assign({}, updateUserDto, { password: hashedPassword }))
     }
 
-    this.userBuilder.buildUser(Object.assign({}, updateUserDto, { password: hashedPassword }))
+    await this.userRepository.update(updateUser)
     return null
   }
 }

@@ -9,4 +9,6 @@ export type UserType = {
   phone: string[]
   type: string
   document: string
+  password?: string
+  updatedAt: Date
 }

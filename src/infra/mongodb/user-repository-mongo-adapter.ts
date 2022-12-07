@@ -2,6 +2,8 @@ import { IUserRepository } from '@/data/protocols/user-repository'
 import { MongoHelper } from './mongo-helper'
 import { SignUpUserDto, LoadUserDto, UserOutputDto, UpdateConfirmUserDto } from '@/main/dtos/user'
 import { Collection, ObjectId } from 'mongodb'
+import { UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
+import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
 
 export class UserRepositoryMongoAdapter implements IUserRepository {
   private userCollection: Collection
@@ -79,6 +81,8 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
       }
     )
   }
+
+  update: (updateUserDto: UpdateUserDto) => Promise<UpdateUserOutputDto>
 
   private getUserCollection (): Collection {
     if (!this.userCollection) {
