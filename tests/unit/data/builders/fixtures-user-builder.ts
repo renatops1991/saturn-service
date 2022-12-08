@@ -10,7 +10,6 @@ export const fixturesBuildUserBasicInfo = (): UserBasicInfoType => ({
 })
 
 export const fixturesBuildUser = (): UserType => ({
-  id: 'foo',
   name: 'John Foo Bar',
   birthDate: new Date('1991-08-01'),
   age: 31,
