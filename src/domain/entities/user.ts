@@ -1,3 +1,4 @@
+import { UserType } from '@/data/types'
 import { UserBasicInfoType } from '@/data/types/user-basic-info-type'
 import { Address } from './address'
 
@@ -23,6 +24,20 @@ export class User {
       password: this.password,
       confirmUser: this.confirmUser,
       createdAt: this.createdAt,
+      updatedAt: this.updatedAt
+    }
+  }
+
+  public getUser (): UserType {
+    return {
+      name: this.name,
+      birthDate: this.birthDate,
+      age: this.age,
+      address: this.address,
+      phone: this.phone,
+      type: this.type,
+      document: this.document,
+      password: this.password,
       updatedAt: this.updatedAt
     }
   }

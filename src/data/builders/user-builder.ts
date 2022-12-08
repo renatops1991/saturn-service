@@ -1,4 +1,5 @@
 import { User } from '@/domain/entities/user'
+import { Address } from '@/domain/entities/address'
 import { IUserBuilder } from '@/data/protocols/user-builder'
 import { UserBasicInfoType, UserType } from '@/data/types'
 import { SignUpUserDto } from '@/main/dtos/user/signup-user.dto'
@@ -19,5 +20,31 @@ export class UserBuilder implements IUserBuilder {
     return user
   }
 
-  buildUser: (userDto: UpdateUserDto) => UserType
+  buildUser (userDto: UpdateUserDto): UserType {
+    const user = new User().getUser()
+    user.birthDate = userDto.birthDate
+    user.document = userDto.document
+    user.updatedAt = new Date()
+
+    if (userDto.address) {
+      user.address = Address.makeAddress(userDto.address)
+    }
+    if (userDto.name) {
+      user.name = userDto.name
+    }
+    if (userDto.age) {
+      user.age = userDto.age
+    }
+    if (userDto.type) {
+      user.type = userDto.type
+    }
+    if (userDto.password) {
+      user.password = userDto.password
+    }
+    if (userDto?.phone && userDto.phone.length) {
+      user.phone = userDto.phone
+    }
+
+    return user
+  }
 }
