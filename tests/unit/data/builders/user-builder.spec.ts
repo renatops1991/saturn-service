@@ -63,5 +63,19 @@ describe('UserBuilder', () => {
         updatedAt: new Date()
       })
     })
+
+    it('Should build user with optionals fields', async () => {
+      const sut = new UserBuilder()
+      const expectedResponse = sut.buildUser({
+        userId: 'foo',
+        birthDate: new Date('1991-08-01'),
+        document: '000000000000'
+      })
+      expect(expectedResponse).toEqual({
+        birthDate: new Date('1991-08-01'),
+        document: '000000000000',
+        updatedAt: new Date()
+      })
+    })
   })
 })
