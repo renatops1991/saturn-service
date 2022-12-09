@@ -82,7 +82,49 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
     )
   }
 
-  update: (updateUserDto: UpdateUserDto) => Promise<UpdateUserOutputDto>
+  async update (updateUserDto: UpdateUserDto): Promise<UpdateUserOutputDto> {
+    const { userId } = updateUserDto
+    await this.getUserCollection().findOneAndUpdate(
+      {
+        _id: new ObjectId(userId)
+      },
+      {
+        $set: {
+          name: updateUserDto.name,
+          birthDate: updateUserDto.birthDate,
+          age: updateUserDto.age,
+          address: updateUserDto.address,
+          phone: updateUserDto.phone,
+          type: updateUserDto.type,
+          document: updateUserDto.document,
+          password: updateUserDto.password,
+          updatedAt: new Date()
+        }
+      },
+      {
+        upsert: true
+      }
+    )
+
+    const updateUser = await this.getUserCollection().findOne(
+      { _id: userId },
+      {
+        projection: {
+          _id: 1,
+          name: 1,
+          birthDate: 1,
+          address: 1,
+          age: 1,
+          phone: 1,
+          type: 1,
+          document: 1,
+          createdAt: 1,
+          updatedAt: 1
+        }
+      }
+    )
+    return MongoHelper.map(updateUser)
+  }
 
   private getUserCollection (): Collection {
     if (!this.userCollection) {
