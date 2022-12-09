@@ -1,6 +1,6 @@
 import { MongoHelper } from '@/infra/mongodb/mongo-helper'
 import { UserRepositoryMongoAdapter } from '@/infra/mongodb/user-repository-mongo-adapter'
-import { fixturesCreateUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
+import { fixturesCreateUser, fixturesUpdateUser, fixturesUpdateUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { Collection } from 'mongodb'
 import MockDate from 'mockdate'
 
@@ -118,6 +118,26 @@ describe('UserRepositoryMongoAdapter', () => {
       const expectedResponse = await userCollection.findOne({ _id: userId })
       expect(expectedResponse.confirmUser).toBeTruthy()
       expect(expectedResponse.updatedAt).toEqual(new Date())
+    })
+  })
+
+  describe('update', () => {
+    it('Should update user all field correctly', async () => {
+      const sut = makeSut()
+      const createUser = await userCollection.insertOne(Object.assign({
+        ...fixturesCreateUser(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        accessToken: 'accessToken'
+      }))
+
+      const user = await userCollection.findOne({ _id: createUser.insertedId })
+      const userId = MongoHelper.map(user).id
+      const expectedResponse = await sut.update(
+        Object.assign({ ...fixturesUpdateUser(), userId })
+      )
+
+      expect(expectedResponse).toEqual(Object.assign({ ...fixturesUpdateUserOutput(), id: userId }))
     })
   })
 })
