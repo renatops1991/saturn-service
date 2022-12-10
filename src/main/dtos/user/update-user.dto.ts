@@ -11,4 +11,5 @@ export interface UpdateUserDto {
   document: string
   password?: string
   passwordConfirmation?: string
+  updatedAt?: Date
 }

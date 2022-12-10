@@ -4,6 +4,7 @@ import { SignUpUserDto, LoadUserDto, UserOutputDto, UpdateConfirmUserDto } from 
 import { Collection, ObjectId } from 'mongodb'
 import { UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
 import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
+import * as utils from '@/main/utils'
 
 export class UserRepositoryMongoAdapter implements IUserRepository {
   private userCollection: Collection
@@ -84,31 +85,16 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
 
   async update (updateUserDto: UpdateUserDto): Promise<UpdateUserOutputDto> {
     const { userId } = updateUserDto
-    await this.getUserCollection().findOneAndUpdate(
+    const updateUser = await this.getUserCollection().findOneAndUpdate(
       {
         _id: new ObjectId(userId)
       },
       {
-        $set: {
-          name: updateUserDto.name,
-          birthDate: updateUserDto.birthDate,
-          age: updateUserDto.age,
-          address: updateUserDto.address,
-          phone: updateUserDto.phone,
-          type: updateUserDto.type,
-          document: updateUserDto.document,
-          password: updateUserDto.password,
-          updatedAt: new Date()
-        }
+        $set: utils.getFieldsWithValidValues(updateUserDto)
       },
       {
-        upsert: true
-      }
-    )
-
-    const updateUser = await this.getUserCollection().findOne(
-      { _id: userId },
-      {
+        upsert: true,
+        returnDocument: 'after',
         projection: {
           _id: 1,
           name: 1,
@@ -123,7 +109,7 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
         }
       }
     )
-    return MongoHelper.map(updateUser)
+    return MongoHelper.map(updateUser.value)
   }
 
   private getUserCollection (): Collection {
