@@ -145,35 +145,35 @@ describe('UserRepositoryMongoAdapter', () => {
       expect(expectedResponse).toEqual(Object.assign({ ...fixturesUpdateUserOutput(), id: userId }))
     })
 
-    // it('Should update user without optional fields correctly', async () => {
-    //   const sut = makeSut()
-    //   const createUser = await userCollection.insertOne(Object.assign({
-    //     ...fixturesCreateUser(),
-    //     createdAt: new Date(),
-    //     updatedAt: new Date(),
-    //     accessToken: 'accessToken'
-    //   }))
+    it('Should update user without optional fields correctly', async () => {
+      const sut = makeSut()
+      const createUser = await userCollection.insertOne(Object.assign({
+        ...fixturesCreateUser(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        accessToken: 'accessToken'
+      }))
 
-    //   const user = await userCollection.findOne({ _id: createUser.insertedId })
-    //   const userId = MongoHelper.map(user).id
-    //   const expectedResponse = await sut.update(
-    //     Object.assign({
-    //       userId,
-    //       birthDate: new Date('1992-08-01'),
-    //       document: '4564564564545',
-    //       updatedAt: new Date()
-    //     })
-    //   )
+      const user = await userCollection.findOne({ _id: createUser.insertedId })
+      const userId = MongoHelper.map(user).id
+      const expectedResponse = await sut.update(
+        Object.assign({
+          userId,
+          birthDate: new Date('1992-08-01'),
+          document: '4564564564545',
+          updatedAt: new Date()
+        })
+      )
 
-    //   expect(expectedResponse).toEqual(Object.assign(
-    //     {
-    //       id: userId,
-    //       name: 'John Foo Bar',
-    //       birthDate: new Date('1992-08-01'),
-    //       document: '4564564564545',
-    //       updatedAt: new Date(),
-    //       createdAt: new Date()
-    //     }))
-    // })
+      expect(expectedResponse).toEqual(Object.assign(
+        {
+          id: userId,
+          name: 'John Foo Bar',
+          birthDate: new Date('1992-08-01'),
+          document: '4564564564545',
+          updatedAt: new Date(),
+          createdAt: new Date()
+        }))
+    })
   })
 })
