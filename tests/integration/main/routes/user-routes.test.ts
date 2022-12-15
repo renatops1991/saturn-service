@@ -6,6 +6,7 @@ import { hash } from 'bcrypt'
 import { sign } from 'jsonwebtoken'
 import request from 'supertest'
 import dotenv from 'dotenv'
+import { fixturesUpdateUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
 
 let userCollection: Collection
 let app: Express
@@ -96,6 +97,36 @@ describe('User routes', () => {
           confirmUser: true
         })
         .expect(204)
+    })
+  })
+
+  describe('Update', () => {
+    it('Should update user fields on succeeds', async () => {
+      const password = await hash('123', 12)
+      const createUser = await userCollection.insertOne({
+        name: 'John Foo Bar',
+        email: 'john@example.com',
+        password,
+        confirmUser: false
+      })
+      const id = createUser.insertedId
+      const accessToken = sign({ id }, process.env.JWT_SECRET)
+      await userCollection.updateOne(
+        {
+          _id: id
+        }, {
+          $set: {
+            accessToken
+          }
+        }
+      )
+      await request(app)
+        .put('/api/user')
+        .set('x-access-token', accessToken)
+        .send(
+          fixturesUpdateUser()
+        )
+        .expect(200)
     })
   })
 })
