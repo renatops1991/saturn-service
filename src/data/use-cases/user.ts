@@ -76,12 +76,12 @@ export class User implements IUser, IAuthentication {
 
   async update (updateUserDto: UpdateUserDto): Promise<UpdateUserOutputDto> {
     const { password } = updateUserDto
-    const hashedPassword = await this.hashed.hash(password)
     let updateUser: UserType
 
     if (!password) {
       updateUser = this.userBuilder.buildUser(updateUserDto)
     } else {
+      const hashedPassword = await this.hashed.hash(password)
       updateUser = this.userBuilder.buildUser(Object.assign({}, updateUserDto, { password: hashedPassword }))
     }
 
