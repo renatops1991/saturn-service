@@ -1,10 +1,16 @@
 import { expressRouteAdapter } from '@/main/adapters/express-route-adapter'
-import { signUpFactory, signInFactory, updateConfirmUserFactory } from '@/main/factories/user-factory'
-import { Router } from 'express'
+import {
+  signUpFactory,
+  signInFactory,
+  updateConfirmUserFactory,
+  updateUserFactory
+} from '@/main/factories/user-factory'
 import { authUser } from '@/main/middlewares'
+import { Router } from 'express'
 
 export default (router: Router): void => {
   router.post('/sign-up', expressRouteAdapter(signUpFactory()))
   router.post('/sign-in', expressRouteAdapter(signInFactory()))
   router.put('/user/confirm', authUser, expressRouteAdapter(updateConfirmUserFactory()))
+  router.put('/user', authUser, expressRouteAdapter(updateUserFactory()))
 }

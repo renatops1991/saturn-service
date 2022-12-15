@@ -1,15 +1,21 @@
 import { User } from '@/data/use-cases/user'
-import { SignUpUserController } from '@/presentation/controllers/user/signup-user-controller'
 import { IController } from '@/presentation/protocols/controller'
-import { SignInUserController } from '@/presentation/controllers/user/signin-user-controller'
-import { makeSignUpValidationCompositeFactory } from '@/main/factories/validations/signup-validation-composite-factory'
-import { makeSignInValidationCompositeFactory } from '@/main/factories/validations/signin-validation-composite-factory'
+import {
+  SignUpUserController,
+  SignInUserController,
+  UpdateUserController,
+  UpdateConfirmUserController
+} from '@/presentation/controllers/user'
+import {
+  makeSignUpValidationCompositeFactory,
+  makeSignInValidationCompositeFactory,
+  makeUpdateUserValidationCompositeFactory
+} from '@/main/factories/validations'
 import { UserRepositoryMongoAdapter } from '@/infra/mongodb/user-repository-mongo-adapter'
 import { BcryptAdapter } from '@/infra/cryptography/bcrypt-adapter'
 import { JwtAdapter } from '@/infra/cryptography/jwt-adapter'
-import dotenv from 'dotenv'
-import { UpdateConfirmUserController } from '@/presentation/controllers/user/update-confirm-user-controller'
 import { UserBuilder } from '@/data/builders/user-builder'
+import dotenv from 'dotenv'
 
 dotenv.config()
 export const signUpFactory = (): IController => {
@@ -38,4 +44,14 @@ export const updateConfirmUserFactory = (): IController => {
     new UserRepositoryMongoAdapter()
   )
   return new UpdateConfirmUserController(user)
+}
+
+export const updateUserFactory = (): IController => {
+  const user = new User(
+    new BcryptAdapter(12),
+    new JwtAdapter(process.env.JWT_SECRET),
+    new UserRepositoryMongoAdapter(),
+    new UserBuilder()
+  )
+  return new UpdateUserController(user, makeUpdateUserValidationCompositeFactory())
 }
