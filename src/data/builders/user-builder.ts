@@ -22,6 +22,7 @@ export class UserBuilder implements IUserBuilder {
 
   buildUser (userDto: UpdateUserDto): UserType {
     const user = new User().getUser()
+    user.userId = userDto.userId
     user.birthDate = userDto.birthDate
     user.document = userDto.document
     user.updatedAt = new Date()

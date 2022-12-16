@@ -1,6 +1,7 @@
 import { AddressType } from './address-type'
 
 export type UserType = {
+  userId: string
   name: string
   birthDate: Date
   age: number

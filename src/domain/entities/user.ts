@@ -30,6 +30,7 @@ export class User {
 
   public getUser (): UserType {
     return {
+      userId: this.id,
       name: this.name,
       birthDate: this.birthDate,
       age: this.age,
