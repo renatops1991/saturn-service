@@ -1,5 +1,5 @@
-export const getFieldsWithValidValues = (fields: Object): Object => {
+export const getFieldsWithValidValues = (fields: Object, removeField?: string): Object => {
   return Object.fromEntries(
-    Object.entries(fields).filter(([_, value]) => !!value)
+    Object.entries(fields).filter(([field, value]) => !!value && field !== removeField)
   )
 }

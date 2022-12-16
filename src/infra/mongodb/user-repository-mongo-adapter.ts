@@ -90,7 +90,7 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
         _id: new ObjectId(userId)
       },
       {
-        $set: utils.getFieldsWithValidValues(updateUserDto)
+        $set: utils.getFieldsWithValidValues(updateUserDto, 'userId')
       },
       {
         upsert: true,
