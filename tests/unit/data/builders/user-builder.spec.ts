@@ -45,6 +45,7 @@ describe('UserBuilder', () => {
       const sut = new UserBuilder()
       const expectedResponse = sut.buildUser(fixturesUpdateUser())
       expect(expectedResponse).toEqual({
+        userId: 'foo',
         name: 'John Foo Bar',
         birthDate: new Date('1991-08-01'),
         age: 31,
@@ -72,6 +73,7 @@ describe('UserBuilder', () => {
         document: '000000000000'
       })
       expect(expectedResponse).toEqual({
+        userId: 'foo',
         birthDate: new Date('1991-08-01'),
         document: '000000000000',
         updatedAt: new Date()
