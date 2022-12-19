@@ -1,4 +1,5 @@
 import { User } from '@/data/use-cases/user'
+import { UserBuilder } from '@/data/builders/user-builder'
 import { IController } from '@/presentation/protocols/controller'
 import {
   SignUpUserController,
@@ -14,7 +15,6 @@ import {
 import { UserRepositoryMongoAdapter } from '@/infra/mongodb/user-repository-mongo-adapter'
 import { BcryptAdapter } from '@/infra/cryptography/bcrypt-adapter'
 import { JwtAdapter } from '@/infra/cryptography/jwt-adapter'
-import { UserBuilder } from '@/data/builders/user-builder'
 import dotenv from 'dotenv'
 
 dotenv.config()

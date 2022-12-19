@@ -1,6 +1,11 @@
-import { SignUpUserDto, LoadUserDto, UserOutputDto, UpdateConfirmUserDto } from '@/main/dtos/user'
-import { UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
-import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
+import {
+  SignUpUserDto,
+  LoadUserDto,
+  UserOutputDto,
+  UpdateConfirmUserDto,
+  UpdateUserOutputDto,
+  UpdateUserDto
+} from '@/main/dtos/user'
 
 export interface IUserRepository {
   create: (userDto: Omit<SignUpUserDto, 'passwordConfirmation'>) => Promise<UserOutputDto>

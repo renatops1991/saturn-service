@@ -1,19 +1,21 @@
 import { IUser } from '@/domain/protocols/user'
-import { IUserBuilder } from '@/data/protocols/user-builder'
 import { IAuthentication } from '@/domain/protocols/authentication'
-import { IHashed } from '@/data/protocols/hashed'
-import { IUserRepository } from '@/data/protocols/user-repository'
-import { ICryptography } from '@/data/protocols/cryptography'
+import {
+  IUserBuilder,
+  IHashed,
+  IUserRepository,
+  ICryptography
+} from '@/data/protocols'
+import { UserType } from '@/data/types'
 import {
   SignUpUserDto,
   UserOutputDto,
   SignInUserDto,
   LoadUserDto,
-  UpdateConfirmUserDto
+  UpdateConfirmUserDto,
+  UpdateUserOutputDto,
+  UpdateUserDto
 } from '@/main/dtos/user'
-import { UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
-import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
-import { UserType } from '@/data/types'
 
 export class User implements IUser, IAuthentication {
   constructor (
