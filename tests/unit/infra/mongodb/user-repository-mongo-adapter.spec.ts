@@ -1,6 +1,6 @@
 import { MongoHelper } from '@/infra/mongodb/mongo-helper'
 import { UserRepositoryMongoAdapter } from '@/infra/mongodb/user-repository-mongo-adapter'
-import { fixturesCreateUser, fixturesUpdateUser, fixturesUpdateUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
+import { fixtureCreateUser, fixtureUpdateUser, fixtureUpdateUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { Collection } from 'mongodb'
 import MockDate from 'mockdate'
 
@@ -27,23 +27,23 @@ describe('UserRepositoryMongoAdapter', () => {
   describe('Create', () => {
     it('Should return correct an user if create method on succeeds', async () => {
       const sut = makeSut()
-      const expectedResponse = await sut.create(fixturesCreateUser())
+      const expectedResponse = await sut.create(fixtureCreateUser())
       expect(expectedResponse).toBeTruthy()
-      expect(expectedResponse.name).toEqual(fixturesCreateUser().name)
-      expect(expectedResponse.email).toEqual(fixturesCreateUser().email)
+      expect(expectedResponse.name).toEqual(fixtureCreateUser().name)
+      expect(expectedResponse.email).toEqual(fixtureCreateUser().email)
     })
   })
 
   describe('LoadByEmail', () => {
     it('Should return correct an user if loadByEmail method on succeeds', async () => {
       const sut = makeSut()
-      await userCollection.insertOne(fixturesCreateUser())
+      await userCollection.insertOne(fixtureCreateUser())
       const expectedUser = await sut.loadByEmail('foo@example.com')
       expect(expectedUser).toBeTruthy()
       expect(expectedUser.id).toBeTruthy()
-      expect(expectedUser.name).toEqual(fixturesCreateUser().name)
-      expect(expectedUser.email).toEqual(fixturesCreateUser().email)
-      expect(expectedUser.password).toEqual(fixturesCreateUser().password)
+      expect(expectedUser.name).toEqual(fixtureCreateUser().name)
+      expect(expectedUser.email).toEqual(fixtureCreateUser().email)
+      expect(expectedUser.password).toEqual(fixtureCreateUser().password)
     })
     it('Should return false if loadByEmail method is fail', async () => {
       const sut = makeSut()
@@ -55,7 +55,7 @@ describe('UserRepositoryMongoAdapter', () => {
   describe('UpdateAccessToken', () => {
     it('Should update user accessToken if updateAccessToken method on succeeds', async () => {
       const sut = makeSut()
-      const createUser = await userCollection.insertOne(fixturesCreateUser())
+      const createUser = await userCollection.insertOne(fixtureCreateUser())
       const user = await userCollection.findOne({ _id: createUser.insertedId })
 
       expect(user.accessToken).toBeFalsy()
@@ -79,7 +79,7 @@ describe('UserRepositoryMongoAdapter', () => {
     it('Should return correct an user on succeeds if loadByToken method without role property', async () => {
       const sut = makeSut()
       await userCollection.insertOne(Object.assign({
-        ...fixturesCreateUser(),
+        ...fixtureCreateUser(),
         accessToken: 'accessToken'
       }))
       const expectedResponse = await sut.loadByToken('accessToken')
@@ -90,7 +90,7 @@ describe('UserRepositoryMongoAdapter', () => {
     it('Should return correct an user on succeeds if loadByToken method with role property', async () => {
       const sut = makeSut()
       await userCollection.insertOne(Object.assign({
-        ...fixturesCreateUser(),
+        ...fixtureCreateUser(),
         accessToken: 'accessToken',
         role: 'admin'
       }))
@@ -104,7 +104,7 @@ describe('UserRepositoryMongoAdapter', () => {
     it('Should update confirmUser and updateAt field correctly', async () => {
       const sut = makeSut()
       const createUser = await userCollection.insertOne(Object.assign({
-        ...fixturesCreateUser(),
+        ...fixtureCreateUser(),
         accessToken: 'accessToken'
       }))
 
@@ -125,7 +125,7 @@ describe('UserRepositoryMongoAdapter', () => {
     it('Should update user all field correctly', async () => {
       const sut = makeSut()
       const createUser = await userCollection.insertOne(Object.assign({
-        ...fixturesCreateUser(),
+        ...fixtureCreateUser(),
         createdAt: new Date(),
         updatedAt: new Date(),
         accessToken: 'accessToken'
@@ -136,19 +136,19 @@ describe('UserRepositoryMongoAdapter', () => {
       const expectedResponse = await sut.update(
         Object.assign(
           {
-            ...fixturesUpdateUser(),
+            ...fixtureUpdateUser(),
             userId,
             updatedAt: new Date()
           })
       )
 
-      expect(expectedResponse).toEqual(Object.assign({ ...fixturesUpdateUserOutput(), id: userId }))
+      expect(expectedResponse).toEqual(Object.assign({ ...fixtureUpdateUserOutput(), id: userId }))
     })
 
     it('Should update user without optional fields correctly', async () => {
       const sut = makeSut()
       const createUser = await userCollection.insertOne(Object.assign({
-        ...fixturesCreateUser(),
+        ...fixtureCreateUser(),
         createdAt: new Date(),
         updatedAt: new Date(),
         accessToken: 'accessToken'

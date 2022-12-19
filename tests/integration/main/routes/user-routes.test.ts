@@ -1,12 +1,12 @@
 import { setupApp } from '@/main/config/app'
 import { MongoHelper } from '@/infra/mongodb/mongo-helper'
+import { fixtureUpdateUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { Express } from 'express'
-import { Collection } from 'mongodb'
 import { hash } from 'bcrypt'
 import { sign } from 'jsonwebtoken'
 import request from 'supertest'
 import dotenv from 'dotenv'
-import { fixturesUpdateUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
+import { Collection, InsertOneResult } from 'mongodb'
 
 let userCollection: Collection
 let app: Express
@@ -26,6 +26,16 @@ describe('User routes', () => {
     userCollection = MongoHelper.getCollection('users')
     await userCollection.deleteMany({})
   })
+
+  const makeUser = async (): Promise<InsertOneResult<Document>> => {
+    const password = await hash('123', 12)
+    return await userCollection.insertOne({
+      name: 'John Foo Bar',
+      email: 'john@example.com',
+      password,
+      confirmUser: false
+    })
+  }
   describe('Create', () => {
     it('Should return an user on success', async () => {
       await request(app)
@@ -43,13 +53,7 @@ describe('User routes', () => {
 
   describe('Login', () => {
     it('Should return name, email and accessToken', async () => {
-      const password = await hash('123', 12)
-      await userCollection.insertOne({
-        name: 'John Foo Bar',
-        email: 'john@example.com',
-        password,
-        confirmUser: false
-      })
+      await makeUser()
       await request(app)
         .post('/api/sign-in')
         .send({
@@ -72,13 +76,7 @@ describe('User routes', () => {
 
   describe('UpdateConfirmUser', () => {
     it('Should update confirmUser field on succeeds', async () => {
-      const password = await hash('123', 12)
-      const createUser = await userCollection.insertOne({
-        name: 'John Foo Bar',
-        email: 'john@example.com',
-        password,
-        confirmUser: false
-      })
+      const createUser = await makeUser()
       const id = createUser.insertedId
       const accessToken = sign({ id }, process.env.JWT_SECRET)
       await userCollection.updateOne(
@@ -102,13 +100,7 @@ describe('User routes', () => {
 
   describe('Update', () => {
     it('Should update user fields on succeeds', async () => {
-      const password = await hash('123', 12)
-      const createUser = await userCollection.insertOne({
-        name: 'John Foo Bar',
-        email: 'john@example.com',
-        password,
-        confirmUser: false
-      })
+      const createUser = await makeUser()
       const id = createUser.insertedId
       const accessToken = sign({ id }, process.env.JWT_SECRET)
       await userCollection.updateOne(
@@ -124,7 +116,7 @@ describe('User routes', () => {
         .put('/api/user')
         .set('x-access-token', accessToken)
         .send(
-          fixturesUpdateUser()
+          fixtureUpdateUser()
         )
         .expect(200)
     })

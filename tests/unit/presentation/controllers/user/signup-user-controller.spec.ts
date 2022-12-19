@@ -10,7 +10,7 @@ import {
 } from '@/presentation/errors'
 import { badRequest, forbidden, serverError } from '@/presentation/http-helper'
 import { IValidation } from '@/presentation/protocols/validation'
-import { fixturesCreateUserRequest, fixturesUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
+import { fixtureCreateUserRequest, fixtureUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockEmailValidator, mockValidation } from '@/tests/unit/presentation/mocks/mock-user-validation'
 import { mockAuthentication } from '@/tests/unit/presentation/mocks/mock-authentication'
 import { EmailInUseError } from '@/presentation/errors/email-in-use-error'
@@ -43,7 +43,7 @@ const makeSut = (): SutTypes => {
 describe('User Controller', () => {
   it('Should return 400 error if email provided is not valid', async () => {
     const { sut, validationStub } = makeSut()
-    const userDto = fixturesCreateUserRequest()
+    const userDto = fixtureCreateUserRequest()
     jest
       .spyOn(validationStub, 'validate')
       .mockReturnValueOnce(new InvalidParamError('email').serializeErrors())
@@ -54,7 +54,7 @@ describe('User Controller', () => {
 
   it('Should return 500 error if SignUpController throw exception error', async () => {
     const { sut, validationStub } = makeSut()
-    const userDto = fixturesCreateUserRequest()
+    const userDto = fixtureCreateUserRequest()
     jest.spyOn(validationStub, 'validate').mockImplementationOnce(() => { throw new Error() })
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(500)
@@ -63,7 +63,7 @@ describe('User Controller', () => {
 
   it('Should call User use case with correct values', async () => {
     const { sut, userStub } = makeSut()
-    const userDto = fixturesCreateUserRequest()
+    const userDto = fixtureCreateUserRequest()
     const userSpy = jest.spyOn(userStub, 'create')
     await sut.handle(userDto)
     expect(userSpy).toHaveBeenCalledWith(userDto)
@@ -71,7 +71,7 @@ describe('User Controller', () => {
 
   it('Should return 500 error if create method throw exception error', async () => {
     const { sut, userStub } = makeSut()
-    const userDto = fixturesCreateUserRequest()
+    const userDto = fixtureCreateUserRequest()
     jest.spyOn(userStub, 'create').mockImplementationOnce(() => { throw new Error() })
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(500)
@@ -80,15 +80,15 @@ describe('User Controller', () => {
 
   it('Should return 200 success status if data provided is valid', async () => {
     const { sut } = makeSut()
-    const userDto = fixturesCreateUserRequest()
+    const userDto = fixtureCreateUserRequest()
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(201)
-    expect(expectedResponse.body).toEqual(fixturesUserOutput())
+    expect(expectedResponse.body).toEqual(fixtureUserOutput())
   })
 
   it('Should call Validation with correct values', async () => {
     const { sut, validationStub } = makeSut()
-    const userDto = fixturesCreateUserRequest()
+    const userDto = fixtureCreateUserRequest()
     const validateSpy = jest.spyOn(validationStub, 'validate')
     await sut.handle(userDto)
     expect(validateSpy).toHaveBeenCalledWith(userDto)
@@ -99,13 +99,13 @@ describe('User Controller', () => {
     jest
       .spyOn(validationStub, 'validate')
       .mockReturnValueOnce(new MissingMandatoryParamError('foo').serializeErrors())
-    const expectedResponse = await sut.handle(fixturesCreateUserRequest())
+    const expectedResponse = await sut.handle(fixtureCreateUserRequest())
     expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('foo').serializeErrors()))
   })
 
   it('Should return 400 error if password confirmation provided is fail', async () => {
     const { sut, validationStub } = makeSut()
-    const userDto = fixturesCreateUserRequest()
+    const userDto = fixtureCreateUserRequest()
     userDto.passwordConfirmation = 'wrongPasswordConfirmation'
     jest
       .spyOn(validationStub, 'validate')
@@ -116,7 +116,7 @@ describe('User Controller', () => {
 
   it('Should call Authentication with correct values', async () => {
     const { sut, authenticationStub } = makeSut()
-    const userDto = fixturesCreateUserRequest()
+    const userDto = fixtureCreateUserRequest()
     const authSpy = jest.spyOn(authenticationStub, 'auth')
     await sut.handle(userDto)
     expect(authSpy).toHaveBeenCalledWith({
@@ -127,7 +127,7 @@ describe('User Controller', () => {
 
   it('Should return 500 error if Authentication throw exception error', async () => {
     const { sut, authenticationStub } = makeSut()
-    const userDto = fixturesCreateUserRequest()
+    const userDto = fixtureCreateUserRequest()
     jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(() => { throw new Error() })
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(500)
@@ -136,7 +136,7 @@ describe('User Controller', () => {
 
   it('Should return 403 error if UserUseCase returns null', async () => {
     const { sut, userStub } = makeSut()
-    const userDto = fixturesCreateUserRequest()
+    const userDto = fixtureCreateUserRequest()
     jest.spyOn(userStub, 'create').mockResolvedValueOnce(null)
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(403)

@@ -1,6 +1,6 @@
 import { UserBuilder } from '@/data/builders/user-builder'
 import { Address } from '@/domain/entities/address'
-import { fixturesCreateUser, fixturesUpdateUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
+import { fixtureCreateUser, fixtureUpdateUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import MockDate from 'mockdate'
 
 describe('UserBuilder', () => {
@@ -13,7 +13,7 @@ describe('UserBuilder', () => {
   describe('buildUserBasicInfo', () => {
     it('Should build user basic info with corrects values', async () => {
       const sut = new UserBuilder()
-      const expectedResponse = sut.buildUserBasicInfo(fixturesCreateUser())
+      const expectedResponse = sut.buildUserBasicInfo(fixtureCreateUser())
       expect(expectedResponse).toEqual({
         name: 'John Foo Bar',
         email: 'foo@example.com',
@@ -26,7 +26,7 @@ describe('UserBuilder', () => {
 
     it('Should build user basic info with confirmUser field equal false if not provided', async () => {
       const sut = new UserBuilder()
-      const buildUser = fixturesCreateUser()
+      const buildUser = fixtureCreateUser()
       delete buildUser.confirmUser
       const expectedResponse = sut.buildUserBasicInfo(buildUser)
       expect(expectedResponse).toEqual({
@@ -43,7 +43,7 @@ describe('UserBuilder', () => {
   describe('buildUser', () => {
     it('Should build user with corrects values', async () => {
       const sut = new UserBuilder()
-      const expectedResponse = sut.buildUser(fixturesUpdateUser())
+      const expectedResponse = sut.buildUser(fixtureUpdateUser())
       expect(expectedResponse).toEqual({
         userId: 'foo',
         name: 'John Foo Bar',

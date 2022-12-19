@@ -4,19 +4,19 @@ import { IHashed } from '@/data/protocols/hashed'
 import { IUserRepository } from '@/data/protocols/user-repository'
 import { User } from '@/data/use-cases/user'
 import {
-  fixturesCreateUser,
-  fixturesUserOutput,
-  fixturesLoginUser,
-  fixturesLoadUser,
-  fixturesUpdateConfirmUser,
-  fixturesUpdateUser,
-  fixturesUpdateUserOutput
+  fixtureCreateUser,
+  fixtureUserOutput,
+  fixtureLoginUser,
+  fixtureLoadUser,
+  fixtureUpdateConfirmUser,
+  fixtureUpdateUser,
+  fixtureUpdateUserOutput
 } from '@/tests/unit/presentation/fixtures/fixtures-user'
-import { mockCryptography, mockHashed, mockUserRepository } from '@/tests/unit/data/use-cases/mock/mock-user-use-case'
+import { mockCryptography, mockHashed, mockUserRepository } from '@/tests/unit/data/use-cases/mocks/mock-user-use-case'
 import { IUserBuilder } from '@/data/protocols/user-builder'
-import { mockUserBuilder } from '../builders/mock/mock-user-builder'
+import { mockUserBuilder } from '@/tests/unit/data/builders/mocks/mock-user-builder'
+import { fixturesBuildUser } from '@/tests/unit/data/builders/fixtures/fixture-user-builder'
 import MockDate from 'mockdate'
-import { fixturesBuildUser } from '../builders/fixtures-user-builder'
 
 type SutType = {
   sut: User
@@ -53,7 +53,7 @@ describe('User use case', () => {
       const { sut, hashedStub, userRepositoryStub } = makeSut()
       jest.spyOn(userRepositoryStub, 'loadByEmail').mockResolvedValue(null)
       const hashSpy = jest.spyOn(hashedStub, 'hash')
-      const user = fixturesCreateUser()
+      const user = fixtureCreateUser()
       await sut.create(user)
       expect(hashSpy).toHaveBeenCalledWith('12345')
     })
@@ -62,7 +62,7 @@ describe('User use case', () => {
       const { sut, hashedStub, userRepositoryStub } = makeSut()
       jest.spyOn(userRepositoryStub, 'loadByEmail').mockResolvedValue(null)
       jest.spyOn(hashedStub, 'hash').mockRejectedValueOnce(new Error())
-      const user = fixturesCreateUser()
+      const user = fixtureCreateUser()
       const expectedResponse = sut.create(user)
       await expect(expectedResponse).rejects.toThrow()
     })
@@ -71,9 +71,9 @@ describe('User use case', () => {
       const { sut, userRepositoryStub } = makeSut()
       jest.spyOn(userRepositoryStub, 'loadByEmail').mockResolvedValue(null)
       const createSpy = jest.spyOn(userRepositoryStub, 'create')
-      const user = fixturesCreateUser()
+      const user = fixtureCreateUser()
       const expectedResponse = Object.assign({
-        ...fixturesCreateUser(),
+        ...fixtureCreateUser(),
         password: 'hashed',
         createdAt: new Date(),
         updatedAt: new Date()
@@ -86,7 +86,7 @@ describe('User use case', () => {
       const { sut, userBuilderStub, userRepositoryStub } = makeSut()
       jest.spyOn(userRepositoryStub, 'loadByEmail').mockResolvedValue(null)
       const buildUserBasicInfoSpy = jest.spyOn(userBuilderStub, 'buildUserBasicInfo')
-      await sut.create(fixturesCreateUser())
+      await sut.create(fixtureCreateUser())
       expect(buildUserBasicInfoSpy).toHaveBeenCalledWith({
         name: 'John Foo Bar',
         email: 'foo@example.com',
@@ -99,7 +99,7 @@ describe('User use case', () => {
       const { sut, userRepositoryStub } = makeSut()
       jest.spyOn(userRepositoryStub, 'loadByEmail').mockResolvedValue(null)
       jest.spyOn(userRepositoryStub, 'create').mockRejectedValueOnce(new Error())
-      const user = fixturesCreateUser()
+      const user = fixtureCreateUser()
       const expectedResponse = sut.create(user)
       await expect(expectedResponse).rejects.toThrow()
     })
@@ -107,14 +107,14 @@ describe('User use case', () => {
     it('Should call loadByEmail method with correct value', async () => {
       const { sut, userRepositoryStub } = makeSut()
       const loadByEmailSpy = jest.spyOn(userRepositoryStub, 'loadByEmail')
-      const user = fixturesCreateUser()
+      const user = fixtureCreateUser()
       await sut.create(user)
       expect(loadByEmailSpy).toHaveBeenCalledWith('foo@example.com')
     })
 
     it('Should return null if email is in used', async () => {
       const { sut, userRepositoryStub } = makeSut()
-      const user = fixturesCreateUser()
+      const user = fixtureCreateUser()
       jest.spyOn(userRepositoryStub, 'loadByEmail')
       const expectedResponse = await sut.create(user)
       expect(expectedResponse).toBeNull()
@@ -123,16 +123,16 @@ describe('User use case', () => {
     it('Should return an user on success', async () => {
       const { sut, userRepositoryStub } = makeSut()
       jest.spyOn(userRepositoryStub, 'loadByEmail').mockResolvedValue(null)
-      const user = fixturesCreateUser()
+      const user = fixtureCreateUser()
       const expectedResponse = await sut.create(user)
-      expect(expectedResponse).toEqual(fixturesUserOutput())
+      expect(expectedResponse).toEqual(fixtureUserOutput())
     })
   })
 
   describe('Authentication', () => {
     it('Should call loadByEmail method of the UserRepository class with correct values', async () => {
       const { sut, userRepositoryStub } = makeSut()
-      const user = fixturesLoginUser()
+      const user = fixtureLoginUser()
       const loadByEmailSpy = jest.spyOn(userRepositoryStub, 'loadByEmail')
       await sut.auth(user)
       expect(loadByEmailSpy).toHaveBeenCalledWith(user.email)
@@ -140,7 +140,7 @@ describe('User use case', () => {
 
     it('Should forward the error if loadByEmail method of the UserRepository class throws error', async () => {
       const { sut, userRepositoryStub } = makeSut()
-      const user = fixturesCreateUser()
+      const user = fixtureCreateUser()
       jest
         .spyOn(userRepositoryStub, 'loadByEmail')
         .mockRejectedValueOnce(new Error())
@@ -150,7 +150,7 @@ describe('User use case', () => {
 
     it('Should return null if loadByEmail method returns null', async () => {
       const { sut, userRepositoryStub } = makeSut()
-      const user = fixturesLoginUser()
+      const user = fixtureLoginUser()
       jest.spyOn(userRepositoryStub, 'loadByEmail').mockReturnValueOnce(null)
       const expectedResponse = await sut.auth(user)
       expect(expectedResponse).toBeNull()
@@ -158,7 +158,7 @@ describe('User use case', () => {
 
     it('Should call compare method with correct password', async () => {
       const { sut, hashedStub } = makeSut()
-      const user = fixturesLoginUser()
+      const user = fixtureLoginUser()
       const hashCompareSpy = jest.spyOn(hashedStub, 'compare')
       await sut.auth(user)
       expect(hashCompareSpy).toHaveBeenCalledWith(user.password, 'hashed')
@@ -166,7 +166,7 @@ describe('User use case', () => {
 
     it('Should forward the error if compare method of the UserRepository class throws error', async () => {
       const { sut, hashedStub } = makeSut()
-      const user = fixturesCreateUser()
+      const user = fixtureCreateUser()
       jest
         .spyOn(hashedStub, 'compare')
         .mockRejectedValueOnce(new Error())
@@ -176,7 +176,7 @@ describe('User use case', () => {
 
     it('Should return null if compare method returns false', async () => {
       const { sut, hashedStub } = makeSut()
-      const user = fixturesLoginUser()
+      const user = fixtureLoginUser()
       jest
         .spyOn(hashedStub, 'compare')
         .mockReturnValueOnce(new Promise(resolve => resolve(false)))
@@ -186,7 +186,7 @@ describe('User use case', () => {
 
     it('Should call Cryptography with correct id', async () => {
       const { sut, cryptographyStub } = makeSut()
-      const user = fixturesLoginUser()
+      const user = fixtureLoginUser()
       const encryptSpy =
         jest
           .spyOn(cryptographyStub, 'encrypt')
@@ -199,7 +199,7 @@ describe('User use case', () => {
       const updateAccessTokenSpy =
         jest
           .spyOn(userRepositoryStub, 'updateAccessToken')
-      await sut.auth(fixturesLoginUser())
+      await sut.auth(fixtureLoginUser())
       expect(updateAccessTokenSpy).toHaveBeenCalledWith('foo', 'encrypted')
     })
 
@@ -208,14 +208,14 @@ describe('User use case', () => {
       jest
         .spyOn(userRepositoryStub, 'updateAccessToken')
         .mockRejectedValueOnce(new Error())
-      const expectedResponse = sut.auth(fixturesCreateUser())
+      const expectedResponse = sut.auth(fixtureCreateUser())
       await expect(expectedResponse).rejects.toThrow()
     })
 
     it('Should return name, email and accessToken if auth method on success', async () => {
       const { sut } = makeSut()
       const updateAccessTokenSpy =
-        await sut.auth(fixturesLoginUser())
+        await sut.auth(fixtureLoginUser())
       expect(updateAccessTokenSpy).toEqual({
         name: 'John Foo Bar',
         email: 'foo@example.com',
@@ -269,7 +269,7 @@ describe('User use case', () => {
     it('Should return an user on success', async () => {
       const { sut } = makeSut()
       const expectedResponse = await sut.loadByToken('accessToken', 'admin')
-      expect(expectedResponse).toEqual(fixturesLoadUser())
+      expect(expectedResponse).toEqual(fixtureLoadUser())
     })
   })
 
@@ -279,7 +279,7 @@ describe('User use case', () => {
       const updateConfirmUserSpy = jest
         .spyOn(userRepositoryStub, 'updateConfirmUser')
       await sut.updateConfirmUser({ confirmUser: true, userId: 'foo' })
-      expect(updateConfirmUserSpy).toHaveBeenCalledWith(fixturesUpdateConfirmUser())
+      expect(updateConfirmUserSpy).toHaveBeenCalledWith(fixtureUpdateConfirmUser())
     })
 
     it('Should forward the error if updateConfirmUser of the UserRepository throws error', async () => {
@@ -287,7 +287,7 @@ describe('User use case', () => {
       jest
         .spyOn(userRepositoryStub, 'updateConfirmUser')
         .mockRejectedValueOnce(new Error())
-      const expectedResponse = sut.updateConfirmUser(fixturesUpdateConfirmUser())
+      const expectedResponse = sut.updateConfirmUser(fixtureUpdateConfirmUser())
       await expect(expectedResponse).rejects.toThrow()
     })
   })
@@ -297,7 +297,7 @@ describe('User use case', () => {
       const { sut, hashedStub } = makeSut()
       const hashSpy = jest
         .spyOn(hashedStub, 'hash')
-      await sut.update(fixturesUpdateUser())
+      await sut.update(fixtureUpdateUser())
       expect(hashSpy).toHaveBeenCalledWith('12345')
     })
 
@@ -305,22 +305,22 @@ describe('User use case', () => {
       const { sut, userBuilderStub } = makeSut()
       const buildUserSpy = jest
         .spyOn(userBuilderStub, 'buildUser')
-      await sut.update(fixturesUpdateUser())
+      await sut.update(fixtureUpdateUser())
       expect(buildUserSpy).toHaveBeenCalledWith(
-        Object.assign({ ...fixturesUpdateUser(), password: 'hashed' })
+        Object.assign({ ...fixtureUpdateUser(), password: 'hashed' })
       )
     })
 
     it('Should call buildUser method with corrects values without password field', async () => {
       const { sut, userBuilderStub } = makeSut()
-      const fakeUpdateUser = fixturesUpdateUser()
+      const fakeUpdateUser = fixtureUpdateUser()
       delete fakeUpdateUser.password
       delete fakeUpdateUser.passwordConfirmation
       const buildUserSpy = jest
         .spyOn(userBuilderStub, 'buildUser')
 
       await sut.update(fakeUpdateUser)
-      const expectedResponse = fixturesUpdateUser()
+      const expectedResponse = fixtureUpdateUser()
       delete expectedResponse.password
       delete expectedResponse.passwordConfirmation
 
@@ -339,7 +339,7 @@ describe('User use case', () => {
           }
         ))
 
-      await sut.update(fixturesUpdateUser())
+      await sut.update(fixtureUpdateUser())
       const expectedResponse = Object.assign(
         {
           ...fixturesBuildUser(),
@@ -350,7 +350,7 @@ describe('User use case', () => {
 
     it('Should call update method with corrects values without password', async () => {
       const { sut, userRepositoryStub } = makeSut()
-      const fakeUpdateUser = fixturesUpdateUser()
+      const fakeUpdateUser = fixtureUpdateUser()
       delete fakeUpdateUser.password
       delete fakeUpdateUser.passwordConfirmation
       const updateSpy = jest
@@ -364,16 +364,16 @@ describe('User use case', () => {
     it('Should forward the error if UserRepository throws error', async () => {
       const { sut, userRepositoryStub } = makeSut()
       jest.spyOn(userRepositoryStub, 'update').mockRejectedValueOnce(new Error())
-      const updateUser = fixturesUpdateUser()
+      const updateUser = fixtureUpdateUser()
       const expectedResponse = sut.update(updateUser)
       await expect(expectedResponse).rejects.toThrow()
     })
 
     it('Should return an update user on succeeds', async () => {
       const { sut } = makeSut()
-      const updateUser = fixturesUpdateUser()
+      const updateUser = fixtureUpdateUser()
       const expectedResponse = await sut.update(updateUser)
-      expect(expectedResponse).toEqual(fixturesUpdateUserOutput())
+      expect(expectedResponse).toEqual(fixtureUpdateUserOutput())
     })
   })
 })

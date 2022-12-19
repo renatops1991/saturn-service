@@ -1,6 +1,6 @@
 import { IAuthentication } from '@/domain/protocols/authentication'
 import { SignInUserController } from '@/presentation/controllers/user/signin-user-controller'
-import { fixturesLoginUser, fixturesUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
+import { fixtureLoginUser, fixtureUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockAuthentication } from '@/tests/unit/presentation/mocks/mock-authentication'
 import { mockValidation } from '@/tests/unit/presentation/mocks/mock-user-validation'
 import {
@@ -38,7 +38,7 @@ describe('SignInUserController', () => {
     jest.spyOn(validationStub, 'validate').mockImplementationOnce(() => {
       throw new Error()
     })
-    const expectedResponse = await sut.handle(fixturesLoginUser())
+    const expectedResponse = await sut.handle(fixtureLoginUser())
     expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))
   })
 
@@ -47,7 +47,7 @@ describe('SignInUserController', () => {
     jest
       .spyOn(validationStub, 'validate')
       .mockReturnValueOnce(new MissingMandatoryParamError('email').serializeErrors())
-    const expectedResponse = await sut.handle(fixturesLoginUser())
+    const expectedResponse = await sut.handle(fixtureLoginUser())
     expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('email').serializeErrors()))
   })
 
@@ -56,15 +56,15 @@ describe('SignInUserController', () => {
     jest
       .spyOn(validationStub, 'validate')
       .mockReturnValueOnce(new MissingMandatoryParamError('password').serializeErrors())
-    const expectedResponse = await sut.handle(fixturesLoginUser())
+    const expectedResponse = await sut.handle(fixtureLoginUser())
     expect(expectedResponse).toEqual(badRequest(new MissingMandatoryParamError('password').serializeErrors()))
   })
 
   it('Should call Validation class with correct value', async () => {
     const { sut, validationStub } = makeSut()
-    const loginUserDto = fixturesLoginUser()
+    const loginUserDto = fixtureLoginUser()
     const isValidSpy = jest.spyOn(validationStub, 'validate')
-    await sut.handle(fixturesLoginUser())
+    await sut.handle(fixtureLoginUser())
     expect(isValidSpy).toHaveBeenCalledWith({
       email: loginUserDto.email,
       password: loginUserDto.password
@@ -74,27 +74,27 @@ describe('SignInUserController', () => {
   it('Should return 401 error if user provided credentials is invalid', async () => {
     const { sut, authenticationStub } = makeSut()
     jest.spyOn(authenticationStub, 'auth').mockReturnValueOnce(null)
-    const expectedResponse = await sut.handle(fixturesLoginUser())
+    const expectedResponse = await sut.handle(fixtureLoginUser())
     expect(expectedResponse).toEqual(unauthorized())
   })
 
   it('Should return 500 error if Authentication throws exception error', async () => {
     const { sut, authenticationStub } = makeSut()
     jest.spyOn(authenticationStub, 'auth').mockRejectedValueOnce(() => { throw new Error() })
-    const expectedResponse = await sut.handle(fixturesLoginUser())
+    const expectedResponse = await sut.handle(fixtureLoginUser())
     expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))
   })
 
   it('Should call Auth method with correct value', async () => {
     const { sut, authenticationStub } = makeSut()
     const authSpy = jest.spyOn(authenticationStub, 'auth')
-    await sut.handle(fixturesLoginUser())
-    expect(authSpy).toHaveBeenCalledWith(fixturesLoginUser())
+    await sut.handle(fixtureLoginUser())
+    expect(authSpy).toHaveBeenCalledWith(fixtureLoginUser())
   })
 
   it('Should return 200 if user provided credentials is valid', async () => {
     const { sut } = makeSut()
-    const expectedResponse = await sut.handle(fixturesLoginUser())
-    expect(expectedResponse).toEqual(success(fixturesUserOutput()))
+    const expectedResponse = await sut.handle(fixtureLoginUser())
+    expect(expectedResponse).toEqual(success(fixtureUserOutput()))
   })
 })

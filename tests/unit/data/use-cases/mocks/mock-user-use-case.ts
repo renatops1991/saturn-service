@@ -1,13 +1,20 @@
 import { IHashed } from '@/data/protocols/hashed'
 import { IUserRepository } from '@/data/protocols/user-repository'
-import { UserOutputDto } from '@/main/dtos/user/user-output.dto'
-import { SignUpUserDto } from '@/main/dtos/user/signup-user.dto'
-import { fixturesUserOutput, fixturesLoadUser, fixturesUpdateUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
-import { LoadUserDto } from '@/main/dtos/user/load-user.dto'
+import {
+  UpdateConfirmUserDto,
+  UpdateUserOutputDto,
+  UpdateUserDto,
+  LoadUserDto,
+  SignUpUserDto,
+  UserOutputDto
+} from '@/main/dtos/user'
+import {
+  fixtureUserOutput,
+  fixtureLoadUser,
+  fixtureUpdateUserOutput
+} from '@/tests/unit/presentation/fixtures/fixtures-user'
+
 import { ICryptography } from '@/data/protocols/cryptography'
-import { UpdateConfirmUserDto } from '@/main/dtos/user'
-import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
-import { UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
 
 export const mockHashed = (): IHashed => {
   class HashedStub implements IHashed {
@@ -38,11 +45,11 @@ export const mockCryptography = (): ICryptography => {
 export const mockUserRepository = (): IUserRepository => {
   class UserRepositoryStub implements IUserRepository {
     async create (userDto: SignUpUserDto): Promise<UserOutputDto> {
-      return await new Promise(resolve => resolve(fixturesUserOutput()))
+      return await new Promise(resolve => resolve(fixtureUserOutput()))
     }
 
     async loadByEmail (email: string): Promise<LoadUserDto> {
-      return await new Promise(resolve => resolve(fixturesLoadUser()))
+      return await new Promise(resolve => resolve(fixtureLoadUser()))
     }
 
     async updateAccessToken (id: string, token: string): Promise<void> {
@@ -50,7 +57,7 @@ export const mockUserRepository = (): IUserRepository => {
     }
 
     async loadByToken (accessToken: string, role?: string): Promise<LoadUserDto> {
-      return await new Promise(resolve => resolve(fixturesLoadUser()))
+      return await new Promise(resolve => resolve(fixtureLoadUser()))
     }
 
     async updateConfirmUser (updateConfirmUserDto: UpdateConfirmUserDto): Promise<void> {
@@ -58,7 +65,7 @@ export const mockUserRepository = (): IUserRepository => {
     }
 
     async update (updateUserDto: UpdateUserDto): Promise<UpdateUserOutputDto> {
-      return await new Promise(resolve => resolve(fixturesUpdateUserOutput()))
+      return await new Promise(resolve => resolve(fixtureUpdateUserOutput()))
     }
   }
 

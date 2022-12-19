@@ -4,7 +4,7 @@ import { MissingMandatoryParamError, ServerError } from '@/presentation/errors'
 import { badRequest, serverError } from '@/presentation/http-helper'
 import { IValidation } from '@/presentation/protocols/validation'
 import { mockValidation } from '@/tests/unit/presentation/mocks/mock-user-validation'
-import { fixturesUpdateUser, fixturesUpdateUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
+import { fixtureUpdateUser, fixtureUpdateUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockUserController } from '@/tests/unit/presentation/mocks/mock-user-controller'
 import MockDate from 'mockdate'
 
@@ -34,7 +34,7 @@ describe('UpdateUserController', () => {
   })
   it('Should call validation with correct values', async () => {
     const { sut, validationStub } = makeSut()
-    const updateUser = fixturesUpdateUser()
+    const updateUser = fixtureUpdateUser()
     const validateSpy =
     jest
       .spyOn(validationStub, 'validate')
@@ -44,7 +44,7 @@ describe('UpdateUserController', () => {
 
   it('Should return 400 error if validation return an error', async () => {
     const { sut, validationStub } = makeSut()
-    const updateUser = fixturesUpdateUser()
+    const updateUser = fixtureUpdateUser()
     jest
       .spyOn(validationStub, 'validate')
       .mockReturnValueOnce(new MissingMandatoryParamError('document').serializeErrors())
@@ -54,7 +54,7 @@ describe('UpdateUserController', () => {
 
   it('Should call update method of the user use case class with correct values', async () => {
     const { sut, userStub } = makeSut()
-    const updateUser = fixturesUpdateUser()
+    const updateUser = fixtureUpdateUser()
     const updateSpy =
     jest
       .spyOn(userStub, 'update')
@@ -64,7 +64,7 @@ describe('UpdateUserController', () => {
 
   it('Should return 500 error if update method throw exception error', async () => {
     const { sut, userStub } = makeSut()
-    const updateUser = fixturesUpdateUser()
+    const updateUser = fixtureUpdateUser()
     jest
       .spyOn(userStub, 'update')
       .mockImplementationOnce(() => { throw new Error() })
@@ -75,9 +75,9 @@ describe('UpdateUserController', () => {
 
   it('Should return 200 status if update method on succeeds', async () => {
     const { sut } = makeSut()
-    const updateUser = fixturesUpdateUser()
+    const updateUser = fixtureUpdateUser()
     const expectedResponse = await sut.handle(updateUser)
     expect(expectedResponse.statusCode).toBe(200)
-    expect(expectedResponse.body).toStrictEqual(fixturesUpdateUserOutput())
+    expect(expectedResponse.body).toStrictEqual(fixtureUpdateUserOutput())
   })
 })

@@ -10,7 +10,7 @@ import {
 import { UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
 import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
 
-export const fixturesCreateUserRequest = (): SignUpUserDto => ({
+export const fixtureCreateUserRequest = (): SignUpUserDto => ({
   name: 'John Foo Bar',
   email: 'foo@example.com',
   password: '12345',
@@ -18,42 +18,42 @@ export const fixturesCreateUserRequest = (): SignUpUserDto => ({
   confirmUser: false
 })
 
-export const fixturesCreateUser = (): Omit<SignUpUserDto, 'passwordConfirmation'> => ({
+export const fixtureCreateUser = (): Omit<SignUpUserDto, 'passwordConfirmation'> => ({
   name: 'John Foo Bar',
   email: 'foo@example.com',
   password: '12345',
   confirmUser: false
 })
 
-export const fixturesLoginUser = (): SignInUserDto => ({
+export const fixtureLoginUser = (): SignInUserDto => ({
   email: 'foo@example.com',
   password: '12345'
 })
 
-export const fixturesUserOutput = (): UserOutputDto => ({
+export const fixtureUserOutput = (): UserOutputDto => ({
   name: 'John Foo Bar',
   email: 'foo@example.com',
   accessToken: 'accessToken'
 })
 
-export const fixturesLoadUser = (): LoadUserDto => ({
+export const fixtureLoadUser = (): LoadUserDto => ({
   id: 'foo',
   name: 'John Foo Bar',
   email: 'foo@example.com',
   password: 'hashed'
 })
 
-export const fixturesUpdateConfirmUser = (): UpdateConfirmUserDto => ({
+export const fixtureUpdateConfirmUser = (): UpdateConfirmUserDto => ({
   confirmUser: true,
   userId: 'foo'
 })
 
-export const fixturesUpdateUser = (): UpdateUserDto => ({
+export const fixtureUpdateUser = (): UpdateUserDto => ({
   userId: 'foo',
   name: 'John Foo Bar',
   birthDate: new Date('1991-08-01'),
   age: 31,
-  address: fixturesAddress(),
+  address: fixtureAddress(),
   phone: ['11554678952'],
   type: 'PERSON',
   document: '000000000000',
@@ -61,7 +61,7 @@ export const fixturesUpdateUser = (): UpdateUserDto => ({
   passwordConfirmation: '12345'
 })
 
-const fixturesAddress = (): AddressDto => ({
+const fixtureAddress = (): AddressDto => ({
   street: 'foo',
   number: 'A1',
   neighborhood: 'bar',
@@ -70,12 +70,12 @@ const fixturesAddress = (): AddressDto => ({
   state: 'SP'
 })
 
-export const fixturesUpdateUserOutput = (): UpdateUserOutputDto => ({
+export const fixtureUpdateUserOutput = (): UpdateUserOutputDto => ({
   id: 'foo',
   name: 'John Foo Bar',
   birthDate: new Date('1991-08-01'),
   age: 31,
-  address: fixturesAddress(),
+  address: fixtureAddress(),
   phone: ['11554678952'],
   type: 'PERSON',
   document: '000000000000',
