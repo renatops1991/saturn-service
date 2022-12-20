@@ -5,7 +5,8 @@ import {
   LoadUserDto,
   UserOutputDto,
   SignInUserDto,
-  UpdateConfirmUserDto
+  UpdateConfirmUserDto,
+  RedefineUserPasswordDto
 } from '@/main/dtos/user'
 import { UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
 import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
@@ -81,4 +82,10 @@ export const fixtureUpdateUserOutput = (): UpdateUserOutputDto => ({
   document: '000000000000',
   createdAt: new Date(),
   updatedAt: new Date()
+})
+
+export const fixtureRedefineUserPassword = (): RedefineUserPasswordDto => ({
+  userId: 'foo',
+  password: '123',
+  passwordConfirmation: '123'
 })
