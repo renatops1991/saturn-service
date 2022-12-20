@@ -14,7 +14,8 @@ import {
   LoadUserDto,
   UpdateConfirmUserDto,
   UpdateUserOutputDto,
-  UpdateUserDto
+  UpdateUserDto,
+  RedefineUserPasswordDto
 } from '@/main/dtos/user'
 
 export class User implements IUser, IAuthentication {
@@ -89,4 +90,6 @@ export class User implements IUser, IAuthentication {
 
     return await this.userRepository.update(updateUser)
   }
+
+  redefineUserPassword: (redefineUserPasswordDto: RedefineUserPasswordDto) => Promise<void>
 }

@@ -16,6 +16,8 @@ export class RedefineUserPassword implements IController {
     if (isError) {
       return badRequest(isError)
     }
+
+    await this.user.redefineUserPassword(redefineUserPasswordDto)
     return null
   }
 }
