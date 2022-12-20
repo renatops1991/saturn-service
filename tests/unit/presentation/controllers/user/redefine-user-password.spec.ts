@@ -4,6 +4,7 @@ import { RedefineUserPassword } from '@/presentation/controllers/user/redefine-u
 import { mockValidation } from '@/tests/unit/presentation/mocks/mock-user-validation'
 import { mockUserController } from '@/tests/unit/presentation/mocks/mock-user-controller'
 import { fixtureRedefineUserPassword } from '@/tests/unit/presentation/fixtures/fixtures-user'
+import { MissingMandatoryParamError } from '@/presentation/errors'
 
 type SutTypes = {
   userRepositoryStub: IUser
@@ -28,5 +29,29 @@ describe('RedefineUserPassword', () => {
     await sut.handle(fixtureRedefineUserPassword())
     const expectedResponse = fixtureRedefineUserPassword()
     expect(validateSpy).toHaveBeenCalledWith(expectedResponse)
+  })
+
+  it('Should return MissingMandatoryParamError if password is no provided', async () => {
+    const { sut, validationStub } = makeSut()
+    jest
+      .spyOn(validationStub, 'validate')
+      .mockReturnValueOnce(new MissingMandatoryParamError('password').serializeErrors())
+    const makeRedefineUserPassword = fixtureRedefineUserPassword()
+    delete makeRedefineUserPassword.password
+    const expectedResponse = await sut.handle(makeRedefineUserPassword)
+    expect(expectedResponse.statusCode).toEqual(400)
+    expect(expectedResponse.body).toEqual(new MissingMandatoryParamError('password').serializeErrors())
+  })
+
+  it('Should return MissingMandatoryParamError if passwordConfirmation is no provided', async () => {
+    const { sut, validationStub } = makeSut()
+    jest
+      .spyOn(validationStub, 'validate')
+      .mockReturnValueOnce(new MissingMandatoryParamError('passwordConfirmation').serializeErrors())
+    const makeRedefineUserPassword = fixtureRedefineUserPassword()
+    delete makeRedefineUserPassword.password
+    const expectedResponse = await sut.handle(makeRedefineUserPassword)
+    expect(expectedResponse.statusCode).toEqual(400)
+    expect(expectedResponse.body).toEqual(new MissingMandatoryParamError('passwordConfirmation').serializeErrors())
   })
 })
