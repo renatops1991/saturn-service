@@ -3,7 +3,7 @@ import { IController } from '@/presentation/protocols/controller'
 import { IHttpResponse } from '@/presentation/protocols/http'
 import { IValidation } from '@/presentation/protocols/validation'
 import { RedefineUserPasswordDto } from '@/main/dtos/user'
-import { badRequest } from '@/presentation/http-helper'
+import { badRequest, noContent } from '@/presentation/http-helper'
 
 export class RedefineUserPassword implements IController {
   constructor (
@@ -18,6 +18,6 @@ export class RedefineUserPassword implements IController {
     }
 
     await this.user.redefineUserPassword(redefineUserPasswordDto)
-    return null
+    return noContent()
   }
 }
