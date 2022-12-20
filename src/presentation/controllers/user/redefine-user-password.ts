@@ -3,6 +3,7 @@ import { IController } from '@/presentation/protocols/controller'
 import { IHttpResponse } from '@/presentation/protocols/http'
 import { IValidation } from '@/presentation/protocols/validation'
 import { RedefineUserPasswordDto } from '@/main/dtos/user'
+import { badRequest } from '@/presentation/http-helper'
 
 export class RedefineUserPassword implements IController {
   constructor (
@@ -11,7 +12,10 @@ export class RedefineUserPassword implements IController {
   ) {}
 
   async handle (redefineUserPasswordDto: RedefineUserPasswordDto): Promise<IHttpResponse> {
-    this.validation.validate(redefineUserPasswordDto)
+    const isError = this.validation.validate(redefineUserPasswordDto)
+    if (isError) {
+      return badRequest(isError)
+    }
     return null
   }
 }
