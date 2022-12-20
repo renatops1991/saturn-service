@@ -7,18 +7,18 @@ import { fixtureRedefineUserPassword } from '@/tests/unit/presentation/fixtures/
 import { MissingMandatoryParamError, InvalidParamError } from '@/presentation/errors'
 
 type SutTypes = {
-  userRepositoryStub: IUser
+  userStub: IUser
   validationStub: IValidation
   sut: RedefineUserPassword
 }
 
 const makeSut = (): SutTypes => {
-  const userRepositoryStub = mockUserController()
+  const userStub = mockUserController()
   const validationStub = mockValidation()
-  const sut = new RedefineUserPassword(userRepositoryStub, validationStub)
+  const sut = new RedefineUserPassword(userStub, validationStub)
   return {
     sut,
-    userRepositoryStub,
+    userStub,
     validationStub
   }
 }
@@ -61,9 +61,18 @@ describe('RedefineUserPassword', () => {
       .spyOn(validationStub, 'validate')
       .mockReturnValueOnce(new InvalidParamError('passwordConfirmation').serializeErrors())
     const makeRedefineUserPassword = fixtureRedefineUserPassword()
-    delete makeRedefineUserPassword.password
+    makeRedefineUserPassword.passwordConfirmation = 'foo'
     const expectedResponse = await sut.handle(makeRedefineUserPassword)
     expect(expectedResponse.statusCode).toEqual(400)
     expect(expectedResponse.body).toEqual(new InvalidParamError('passwordConfirmation').serializeErrors())
+  })
+
+  it('Should call redefineUserPassword method with correct values', async () => {
+    const { sut, userStub } = makeSut()
+    const redefineUserPasswordSpy = jest
+      .spyOn(userStub, 'redefineUserPassword')
+    const makeRedefineUserPassword = fixtureRedefineUserPassword()
+    await sut.handle(makeRedefineUserPassword)
+    expect(redefineUserPasswordSpy).toHaveBeenCalledWith(fixtureRedefineUserPassword())
   })
 })

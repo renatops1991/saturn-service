@@ -4,7 +4,8 @@ import {
   UpdateConfirmUserDto,
   UserOutputDto,
   UpdateUserOutputDto,
-  UpdateUserDto
+  UpdateUserDto,
+  RedefineUserPasswordDto
 } from '@/main/dtos/user'
 import { fixtureUpdateUserOutput, fixtureUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 
@@ -20,6 +21,10 @@ export const mockUserController = (): IUser => {
 
     async update (updateUserDto: UpdateUserDto): Promise<UpdateUserOutputDto> {
       return await Promise.resolve(fixtureUpdateUserOutput())
+    }
+
+    async redefineUserPassword (redefineUserPasswordDto: RedefineUserPasswordDto): Promise<void> {
+      return await Promise.resolve()
     }
   }
 
