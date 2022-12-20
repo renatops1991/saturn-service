@@ -5,6 +5,7 @@ import { mockValidation } from '@/tests/unit/presentation/mocks/mock-user-valida
 import { mockUserController } from '@/tests/unit/presentation/mocks/mock-user-controller'
 import { fixtureRedefineUserPassword } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { MissingMandatoryParamError, InvalidParamError } from '@/presentation/errors'
+import { noContent } from '@/presentation/http-helper'
 
 type SutTypes = {
   userStub: IUser
@@ -74,5 +75,11 @@ describe('RedefineUserPassword', () => {
     const makeRedefineUserPassword = fixtureRedefineUserPassword()
     await sut.handle(makeRedefineUserPassword)
     expect(redefineUserPasswordSpy).toHaveBeenCalledWith(fixtureRedefineUserPassword())
+  })
+
+  it('Should return 204 if redefine user password on succeeds', async () => {
+    const { sut } = makeSut()
+    const expectedResponse = await sut.handle(fixtureRedefineUserPassword())
+    expect(expectedResponse).toEqual(noContent())
   })
 })
