@@ -4,8 +4,8 @@ import { RedefineUserPassword } from '@/presentation/controllers/user/redefine-u
 import { mockValidation } from '@/tests/unit/presentation/mocks/mock-user-validation'
 import { mockUserController } from '@/tests/unit/presentation/mocks/mock-user-controller'
 import { fixtureRedefineUserPassword } from '@/tests/unit/presentation/fixtures/fixtures-user'
-import { MissingMandatoryParamError, InvalidParamError } from '@/presentation/errors'
-import { noContent } from '@/presentation/http-helper'
+import { MissingMandatoryParamError, InvalidParamError, ServerError } from '@/presentation/errors'
+import { noContent, serverError } from '@/presentation/http-helper'
 
 type SutTypes = {
   userStub: IUser
@@ -81,5 +81,15 @@ describe('RedefineUserPassword', () => {
     const { sut } = makeSut()
     const expectedResponse = await sut.handle(fixtureRedefineUserPassword())
     expect(expectedResponse).toEqual(noContent())
+  })
+
+  it('Should return 500 error if redefineUserPassword method throw exception error', async () => {
+    const { sut, userStub } = makeSut()
+    jest
+      .spyOn(userStub, 'redefineUserPassword')
+      .mockImplementationOnce(() => { throw new Error() })
+    const expectedResponse = await sut.handle(fixtureRedefineUserPassword())
+    expect(expectedResponse.statusCode).toEqual(500)
+    expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))
   })
 })
