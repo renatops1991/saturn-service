@@ -15,7 +15,7 @@ import {
   UpdateConfirmUserDto,
   UpdateUserOutputDto,
   UpdateUserDto,
-  RedefineUserPasswordDto
+  UpdateUserPasswordDto
 } from '@/main/dtos/user'
 
 export class User implements IUser, IAuthentication {
@@ -91,11 +91,11 @@ export class User implements IUser, IAuthentication {
     return await this.userRepository.update(updateUser)
   }
 
-  async redefineUserPassword (redefineUserPasswordDto: RedefineUserPasswordDto): Promise<void> {
+  async updateUserPassword (redefineUserPasswordDto: UpdateUserPasswordDto): Promise<void> {
     const { password } = redefineUserPasswordDto
     delete redefineUserPasswordDto.passwordConfirmation
     const hashedPassword = await this.hashed.hash(password)
-    await this.userRepository.redefineUserPassword(
+    await this.userRepository.updateUserPassword(
       Object.assign({}, redefineUserPasswordDto,
         {
           password: hashedPassword

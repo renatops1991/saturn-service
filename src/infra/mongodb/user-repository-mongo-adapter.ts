@@ -5,7 +5,7 @@ import {
   LoadUserDto,
   UserOutputDto,
   UpdateConfirmUserDto,
-  RedefineUserPasswordDto
+  UpdateUserPasswordDto
 } from '@/main/dtos/user'
 import { UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
 import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
@@ -118,7 +118,7 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
     return MongoHelper.map(updateUser.value)
   }
 
-  redefineUserPassword: (redefineUserPasswordDto: RedefineUserPasswordDto) => Promise<void>
+  updateUserPassword: (redefineUserPasswordDto: UpdateUserPasswordDto) => Promise<void>
 
   private getUserCollection (): Collection {
     if (!this.userCollection) {

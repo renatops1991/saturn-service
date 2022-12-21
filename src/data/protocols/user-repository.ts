@@ -5,7 +5,7 @@ import {
   UpdateConfirmUserDto,
   UpdateUserOutputDto,
   UpdateUserDto,
-  RedefineUserPasswordDto
+  UpdateUserPasswordDto
 } from '@/main/dtos/user'
 
 export interface IUserRepository {
@@ -15,5 +15,5 @@ export interface IUserRepository {
   updateAccessToken: (userId: string, token: string) => Promise<void>
   updateConfirmUser: (updateConfirmUserDto: UpdateConfirmUserDto) => Promise<void>
   update: (updateUserDto: UpdateUserDto) => Promise<UpdateUserOutputDto>
-  redefineUserPassword: (redefineUserPasswordDto: RedefineUserPasswordDto) => Promise<void>
+  updateUserPassword: (redefineUserPasswordDto: UpdateUserPasswordDto) => Promise<void>
 }
