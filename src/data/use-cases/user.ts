@@ -91,5 +91,10 @@ export class User implements IUser, IAuthentication {
     return await this.userRepository.update(updateUser)
   }
 
-  redefineUserPassword: (redefineUserPasswordDto: RedefineUserPasswordDto) => Promise<void>
+  async redefineUserPassword (redefineUserPasswordDto: RedefineUserPasswordDto): Promise<void> {
+    const { password } = redefineUserPasswordDto
+
+    await this.hashed.hash(password)
+    return null
+  }
 }
