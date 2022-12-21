@@ -10,7 +10,8 @@ import {
   fixtureLoadUser,
   fixtureUpdateConfirmUser,
   fixtureUpdateUser,
-  fixtureUpdateUserOutput
+  fixtureUpdateUserOutput,
+  fixtureRedefineUserPassword
 } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockCryptography, mockHashed, mockUserRepository } from '@/tests/unit/data/use-cases/mocks/mock-user-use-case'
 import { IUserBuilder } from '@/data/protocols/user-builder'
@@ -374,6 +375,27 @@ describe('User use case', () => {
       const updateUser = fixtureUpdateUser()
       const expectedResponse = await sut.update(updateUser)
       expect(expectedResponse).toEqual(fixtureUpdateUserOutput())
+    })
+  })
+
+  describe('UpdateUserPassword', () => {
+    it('Should call hash method with correct value', async () => {
+      const { sut, hashedStub } = makeSut()
+      const hashSpy = jest
+        .spyOn(hashedStub, 'hash')
+      await sut.redefineUserPassword(fixtureRedefineUserPassword())
+      expect(hashSpy).toHaveBeenCalledWith('123')
+    })
+
+    it('Should call redefineUserPassword of the UserRepository with correct value', async () => {
+      const { sut, userRepositoryStub } = makeSut()
+      const redefineUserPasswordSpy = jest
+        .spyOn(userRepositoryStub, 'redefineUserPassword')
+      await sut.redefineUserPassword(fixtureRedefineUserPassword())
+      expect(redefineUserPasswordSpy).toHaveBeenCalledWith({
+        userId: 'foo',
+        password: 'hashed'
+      })
     })
   })
 })

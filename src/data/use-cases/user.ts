@@ -93,7 +93,6 @@ export class User implements IUser, IAuthentication {
 
   async redefineUserPassword (redefineUserPasswordDto: RedefineUserPasswordDto): Promise<void> {
     const { password } = redefineUserPasswordDto
-
     delete redefineUserPasswordDto.passwordConfirmation
     const hashedPassword = await this.hashed.hash(password)
     await this.userRepository.redefineUserPassword(
