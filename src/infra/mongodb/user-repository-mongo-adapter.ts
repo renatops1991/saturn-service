@@ -1,9 +1,15 @@
 import { IUserRepository } from '@/data/protocols/user-repository'
 import { MongoHelper } from './mongo-helper'
-import { SignUpUserDto, LoadUserDto, UserOutputDto, UpdateConfirmUserDto } from '@/main/dtos/user'
-import { Collection, ObjectId } from 'mongodb'
+import {
+  SignUpUserDto,
+  LoadUserDto,
+  UserOutputDto,
+  UpdateConfirmUserDto,
+  RedefineUserPasswordDto
+} from '@/main/dtos/user'
 import { UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
 import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
+import { Collection, ObjectId } from 'mongodb'
 import * as utils from '@/main/utils'
 
 export class UserRepositoryMongoAdapter implements IUserRepository {
@@ -111,6 +117,8 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
     )
     return MongoHelper.map(updateUser.value)
   }
+
+  redefineUserPassword: (redefineUserPasswordDto: RedefineUserPasswordDto) => Promise<void>
 
   private getUserCollection (): Collection {
     if (!this.userCollection) {
