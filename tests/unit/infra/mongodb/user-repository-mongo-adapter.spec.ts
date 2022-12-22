@@ -176,4 +176,25 @@ describe('UserRepositoryMongoAdapter', () => {
         }))
     })
   })
+
+  describe('updateUserPassword', () => {
+    it('Should update user password and updateAt field correctly', async () => {
+      const sut = makeSut()
+      const createUser = await userCollection.insertOne(Object.assign({
+        ...fixtureCreateUser(),
+        accessToken: 'accessToken'
+      }))
+
+      const user = await userCollection.findOne({ _id: createUser.insertedId })
+      const userId = MongoHelper.map(user).id
+      await sut.updateUserPassword({
+        password: 'bar',
+        userId
+      })
+
+      const expectedResponse = await userCollection.findOne({ _id: userId })
+      expect(expectedResponse.password).toEqual('bar')
+      expect(expectedResponse.updatedAt).toEqual(new Date())
+    })
+  })
 })
