@@ -84,7 +84,13 @@ export const fixtureUpdateUserOutput = (): UpdateUserOutputDto => ({
   updatedAt: new Date()
 })
 
-export const fixtureUpdateUserPassword = (): UpdateUserPasswordDto => ({
+export const fixtureUpdateUserPassword = (): Omit<
+UpdateUserPasswordDto, 'passwordConfirmation'> => ({
+  userId: 'foo',
+  password: '123'
+})
+
+export const fixtureUpdateUserPasswordRequest = (): UpdateUserPasswordDto => ({
   userId: 'foo',
   password: '123',
   passwordConfirmation: '123'

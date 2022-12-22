@@ -69,7 +69,7 @@ export const mockUserRepository = (): IUserRepository => {
       return await new Promise(resolve => resolve(fixtureUpdateUserOutput()))
     }
 
-    async updateUserPassword (updateUserPassword: UpdateUserPasswordDto): Promise<void> {
+    async updateUserPassword (updateUserPassword: Omit<UpdateUserPasswordDto, 'passwordConfirmation'>): Promise<void> {
       return await Promise.resolve()
     }
   }

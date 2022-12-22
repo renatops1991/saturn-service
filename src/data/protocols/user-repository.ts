@@ -15,5 +15,5 @@ export interface IUserRepository {
   updateAccessToken: (userId: string, token: string) => Promise<void>
   updateConfirmUser: (updateConfirmUserDto: UpdateConfirmUserDto) => Promise<void>
   update: (updateUserDto: UpdateUserDto) => Promise<UpdateUserOutputDto>
-  updateUserPassword: (redefineUserPasswordDto: UpdateUserPasswordDto) => Promise<void>
+  updateUserPassword: (updateUserPasswordDto: Omit<UpdateUserPasswordDto, 'passwordConfirmation'>) => Promise<void>
 }

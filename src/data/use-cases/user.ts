@@ -91,9 +91,8 @@ export class User implements IUser, IAuthentication {
     return await this.userRepository.update(updateUser)
   }
 
-  async updateUserPassword (redefineUserPasswordDto: UpdateUserPasswordDto): Promise<void> {
+  async updateUserPassword (redefineUserPasswordDto: Omit<UpdateUserPasswordDto, 'passwordConfirmation'>): Promise<void> {
     const { password } = redefineUserPasswordDto
-    delete redefineUserPasswordDto.passwordConfirmation
     const hashedPassword = await this.hashed.hash(password)
     await this.userRepository.updateUserPassword(
       Object.assign({}, redefineUserPasswordDto,
