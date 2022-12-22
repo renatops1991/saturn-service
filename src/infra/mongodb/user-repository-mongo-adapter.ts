@@ -118,7 +118,23 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
     return MongoHelper.map(updateUser.value)
   }
 
-  updateUserPassword: (updateUserPasswordDto: Omit<UpdateUserPasswordDto, 'passwordConfirmation'>) => Promise<void>
+  async updateUserPassword (updateUserPasswordDto: Omit<UpdateUserPasswordDto, 'passwordConfirmation'>): Promise<void> {
+    const { userId, password } = updateUserPasswordDto
+    await this.getUserCollection().findOneAndUpdate(
+      {
+        _id: new ObjectId(userId)
+      },
+      {
+        $set: {
+          password,
+          updatedAt: new Date()
+        }
+      },
+      {
+        upsert: true
+      }
+    )
+  }
 
   private getUserCollection (): Collection {
     if (!this.userCollection) {
