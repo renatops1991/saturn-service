@@ -3,7 +3,8 @@ import {
   signUpFactory,
   signInFactory,
   updateConfirmUserFactory,
-  updateUserFactory
+  updateUserFactory,
+  updateUserPasswordFactory
 } from '@/main/factories/user-factory'
 import { authUser } from '@/main/middlewares'
 import { Router } from 'express'
@@ -13,4 +14,5 @@ export default (router: Router): void => {
   router.post('/sign-in', expressRouteAdapter(signInFactory()))
   router.put('/user/confirm', authUser, expressRouteAdapter(updateConfirmUserFactory()))
   router.put('/user', authUser, expressRouteAdapter(updateUserFactory()))
+  router.put('/user/redefine-password', authUser, expressRouteAdapter(updateUserPasswordFactory()))
 }
