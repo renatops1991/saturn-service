@@ -33,7 +33,8 @@ describe('User routes', () => {
       name: 'John Foo Bar',
       email: 'john@example.com',
       password,
-      confirmUser: false
+      confirmUser: false,
+      accessToken: sign('foo', process.env.JWT_SECRET)
     })
   }
   describe('Create', () => {
@@ -119,6 +120,30 @@ describe('User routes', () => {
           fixtureUpdateUser()
         )
         .expect(200)
+    })
+  })
+
+  describe('UpdateUserPassword', () => {
+    it('Should update user password field on succeeds', async () => {
+      const createUser = await makeUser()
+      const id = createUser.insertedId
+      const user = await userCollection.findOne(
+        {
+          _id: id
+        }, {
+          projection: {
+            accessToken: 1
+          }
+        }
+      )
+      await request(app)
+        .put('/api/user/redefine-password')
+        .set('x-access-token', user.accessToken)
+        .send({
+          password: 'bar',
+          passwordConfirmation: 'bar'
+        })
+        .expect(204)
     })
   })
 })
