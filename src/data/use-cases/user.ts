@@ -15,7 +15,8 @@ import {
   UpdateConfirmUserDto,
   UpdateUserOutputDto,
   UpdateUserDto,
-  UpdateUserPasswordDto
+  UpdateUserPasswordDto,
+  GetUserOutputDto
 } from '@/main/dtos/user'
 
 export class User implements IUser, IAuthentication {
@@ -101,4 +102,6 @@ export class User implements IUser, IAuthentication {
         }
       ))
   }
+
+  getUser: (userId: string) => Promise<GetUserOutputDto>
 }

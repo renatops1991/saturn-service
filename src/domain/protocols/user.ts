@@ -2,7 +2,8 @@ import {
   UpdateUserPasswordDto,
   SignUpUserDto,
   UpdateConfirmUserDto,
-  UserOutputDto
+  UserOutputDto,
+  GetUserOutputDto
 } from '@/main/dtos/user'
 import { UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
 import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
@@ -11,4 +12,5 @@ export interface IUser {
   updateConfirmUser: (updateConfirmUserDto: UpdateConfirmUserDto) => Promise<void>
   update: (updateUserDto: UpdateUserDto) => Promise<UpdateUserOutputDto>
   updateUserPassword: (redefineUserPasswordDto: UpdateUserPasswordDto) => Promise<void>
+  getUser: (userId: string) => Promise<GetUserOutputDto>
 }
