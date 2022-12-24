@@ -398,4 +398,14 @@ describe('User use case', () => {
       })
     })
   })
+
+  describe('getUser', () => {
+    it('Should call getUser method of the UserRepository class with correct userId', async () => {
+      const { sut, userRepositoryStub } = makeSut()
+      const getUserSpy = jest
+        .spyOn(userRepositoryStub, 'getUser')
+      await sut.getUser('foo')
+      expect(getUserSpy).toHaveBeenCalledWith('foo')
+    })
+  })
 })

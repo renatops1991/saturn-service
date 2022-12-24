@@ -7,7 +7,8 @@ import {
   LoadUserDto,
   SignUpUserDto,
   UserOutputDto,
-  UpdateUserPasswordDto
+  UpdateUserPasswordDto,
+  GetUserOutputDto
 } from '@/main/dtos/user'
 import {
   fixtureUserOutput,
@@ -71,6 +72,10 @@ export const mockUserRepository = (): IUserRepository => {
 
     async updateUserPassword (updateUserPassword: Omit<UpdateUserPasswordDto, 'passwordConfirmation'>): Promise<void> {
       return await Promise.resolve()
+    }
+
+    async getUser (userId: string): Promise<GetUserOutputDto> {
+      return await Promise.resolve(fixtureUpdateUserOutput())
     }
   }
 
