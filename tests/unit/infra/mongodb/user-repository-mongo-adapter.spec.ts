@@ -197,4 +197,29 @@ describe('UserRepositoryMongoAdapter', () => {
       expect(expectedResponse.updatedAt).toEqual(new Date())
     })
   })
+
+  describe('getUser', () => {
+    it('Should return an user with correct data', async () => {
+      const sut = makeSut()
+      const createUser = await userCollection.insertOne(Object.assign({
+        ...fixtureCreateUser(),
+        accessToken: 'accessToken',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }))
+
+      const user = await userCollection.findOne({ _id: createUser.insertedId })
+      const userId = MongoHelper.map(user).id
+
+      const expectedResponse = await sut.getUser(userId)
+      expect(expectedResponse).toEqual({
+        id: userId,
+        name: 'John Foo Bar',
+        email: 'foo@example.com',
+        confirmUser: false,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      })
+    })
+  })
 })
