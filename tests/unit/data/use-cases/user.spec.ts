@@ -407,5 +407,11 @@ describe('User use case', () => {
       await sut.getUser('foo')
       expect(getUserSpy).toHaveBeenCalledWith('foo')
     })
+
+    it('Should return user if getUser method succeeds', async () => {
+      const { sut } = makeSut()
+      const expectedResponse = await sut.getUser('foo')
+      expect(expectedResponse).toEqual(fixtureUpdateUserOutput())
+    })
   })
 })
