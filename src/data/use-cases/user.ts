@@ -104,7 +104,6 @@ export class User implements IUser, IAuthentication {
   }
 
   async getUser (userId: string): Promise<GetUserOutputDto> {
-    await this.userRepository.getUser(userId)
-    return null
+    return await this.userRepository.getUser(userId)
   }
 }
