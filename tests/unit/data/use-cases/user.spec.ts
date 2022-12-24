@@ -413,5 +413,14 @@ describe('User use case', () => {
       const expectedResponse = await sut.getUser('foo')
       expect(expectedResponse).toEqual(fixtureUpdateUserOutput())
     })
+
+    it('Should forward the error if getUser of the UserRepository throws error', async () => {
+      const { sut, userRepositoryStub } = makeSut()
+      jest
+        .spyOn(userRepositoryStub, 'getUser')
+        .mockRejectedValueOnce(new Error())
+      const expectedResponse = sut.getUser('foo')
+      await expect(expectedResponse).rejects.toThrow()
+    })
   })
 })
