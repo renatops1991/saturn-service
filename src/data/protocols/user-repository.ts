@@ -5,7 +5,8 @@ import {
   UpdateConfirmUserDto,
   UpdateUserOutputDto,
   UpdateUserDto,
-  UpdateUserPasswordDto
+  UpdateUserPasswordDto,
+  GetUserOutputDto
 } from '@/main/dtos/user'
 
 export interface IUserRepository {
@@ -16,4 +17,5 @@ export interface IUserRepository {
   updateConfirmUser: (updateConfirmUserDto: UpdateConfirmUserDto) => Promise<void>
   update: (updateUserDto: UpdateUserDto) => Promise<UpdateUserOutputDto>
   updateUserPassword: (updateUserPasswordDto: Omit<UpdateUserPasswordDto, 'passwordConfirmation'>) => Promise<void>
+  getUser: (userId: string) => Promise<GetUserOutputDto>
 }
