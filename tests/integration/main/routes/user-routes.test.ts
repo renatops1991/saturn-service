@@ -146,4 +146,24 @@ describe('User routes', () => {
         .expect(204)
     })
   })
+
+  describe('GetUser', () => {
+    it('Should return user on succeeds', async () => {
+      const createUser = await makeUser()
+      const id = createUser.insertedId
+      const user = await userCollection.findOne(
+        {
+          _id: id
+        }, {
+          projection: {
+            accessToken: 1
+          }
+        }
+      )
+      await request(app)
+        .get('/api/user')
+        .set('x-access-token', user.accessToken)
+        .expect(200)
+    })
+  })
 })

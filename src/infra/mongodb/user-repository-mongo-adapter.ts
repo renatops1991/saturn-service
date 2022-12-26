@@ -157,7 +157,8 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
           createdAt: 1,
           updatedAt: 1
         }
-      })
+      }
+    )
     return user && MongoHelper.map(user)
   }
 

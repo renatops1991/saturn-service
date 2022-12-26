@@ -30,13 +30,13 @@ describe('GetUserController', () => {
     const { sut, userStub } = makeSut()
     const getUserSpy = jest
       .spyOn(userStub, 'getUser')
-    await sut.handle('foo')
+    await sut.handle({ userId: 'foo' })
     expect(getUserSpy).toHaveBeenCalledWith('foo')
   })
 
   it('Should return object correct user', async () => {
     const { sut } = makeSut()
-    const expectedResponse = await sut.handle('foo')
+    const expectedResponse = await sut.handle({ userId: 'foo' })
     expect(expectedResponse.statusCode).toEqual(200)
     expect(expectedResponse).toEqual(success(fixtureUpdateUserOutput()))
   })
@@ -45,7 +45,7 @@ describe('GetUserController', () => {
     const { sut, userStub } = makeSut()
     jest
       .spyOn(userStub, 'getUser').mockRejectedValueOnce(() => { throw new Error() })
-    const expectedResponse = await sut.handle('foo')
+    const expectedResponse = await sut.handle({ userId: 'foo' })
     expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))
   })
 })
