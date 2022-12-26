@@ -141,7 +141,8 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
     const user = await this.getUserCollection().findOne(
       {
         _id: new ObjectId(userId)
-      }, {
+      },
+      {
         projection: {
           _id: 1,
           email: 1,
@@ -157,8 +158,7 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
           updatedAt: 1
         }
       })
-
-    return MongoHelper.map(user)
+    return user && MongoHelper.map(user)
   }
 
   private getUserCollection (): Collection {

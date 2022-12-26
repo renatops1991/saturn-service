@@ -6,7 +6,8 @@ import {
   SignInUserController,
   UpdateUserController,
   UpdateConfirmUserController,
-  UpdateUserPasswordController
+  UpdateUserPasswordController,
+  GetUserController
 } from '@/presentation/controllers/user'
 import {
   makeSignUpValidationCompositeFactory,
@@ -65,4 +66,13 @@ export const updateUserPasswordFactory = (): IController => {
     new UserRepositoryMongoAdapter()
   )
   return new UpdateUserPasswordController(user, makeUpdateUserPasswordValidationCompositeFactory())
+}
+
+export const getUserFactory = (): IController => {
+  const user = new User(
+    new BcryptAdapter(12),
+    new JwtAdapter(process.env.JWT_SECRET),
+    new UserRepositoryMongoAdapter()
+  )
+  return new GetUserController(user)
 }
