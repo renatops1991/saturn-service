@@ -90,7 +90,7 @@ describe('User routes', () => {
         }
       )
       await request(app)
-        .put('/api/user/confirm')
+        .patch('/api/user/confirm')
         .set('x-access-token', accessToken)
         .send({
           confirmUser: true
@@ -137,7 +137,7 @@ describe('User routes', () => {
         }
       )
       await request(app)
-        .put('/api/user/redefine-password')
+        .patch('/api/user/redefine-password')
         .set('x-access-token', user.accessToken)
         .send({
           password: 'bar',

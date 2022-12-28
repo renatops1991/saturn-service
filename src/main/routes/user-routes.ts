@@ -13,8 +13,8 @@ import { Router } from 'express'
 export default (router: Router): void => {
   router.post('/sign-up', expressRouteAdapter(signUpFactory()))
   router.post('/sign-in', expressRouteAdapter(signInFactory()))
-  router.put('/user/confirm', authUser, expressRouteAdapter(updateConfirmUserFactory()))
   router.put('/user', authUser, expressRouteAdapter(updateUserFactory()))
   router.get('/user', authUser, expressRouteAdapter(getUserFactory()))
-  router.put('/user/redefine-password', authUser, expressRouteAdapter(updateUserPasswordFactory()))
+  router.patch('/user/confirm', authUser, expressRouteAdapter(updateConfirmUserFactory()))
+  router.patch('/user/redefine-password', authUser, expressRouteAdapter(updateUserPasswordFactory()))
 }
