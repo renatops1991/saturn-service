@@ -16,7 +16,7 @@ import {
 import { mockCryptography, mockHashed, mockUserRepository } from '@/tests/unit/data/use-cases/mocks/mock-user-use-case'
 import { IUserBuilder } from '@/data/protocols/user-builder'
 import { mockUserBuilder } from '@/tests/unit/data/builders/mocks/mock-user-builder'
-import { fixturesBuildUser } from '@/tests/unit/data/builders/fixtures/fixture-user-builder'
+import { fixtureBuildUser } from '@/tests/unit/data/builders/fixtures/fixtures-user-builder'
 import MockDate from 'mockdate'
 
 type SutType = {
@@ -335,7 +335,7 @@ describe('User use case', () => {
       jest
         .spyOn(userBuilderStub, 'buildUser').mockReturnValueOnce(Object.assign(
           {
-            ...fixturesBuildUser(),
+            ...fixtureBuildUser(),
             password: 'hashed'
           }
         ))
@@ -343,7 +343,7 @@ describe('User use case', () => {
       await sut.update(fixtureUpdateUser())
       const expectedResponse = Object.assign(
         {
-          ...fixturesBuildUser(),
+          ...fixtureBuildUser(),
           password: 'hashed'
         })
       expect(updateSpy).toHaveBeenCalledWith(expectedResponse)
@@ -357,7 +357,7 @@ describe('User use case', () => {
       const updateSpy = jest
         .spyOn(userRepositoryStub, 'update')
       await sut.update(fakeUpdateUser)
-      const expectedResponse = fixturesBuildUser()
+      const expectedResponse = fixtureBuildUser()
       delete expectedResponse.password
       expect(updateSpy).toHaveBeenCalledWith(expectedResponse)
     })

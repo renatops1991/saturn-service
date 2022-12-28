@@ -1,7 +1,10 @@
 import { UserBuilder } from '@/data/builders/user-builder'
 import { Address } from '@/domain/entities/address'
 import { fixtureCreateUser, fixtureUpdateUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
+import { fixtureBuildUserBasicInfo } from '@/tests/unit/data/builders/fixtures/fixtures-user-builder'
 import MockDate from 'mockdate'
+
+const sut = new UserBuilder()
 
 describe('UserBuilder', () => {
   beforeAll(() => {
@@ -11,38 +14,31 @@ describe('UserBuilder', () => {
     MockDate.reset()
   })
   describe('buildUserBasicInfo', () => {
-    it('Should build user basic info with corrects values', async () => {
-      const sut = new UserBuilder()
+    it('Should build user basic info correctly', async () => {
       const expectedResponse = sut.buildUserBasicInfo(fixtureCreateUser())
-      expect(expectedResponse).toEqual({
-        name: 'John Foo Bar',
-        email: 'foo@example.com',
-        password: '12345',
-        confirmUser: false,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      })
+      expect(expectedResponse).toEqual(
+        Object.assign({}, {
+          ...fixtureBuildUserBasicInfo(),
+          password: '12345'
+        }
+        ))
     })
 
-    it('Should build user basic info with confirmUser field equal false if not provided', async () => {
-      const sut = new UserBuilder()
+    it('Should build user basic info with field confirmUser equal to false if not provided', async () => {
       const buildUser = fixtureCreateUser()
       delete buildUser.confirmUser
       const expectedResponse = sut.buildUserBasicInfo(buildUser)
-      expect(expectedResponse).toEqual({
-        name: 'John Foo Bar',
-        email: 'foo@example.com',
-        password: '12345',
-        confirmUser: false,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      })
+      expect(expectedResponse).toEqual(
+        Object.assign({}, {
+          ...fixtureBuildUserBasicInfo(),
+          password: '12345'
+        }
+        ))
     })
   })
 
   describe('buildUser', () => {
-    it('Should build user with corrects values', async () => {
-      const sut = new UserBuilder()
+    it('Should build user correctly', async () => {
       const expectedResponse = sut.buildUser(fixtureUpdateUser())
       expect(expectedResponse).toEqual({
         userId: 'foo',
@@ -65,8 +61,7 @@ describe('UserBuilder', () => {
       })
     })
 
-    it('Should build user with optionals fields', async () => {
-      const sut = new UserBuilder()
+    it('Should build user only with optionals fields', async () => {
       const expectedResponse = sut.buildUser({
         userId: 'foo',
         birthDate: new Date('1991-08-01'),

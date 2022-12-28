@@ -1,6 +1,6 @@
 import { UserBasicInfoType, UserType } from '@/data/types'
 
-export const fixturesBuildUserBasicInfo = (): UserBasicInfoType => ({
+export const fixtureBuildUserBasicInfo = (): UserBasicInfoType => ({
   name: 'John Foo Bar',
   email: 'foo@example.com',
   password: 'hashed',
@@ -9,7 +9,7 @@ export const fixturesBuildUserBasicInfo = (): UserBasicInfoType => ({
   updatedAt: new Date()
 })
 
-export const fixturesBuildUser = (): UserType => ({
+export const fixtureBuildUser = (): UserType => ({
   userId: 'foo',
   name: 'John Foo Bar',
   birthDate: new Date('1991-08-01'),
