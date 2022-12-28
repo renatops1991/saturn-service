@@ -17,6 +17,7 @@ services:
     image: saturn-service-api
     environment:
       - MONGODB_URI=${MONGODB_DOCKER_URI}
+      - JWT_SECRET=${JWT_SECRET}
       - PORT=${PORT}
     command: npm run start:debug
     volumes: 
