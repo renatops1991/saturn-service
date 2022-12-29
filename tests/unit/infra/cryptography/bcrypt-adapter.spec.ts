@@ -33,13 +33,13 @@ describe('BcryptAdapter', () => {
       expect(hashSpy).toHaveBeenCalledWith('password', salt)
     })
 
-    it('Should return a correct hash on success', async () => {
+    it('Should return a correct hash on succeeds', async () => {
       const { sut } = makeSut()
       const expectedResponse = await sut.hash('password')
       expect(expectedResponse).toEqual('hashPassword')
     })
 
-    it('Should pass error if hash method throws exception error', async () => {
+    it('Should forward error if hash method throws exception error', async () => {
       const { sut } = makeSut()
       jest
         .spyOn(bcrypt, 'hash')

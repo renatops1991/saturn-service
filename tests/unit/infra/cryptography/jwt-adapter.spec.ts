@@ -29,7 +29,7 @@ describe('JwtAdapter', () => {
       expect(expectedResponse).toBe('token')
     })
 
-    it('Should pass error if sign method throws exception error', async () => {
+    it('Should forward error if sign method throws exception error', async () => {
       const sut = makeSut()
       jest
         .spyOn(jwt, 'sign')

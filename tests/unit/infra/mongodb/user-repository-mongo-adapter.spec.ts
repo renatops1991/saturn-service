@@ -14,6 +14,7 @@ describe('UserRepositoryMongoAdapter', () => {
     await MongoHelper.connect(process.env.MONGODB_URL)
     MockDate.set(new Date())
   })
+
   afterAll(async () => {
     await MongoHelper.disconnect()
     MockDate.reset()
