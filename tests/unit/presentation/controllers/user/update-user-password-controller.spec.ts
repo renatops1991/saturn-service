@@ -1,8 +1,8 @@
 import { IUser } from '@/domain/protocols/user'
 import { IValidation } from '@/presentation/protocols/validation'
 import { UpdateUserPasswordController } from '@/presentation/controllers/user/update-user-password-controller'
-import { mockValidation } from '@/tests/unit/presentation/mocks/mock-user-validation'
-import { mockUserController } from '@/tests/unit/presentation/mocks/mock-user-controller'
+import { mockValidation } from '@/tests/unit/presentation/mocks/mocks-user-validation'
+import { mocksUserController } from '@/tests/unit/presentation/mocks/mocks-user-controller'
 import { fixtureUpdateUserPasswordRequest } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { MissingMandatoryParamError, InvalidParamError, ServerError } from '@/presentation/errors'
 import { noContent, serverError } from '@/presentation/http-helper'
@@ -14,7 +14,7 @@ type SutTypes = {
 }
 
 const makeSut = (): SutTypes => {
-  const userStub = mockUserController()
+  const userStub = mocksUserController()
   const validationStub = mockValidation()
   const sut = new UpdateUserPasswordController(userStub, validationStub)
   return {
@@ -26,7 +26,8 @@ const makeSut = (): SutTypes => {
 describe('UpdateUserPasswordController', () => {
   it('Should call validate method with correct values', async () => {
     const { sut, validationStub } = makeSut()
-    const validateSpy = jest.spyOn(validationStub, 'validate')
+    const validateSpy = jest
+      .spyOn(validationStub, 'validate')
     await sut.handle(fixtureUpdateUserPasswordRequest())
     const expectedResponse = fixtureUpdateUserPasswordRequest()
     expect(validateSpy).toHaveBeenCalledWith(expectedResponse)
@@ -34,10 +35,10 @@ describe('UpdateUserPasswordController', () => {
 
   it('Should return MissingMandatoryParamError if password is no provided', async () => {
     const { sut, validationStub } = makeSut()
+    const makeUpdateUserPassword = fixtureUpdateUserPasswordRequest()
     jest
       .spyOn(validationStub, 'validate')
       .mockReturnValueOnce(new MissingMandatoryParamError('password').serializeErrors())
-    const makeUpdateUserPassword = fixtureUpdateUserPasswordRequest()
     delete makeUpdateUserPassword.password
     const expectedResponse = await sut.handle(makeUpdateUserPassword)
     expect(expectedResponse.statusCode).toEqual(400)
@@ -46,10 +47,10 @@ describe('UpdateUserPasswordController', () => {
 
   it('Should return MissingMandatoryParamError if passwordConfirmation is no provided', async () => {
     const { sut, validationStub } = makeSut()
+    const makeUpdateUserPassword = fixtureUpdateUserPasswordRequest()
     jest
       .spyOn(validationStub, 'validate')
       .mockReturnValueOnce(new MissingMandatoryParamError('passwordConfirmation').serializeErrors())
-    const makeUpdateUserPassword = fixtureUpdateUserPasswordRequest()
     delete makeUpdateUserPassword.password
     const expectedResponse = await sut.handle(makeUpdateUserPassword)
     expect(expectedResponse.statusCode).toEqual(400)
@@ -58,11 +59,11 @@ describe('UpdateUserPasswordController', () => {
 
   it('Should return InvalidParamError if the password and passwordConfirmation is different', async () => {
     const { sut, validationStub } = makeSut()
+    const makeUpdateUserPassword = fixtureUpdateUserPasswordRequest()
+    makeUpdateUserPassword.passwordConfirmation = 'foo'
     jest
       .spyOn(validationStub, 'validate')
       .mockReturnValueOnce(new InvalidParamError('passwordConfirmation').serializeErrors())
-    const makeUpdateUserPassword = fixtureUpdateUserPasswordRequest()
-    makeUpdateUserPassword.passwordConfirmation = 'foo'
     const expectedResponse = await sut.handle(makeUpdateUserPassword)
     expect(expectedResponse.statusCode).toEqual(400)
     expect(expectedResponse.body).toEqual(new InvalidParamError('passwordConfirmation').serializeErrors())
@@ -70,9 +71,9 @@ describe('UpdateUserPasswordController', () => {
 
   it('Should call updateUserPassword method with correct values', async () => {
     const { sut, userStub } = makeSut()
+    const makeUpdateUserPassword = fixtureUpdateUserPasswordRequest()
     const redefineUserPasswordSpy = jest
       .spyOn(userStub, 'updateUserPassword')
-    const makeUpdateUserPassword = fixtureUpdateUserPasswordRequest()
     await sut.handle(makeUpdateUserPassword)
     expect(redefineUserPasswordSpy).toHaveBeenCalledWith(fixtureUpdateUserPasswordRequest())
   })

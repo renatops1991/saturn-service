@@ -10,7 +10,7 @@ import {
 } from '@/main/dtos/user'
 import { fixtureUpdateUserOutput, fixtureUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 
-export const mockUserController = (): IUser => {
+export const mocksUserController = (): IUser => {
   class UserStub implements IUser {
     async create (user: SignUpUserDto): Promise<UserOutputDto> {
       return await new Promise(resolve => resolve(fixtureUserOutput()))

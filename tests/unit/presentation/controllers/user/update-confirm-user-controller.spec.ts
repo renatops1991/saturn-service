@@ -4,7 +4,7 @@ import { UpdateConfirmUserController } from '@/presentation/controllers/user/upd
 import { IUser } from '@/domain/protocols/user'
 import { MissingMandatoryParamError, ServerError } from '@/presentation/errors'
 import { noContent, serverError } from '@/presentation/http-helper'
-import { mockUserController } from '../../mocks/mock-user-controller'
+import { mocksUserController } from '../../mocks/mocks-user-controller'
 import { RequiredField } from '@/validation/required-field'
 
 type SutTypes = {
@@ -15,7 +15,7 @@ type SutTypes = {
 
 const makeSut = (): SutTypes => {
   const requiredFieldStub = new RequiredField('confirmUser')
-  const userStub = mockUserController()
+  const userStub = mocksUserController()
   const sut = new UpdateConfirmUserController(userStub)
   return {
     requiredFieldStub,

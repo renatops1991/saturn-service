@@ -11,10 +11,10 @@ import {
 import { badRequest, forbidden, serverError } from '@/presentation/http-helper'
 import { IValidation } from '@/presentation/protocols/validation'
 import { fixtureCreateUserRequest, fixtureUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
-import { mockEmailValidator, mockValidation } from '@/tests/unit/presentation/mocks/mock-user-validation'
-import { mockAuthentication } from '@/tests/unit/presentation/mocks/mock-authentication'
+import { mockEmailValidator, mockValidation } from '@/tests/unit/presentation/mocks/mocks-user-validation'
+import { mocksAuthentication } from '@/tests/unit/presentation/mocks/mocks-authentication'
 import { EmailInUseError } from '@/presentation/errors/email-in-use-error'
-import { mockUserController } from '../../mocks/mock-user-controller'
+import { mocksUserController } from '../../mocks/mocks-user-controller'
 
 type SutTypes = {
   sut: SignUpUserController
@@ -26,9 +26,9 @@ type SutTypes = {
 
 const makeSut = (): SutTypes => {
   const emailValidatorStub = mockEmailValidator()
-  const userStub = mockUserController()
+  const userStub = mocksUserController()
   const validationStub = mockValidation()
-  const authenticationStub = mockAuthentication()
+  const authenticationStub = mocksAuthentication()
   const sut = new SignUpUserController(userStub, validationStub, authenticationStub)
 
   return {
@@ -55,7 +55,9 @@ describe('User Controller', () => {
   it('Should return 500 error if SignUpController throw exception error', async () => {
     const { sut, validationStub } = makeSut()
     const userDto = fixtureCreateUserRequest()
-    jest.spyOn(validationStub, 'validate').mockImplementationOnce(() => { throw new Error() })
+    jest
+      .spyOn(validationStub, 'validate')
+      .mockImplementationOnce(() => { throw new Error() })
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(500)
     expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))
@@ -64,7 +66,8 @@ describe('User Controller', () => {
   it('Should call User use case with correct values', async () => {
     const { sut, userStub } = makeSut()
     const userDto = fixtureCreateUserRequest()
-    const userSpy = jest.spyOn(userStub, 'create')
+    const userSpy = jest
+      .spyOn(userStub, 'create')
     await sut.handle(userDto)
     expect(userSpy).toHaveBeenCalledWith(userDto)
   })
@@ -72,7 +75,9 @@ describe('User Controller', () => {
   it('Should return 500 error if create method throw exception error', async () => {
     const { sut, userStub } = makeSut()
     const userDto = fixtureCreateUserRequest()
-    jest.spyOn(userStub, 'create').mockImplementationOnce(() => { throw new Error() })
+    jest
+      .spyOn(userStub, 'create')
+      .mockImplementationOnce(() => { throw new Error() })
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(500)
     expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))
@@ -89,7 +94,8 @@ describe('User Controller', () => {
   it('Should call Validation with correct values', async () => {
     const { sut, validationStub } = makeSut()
     const userDto = fixtureCreateUserRequest()
-    const validateSpy = jest.spyOn(validationStub, 'validate')
+    const validateSpy = jest
+      .spyOn(validationStub, 'validate')
     await sut.handle(userDto)
     expect(validateSpy).toHaveBeenCalledWith(userDto)
   })
@@ -117,7 +123,8 @@ describe('User Controller', () => {
   it('Should call Authentication with correct values', async () => {
     const { sut, authenticationStub } = makeSut()
     const userDto = fixtureCreateUserRequest()
-    const authSpy = jest.spyOn(authenticationStub, 'auth')
+    const authSpy = jest
+      .spyOn(authenticationStub, 'auth')
     await sut.handle(userDto)
     expect(authSpy).toHaveBeenCalledWith({
       email: 'foo@example.com',
@@ -128,7 +135,9 @@ describe('User Controller', () => {
   it('Should return 500 error if Authentication throw exception error', async () => {
     const { sut, authenticationStub } = makeSut()
     const userDto = fixtureCreateUserRequest()
-    jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(() => { throw new Error() })
+    jest
+      .spyOn(authenticationStub, 'auth')
+      .mockImplementationOnce(() => { throw new Error() })
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(500)
     expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))
@@ -137,7 +146,9 @@ describe('User Controller', () => {
   it('Should return 403 error if UserUseCase returns null', async () => {
     const { sut, userStub } = makeSut()
     const userDto = fixtureCreateUserRequest()
-    jest.spyOn(userStub, 'create').mockResolvedValueOnce(null)
+    jest
+      .spyOn(userStub, 'create')
+      .mockResolvedValueOnce(null)
     const expectedResponse = await sut.handle(userDto)
     expect(expectedResponse.statusCode).toBe(403)
     expect(expectedResponse).toEqual(forbidden((new EmailInUseError().serializeErrors())))

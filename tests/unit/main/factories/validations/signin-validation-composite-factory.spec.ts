@@ -4,7 +4,7 @@ import { IValidation } from '@/presentation/protocols/validation'
 import { EmailValidation } from '@/validation/email-validation'
 import { RequiredField } from '@/validation/required-field'
 import { ValidationComposite } from '@/validation/validation-composite'
-import { mockEmailValidator } from '@/tests/unit/presentation/mocks/mock-user-validation'
+import { mockEmailValidator } from '@/tests/unit/presentation/mocks/mocks-user-validation'
 
 jest.mock('@/validation/validation-composite')
 

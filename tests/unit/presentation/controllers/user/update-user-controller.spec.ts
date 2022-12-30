@@ -3,9 +3,9 @@ import { UpdateUserController } from '@/presentation/controllers/user/update-use
 import { MissingMandatoryParamError, ServerError } from '@/presentation/errors'
 import { badRequest, serverError } from '@/presentation/http-helper'
 import { IValidation } from '@/presentation/protocols/validation'
-import { mockValidation } from '@/tests/unit/presentation/mocks/mock-user-validation'
+import { mockValidation } from '@/tests/unit/presentation/mocks/mocks-user-validation'
 import { fixtureUpdateUser, fixtureUpdateUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
-import { mockUserController } from '@/tests/unit/presentation/mocks/mock-user-controller'
+import { mocksUserController } from '@/tests/unit/presentation/mocks/mocks-user-controller'
 import MockDate from 'mockdate'
 
 type SutTypes = {
@@ -16,7 +16,7 @@ type SutTypes = {
 
 const makeSut = (): SutTypes => {
   const validationStub = mockValidation()
-  const userStub = mockUserController()
+  const userStub = mocksUserController()
   const sut = new UpdateUserController(userStub, validationStub)
   return {
     sut,

@@ -2,7 +2,7 @@ import { IAuthentication } from '@/domain/protocols/authentication'
 import { AccessDeniedError } from '@/presentation/errors/access-denied-error'
 import { forbidden, serverError, success } from '@/presentation/http-helper'
 import { AuthMiddleware } from '@/presentation/middlewares/auth-middleware'
-import { mockAuthentication } from '../mocks/mock-authentication'
+import { mocksAuthentication } from '../mocks/mocks-authentication'
 
 type SutTypes = {
   sut: AuthMiddleware
@@ -10,7 +10,7 @@ type SutTypes = {
 }
 
 const makeSut = (role?: string): SutTypes => {
-  const authenticationStub = mockAuthentication()
+  const authenticationStub = mocksAuthentication()
   const sut = new AuthMiddleware(authenticationStub, role)
   return {
     sut,
@@ -30,9 +30,7 @@ describe('Auth Middleware', () => {
     const { sut, authenticationStub } = makeSut(role)
     const loadUserByTokenSpy = jest
       .spyOn(authenticationStub, 'loadByToken')
-    await sut.handle({
-      accessToken: 'accessToken'
-    })
+    await sut.handle({ accessToken: 'accessToken' })
     expect(loadUserByTokenSpy).toHaveBeenCalledWith('accessToken', role)
   })
 
