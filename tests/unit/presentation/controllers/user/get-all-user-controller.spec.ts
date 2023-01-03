@@ -3,8 +3,9 @@ import { GetUserDto } from '@/main/dtos/user'
 import { GetAllUserController } from '@/presentation/controllers/user/get-all-user-controller'
 import { mocksUserController } from '@/tests/unit/presentation/mocks/mocks-user-controller'
 import { fixtureUpdateUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
-import { success } from '@/presentation/http-helper'
+import { serverError, success } from '@/presentation/http-helper'
 import MockDate from 'mockdate'
+import { ServerError } from '@/presentation/errors'
 
 type SutTypes = {
   sut: GetAllUserController
@@ -53,5 +54,21 @@ describe('getAllUserController', () => {
     const users = await sut.handle(getUserDto)
     expect(users.statusCode).toEqual(200)
     expect(users).toEqual(success([fixtureUpdateUserOutput()]))
+  })
+
+  it('Should return 500 error if getAllUsers throws exception error', async () => {
+    const { sut, userStub } = makeSut()
+    const getUserDto: GetUserDto = {
+      userId: 'foo',
+      document: '11111111',
+      startDate: new Date(),
+      endDate: new Date()
+    }
+    jest
+      .spyOn(userStub, 'getAllUsers')
+      .mockRejectedValueOnce(() => { throw new Error() })
+    const expectedResponse = await sut.handle(getUserDto)
+    expect(expectedResponse.statusCode).toEqual(500)
+    expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))
   })
 })
