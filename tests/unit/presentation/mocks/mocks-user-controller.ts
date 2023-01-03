@@ -6,7 +6,8 @@ import {
   UpdateUserOutputDto,
   UpdateUserDto,
   UpdateUserPasswordDto,
-  GetUserOutputDto
+  GetUserOutputDto,
+  GetUserDto
 } from '@/main/dtos/user'
 import { fixtureUpdateUserOutput, fixtureUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 
@@ -30,6 +31,10 @@ export const mocksUserController = (): IUser => {
 
     async getUser (userId: string): Promise<GetUserOutputDto> {
       return await Promise.resolve(fixtureUpdateUserOutput())
+    }
+
+    async getAllUsers (getUserDto: GetUserDto): Promise<GetUserOutputDto[]> {
+      return await Promise.resolve([fixtureUpdateUserOutput()])
     }
   }
 
