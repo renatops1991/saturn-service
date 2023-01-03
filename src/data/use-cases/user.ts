@@ -16,7 +16,8 @@ import {
   UpdateUserOutputDto,
   UpdateUserDto,
   UpdateUserPasswordDto,
-  GetUserOutputDto
+  GetUserOutputDto,
+  GetUserDto
 } from '@/main/dtos/user'
 
 export class User implements IUser, IAuthentication {
@@ -106,4 +107,6 @@ export class User implements IUser, IAuthentication {
   async getUser (userId: string): Promise<GetUserOutputDto> {
     return await this.userRepository.getUser(userId)
   }
+
+  getAllUsers: (getUserDto: GetUserDto) => Promise<GetUserOutputDto[]>
 }
