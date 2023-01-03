@@ -2,6 +2,8 @@ import { IUser } from '@/domain/protocols/user'
 import { GetUserDto } from '@/main/dtos/user'
 import { GetAllUserController } from '@/presentation/controllers/user/get-all-user-controller'
 import { mocksUserController } from '@/tests/unit/presentation/mocks/mocks-user-controller'
+import { fixtureUpdateUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
+import { success } from '@/presentation/http-helper'
 import MockDate from 'mockdate'
 
 type SutTypes = {
@@ -38,5 +40,18 @@ describe('getAllUserController', () => {
       .spyOn(userStub, 'getAllUsers')
     await sut.handle(getUserDto)
     expect(getAllUserSpy).toHaveBeenCalledWith(getUserDto)
+  })
+
+  it('Should return users on succeeds', async () => {
+    const { sut } = makeSut()
+    const getUserDto: GetUserDto = {
+      userId: 'foo',
+      document: '11111111',
+      startDate: new Date(),
+      endDate: new Date()
+    }
+    const users = await sut.handle(getUserDto)
+    expect(users.statusCode).toEqual(200)
+    expect(users).toEqual(success([fixtureUpdateUserOutput()]))
   })
 })
