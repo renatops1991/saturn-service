@@ -6,7 +6,8 @@ import {
   UserOutputDto,
   UpdateConfirmUserDto,
   UpdateUserPasswordDto,
-  GetUserOutputDto
+  GetUserOutputDto,
+  GetUserDto
 } from '@/main/dtos/user'
 import { UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
 import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
@@ -162,6 +163,7 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
     return user && MongoHelper.map(user)
   }
 
+  getAllUsers: (getUserDto: GetUserDto) => Promise<GetUserOutputDto[]>
   private getUserCollection (): Collection {
     if (!this.userCollection) {
       this.userCollection = MongoHelper.getCollection('users')

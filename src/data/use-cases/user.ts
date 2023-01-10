@@ -108,5 +108,7 @@ export class User implements IUser, IAuthentication {
     return await this.userRepository.getUser(userId)
   }
 
-  getAllUsers: (getUserDto: GetUserDto) => Promise<GetUserOutputDto[]>
+  async getAllUsers (getUserDto: GetUserDto): Promise<GetUserOutputDto[]> {
+    return await this.userRepository.getAllUsers(getUserDto)
+  }
 }
