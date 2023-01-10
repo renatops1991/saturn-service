@@ -460,5 +460,11 @@ describe('User use case', () => {
       await sut.getAllUsers(fixtureGetAllUsers())
       expect(getAllUserSpy).toHaveBeenCalledWith(fixtureGetAllUsers())
     })
+
+    it('Should return an array users', async () => {
+      const { sut } = makeSut()
+      const expectedResponse = await sut.getAllUsers(fixtureGetAllUsers())
+      expect(expectedResponse).toEqual([fixtureUpdateUserOutput(), fixtureUpdateUserOutput()])
+    })
   })
 })
