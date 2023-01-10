@@ -77,6 +77,10 @@ export const mockUserRepository = (): IUserRepository => {
     async getUser (userId: string): Promise<GetUserOutputDto> {
       return await Promise.resolve(fixtureUpdateUserOutput())
     }
+
+    async getAllUsers (): Promise<GetUserOutputDto[]> {
+      return await Promise.resolve([fixtureUpdateUserOutput(), fixtureUpdateUserOutput()])
+    }
   }
 
   return new UserRepositoryStub()

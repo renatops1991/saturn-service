@@ -6,7 +6,8 @@ import {
   UserOutputDto,
   SignInUserDto,
   UpdateConfirmUserDto,
-  UpdateUserPasswordDto
+  UpdateUserPasswordDto,
+  GetUserDto
 } from '@/main/dtos/user'
 import { UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
 import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
@@ -42,6 +43,14 @@ export const fixtureLoadUser = (): LoadUserDto => ({
   name: 'John Foo Bar',
   email: 'foo@example.com',
   password: 'hashed'
+})
+
+export const fixtureGetAllUsers = (): GetUserDto => ({
+  userId: 'foo',
+  email: 'foo@example.com',
+  document: '000000000000',
+  startDate: new Date(),
+  endDate: new Date()
 })
 
 export const fixtureUpdateConfirmUser = (): UpdateConfirmUserDto => ({

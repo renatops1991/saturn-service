@@ -11,7 +11,8 @@ import {
   fixtureUpdateConfirmUser,
   fixtureUpdateUser,
   fixtureUpdateUserOutput,
-  fixtureUpdateUserPassword
+  fixtureUpdateUserPassword,
+  fixtureGetAllUsers
 } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockCryptography, mockHashed, mockUserRepository } from '@/tests/unit/data/use-cases/mocks/mocks-user-use-case'
 import { IUserBuilder } from '@/data/protocols/user-builder'
@@ -448,6 +449,16 @@ describe('User use case', () => {
         .mockRejectedValueOnce(new Error())
       const expectedResponse = sut.getUser('foo')
       await expect(expectedResponse).rejects.toThrow()
+    })
+  })
+
+  describe('getAllUser', () => {
+    it('Should call getAllUser method of the UserRepository with correct values', async () => {
+      const { sut, userRepositoryStub } = makeSut()
+      const getAllUserSpy = jest
+        .spyOn(userRepositoryStub, 'getAllUsers')
+      await sut.getAllUsers(fixtureGetAllUsers())
+      expect(getAllUserSpy).toHaveBeenCalledWith(fixtureGetAllUsers())
     })
   })
 })
