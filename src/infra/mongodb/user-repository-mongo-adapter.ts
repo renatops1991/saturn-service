@@ -7,7 +7,7 @@ import {
   UpdateConfirmUserDto,
   UpdateUserPasswordDto,
   GetUserOutputDto,
-  GetUserDto
+  FilterUserDto
 } from '@/main/dtos/user'
 import { UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
 import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
@@ -163,24 +163,25 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
     return user && MongoHelper.map(user)
   }
 
-  async getAllUsers (getUserDto: GetUserDto): Promise<GetUserOutputDto[]> {
+  async getAllUsers (filterUserDto: FilterUserDto): Promise<GetUserOutputDto[]> {
+    const { startDate, endDate, email, document } = filterUserDto
     const users = await this.getUserCollection().find({
       $or: [
         {
+          email
+        },
+        {
+          document
+        },
+        {
           createdAt: {
-            $lte: getUserDto.endDate
+            $gte: startDate
           }
         },
         {
           createdAt: {
-            $gte: getUserDto.startDate
+            $lte: endDate
           }
-        },
-        {
-          email: getUserDto.email
-        },
-        {
-          document: getUserDto.document
         }
       ]
     },

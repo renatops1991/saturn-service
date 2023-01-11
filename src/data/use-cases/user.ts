@@ -17,7 +17,7 @@ import {
   UpdateUserDto,
   UpdateUserPasswordDto,
   GetUserOutputDto,
-  GetUserDto
+  FilterUserDto
 } from '@/main/dtos/user'
 
 export class User implements IUser, IAuthentication {
@@ -108,7 +108,7 @@ export class User implements IUser, IAuthentication {
     return await this.userRepository.getUser(userId)
   }
 
-  async getAllUsers (getUserDto: GetUserDto): Promise<GetUserOutputDto[]> {
-    return await this.userRepository.getAllUsers(getUserDto)
+  async getAllUsers (filterUserDto: FilterUserDto): Promise<GetUserOutputDto[]> {
+    return await this.userRepository.getAllUsers(filterUserDto)
   }
 }

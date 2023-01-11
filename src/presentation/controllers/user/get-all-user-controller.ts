@@ -1,5 +1,5 @@
 import { IUser } from '@/domain/protocols/user'
-import { GetUserDto } from '@/main/dtos/user'
+import { FilterUserDto } from '@/main/dtos/user'
 import { badRequest, serverError, success } from '@/presentation/http-helper'
 import { IController } from '@/presentation/protocols/controller'
 import { IHttpResponse } from '@/presentation/protocols/http'
@@ -11,14 +11,14 @@ export class GetAllUserController implements IController {
     private readonly validation: IValidation
   ) { }
 
-  async handle (getUserDto: GetUserDto): Promise<IHttpResponse> {
+  async handle (filterUserDto: FilterUserDto): Promise<IHttpResponse> {
     try {
-      const isError = this.validation.validate(getUserDto)
+      const isError = this.validation.validate(filterUserDto)
       if (isError) {
         return badRequest(isError)
       }
 
-      const users = await this.user.getAllUsers(getUserDto)
+      const users = await this.user.getAllUsers(filterUserDto)
       return success(users)
     } catch (error) {
       return serverError(error)

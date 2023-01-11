@@ -12,7 +12,7 @@ import {
   fixtureUpdateUser,
   fixtureUpdateUserOutput,
   fixtureUpdateUserPassword,
-  fixtureGetAllUsers
+  fixtureFilterUser
 } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockCryptography, mockHashed, mockUserRepository } from '@/tests/unit/data/use-cases/mocks/mocks-user-use-case'
 import { IUserBuilder } from '@/data/protocols/user-builder'
@@ -457,13 +457,13 @@ describe('User use case', () => {
       const { sut, userRepositoryStub } = makeSut()
       const getAllUserSpy = jest
         .spyOn(userRepositoryStub, 'getAllUsers')
-      await sut.getAllUsers(fixtureGetAllUsers())
-      expect(getAllUserSpy).toHaveBeenCalledWith(fixtureGetAllUsers())
+      await sut.getAllUsers(fixtureFilterUser())
+      expect(getAllUserSpy).toHaveBeenCalledWith(fixtureFilterUser())
     })
 
     it('Should return an array users', async () => {
       const { sut } = makeSut()
-      const expectedResponse = await sut.getAllUsers(fixtureGetAllUsers())
+      const expectedResponse = await sut.getAllUsers(fixtureFilterUser())
       expect(expectedResponse).toEqual([fixtureUpdateUserOutput(), fixtureUpdateUserOutput()])
     })
   })

@@ -4,7 +4,7 @@ import {
   UpdateConfirmUserDto,
   UserOutputDto,
   GetUserOutputDto,
-  GetUserDto
+  FilterUserDto
 } from '@/main/dtos/user'
 import { UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
 import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
@@ -14,5 +14,5 @@ export interface IUser {
   update: (updateUserDto: UpdateUserDto) => Promise<UpdateUserOutputDto>
   updateUserPassword: (redefineUserPasswordDto: UpdateUserPasswordDto) => Promise<void>
   getUser: (userId: string) => Promise<GetUserOutputDto>
-  getAllUsers: (getUserDto: GetUserDto) => Promise<GetUserOutputDto[]>
+  getAllUsers: (filterUserDto: FilterUserDto) => Promise<GetUserOutputDto[]>
 }

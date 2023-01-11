@@ -8,7 +8,8 @@ import {
   SignUpUserDto,
   UserOutputDto,
   UpdateUserPasswordDto,
-  GetUserOutputDto
+  GetUserOutputDto,
+  FilterUserDto
 } from '@/main/dtos/user'
 import {
   fixtureUserOutput,
@@ -78,7 +79,7 @@ export const mockUserRepository = (): IUserRepository => {
       return await Promise.resolve(fixtureUpdateUserOutput())
     }
 
-    async getAllUsers (): Promise<GetUserOutputDto[]> {
+    async getAllUsers (filterUserDto: FilterUserDto): Promise<GetUserOutputDto[]> {
       return await Promise.resolve([fixtureUpdateUserOutput(), fixtureUpdateUserOutput()])
     }
   }
