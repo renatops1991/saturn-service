@@ -104,3 +104,47 @@ export const fixtureUpdateUserPasswordRequest = (): UpdateUserPasswordDto => ({
   password: '123',
   passwordConfirmation: '123'
 })
+
+export const fixtureFullUser = (): any => ({
+  name: 'John Foo Bar',
+  email: 'foo@example.com',
+  password: '12345',
+  confirmUser: false,
+  birthDate: new Date('1991-08-01'),
+  age: 31,
+  address: {
+    street: 'foo',
+    number: 'A1',
+    neighborhood: 'bar',
+    complements: 'xis',
+    city: 'foo',
+    state: 'SP'
+  },
+  phone: ['11554678952'],
+  type: 'PERSON',
+  document: '000000000000',
+  createdAt: new Date(),
+  updatedAt: new Date()
+})
+
+export const fixtureFullUserOutput = (): any => ({
+  id: 'foo',
+  name: 'John Foo Bar',
+  email: 'foo@example.com',
+  confirmUser: false,
+  birthDate: new Date('1991-08-01'),
+  age: 31,
+  address: {
+    street: 'foo',
+    number: 'A1',
+    neighborhood: 'bar',
+    complements: 'xis',
+    city: 'foo',
+    state: 'SP'
+  },
+  phone: ['11554678952'],
+  type: 'PERSON',
+  document: '000000000000',
+  createdAt: new Date(),
+  updatedAt: new Date()
+})
