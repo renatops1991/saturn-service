@@ -234,40 +234,42 @@ describe('UserRepositoryMongoAdapter', () => {
     const secondUser = Object.assign({ ...fixtureFullUser(), email: 'foo@gmail.com' })
     const thirstUser = Object.assign({ ...fixtureFullUser(), createdAt: new Date('2023-01-09') })
 
+    const insertUsers = async (): Promise<any> => {
+      return (await userCollection.insertMany([firstUser, secondUser, thirstUser])).insertedIds
+    }
+
+    const users = async (id: number): Promise<any> => {
+      const user = await userCollection.findOne({ _id: id }, { projection: { password: 0 } })
+      return MongoHelper.map(user)
+    }
+
     it('Should return users correctly with createdAt greater than date that was provided', async () => {
-      const users = (await userCollection.insertMany([firstUser, secondUser, thirstUser])).insertedIds
-
-      const firstUserOutput = await userCollection.findOne({ _id: users[0] }, { projection: { password: 0 } })
-      const secondUserOutput = await userCollection.findOne({ _id: users[1] }, { projection: { password: 0 } })
-
+      const insertUser = await insertUsers()
+      const firstUserOutput = await users(insertUser[0])
+      const secondUserOutput = await users(insertUser[1])
       const expectedResponse = await sut.getAllUsers({ startDate: new Date('2023-01-10') })
-      expect(expectedResponse).toEqual([MongoHelper.map(firstUserOutput), MongoHelper.map(secondUserOutput)])
+      expect(expectedResponse).toEqual([firstUserOutput, secondUserOutput])
     })
 
     it('Should return users correctly with createdAt less than date that was provided', async () => {
-      const users = (await userCollection.insertMany([firstUser, secondUser, thirstUser])).insertedIds
-
-      const thirstUserOutput = await userCollection.findOne({ _id: users[2] }, { projection: { password: 0 } })
-
+      const insertUser = await insertUsers()
+      const thirstUserOutput = await users(insertUser[2])
       const expectedResponse = await sut.getAllUsers({ endDate: new Date('2023-01-10') })
-      expect(expectedResponse).toEqual([MongoHelper.map(thirstUserOutput)])
+      expect(expectedResponse).toEqual([thirstUserOutput])
     })
 
     it('Should return users correctly with the email that was provided', async () => {
-      const users = (await userCollection.insertMany([firstUser, secondUser, thirstUser])).insertedIds
-
-      const secondUserOutput = await userCollection.findOne({ _id: users[1] }, { projection: { password: 0 } })
-
+      const insertUser = await insertUsers()
+      const secondUserOutput = await users(insertUser[1])
       const expectedResponse = await sut.getAllUsers({ email: 'foo@gmail.com' })
-      expect(expectedResponse).toEqual([MongoHelper.map(secondUserOutput)])
+      expect(expectedResponse).toEqual([secondUserOutput])
     })
 
     it('Should return users correctly with all filters that was provided', async () => {
-      const users = (await userCollection.insertMany([firstUser, secondUser, thirstUser])).insertedIds
-
-      const firstUserOutput = await userCollection.findOne({ _id: users[0] }, { projection: { password: 0 } })
-      const secondUserOutput = await userCollection.findOne({ _id: users[1] }, { projection: { password: 0 } })
-      const thirstUserOutput = await userCollection.findOne({ _id: users[2] }, { projection: { password: 0 } })
+      const insertUser = await insertUsers()
+      const firstUserOutput = await users(insertUser[0])
+      const secondUserOutput = await users(insertUser[1])
+      const thirstUserOutput = await users(insertUser[2])
 
       const expectedResponse = await sut.getAllUsers({
         email: 'foo@gmail.com',
@@ -277,9 +279,9 @@ describe('UserRepositoryMongoAdapter', () => {
       })
       expect(expectedResponse).toEqual(
         [
-          MongoHelper.map(firstUserOutput),
-          MongoHelper.map(secondUserOutput),
-          MongoHelper.map(thirstUserOutput)
+          firstUserOutput,
+          secondUserOutput,
+          thirstUserOutput
         ]
       )
     })
