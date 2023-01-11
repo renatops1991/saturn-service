@@ -163,7 +163,47 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
     return user && MongoHelper.map(user)
   }
 
-  getAllUsers: (getUserDto: GetUserDto) => Promise<GetUserOutputDto[]>
+  async getAllUsers (getUserDto: GetUserDto): Promise<GetUserOutputDto[]> {
+    const users = await this.getUserCollection().find({
+      $or: [
+        {
+          createdAt: {
+            $lte: getUserDto.endDate
+          }
+        },
+        {
+          createdAt: {
+            $gte: getUserDto.startDate
+          }
+        },
+        {
+          email: getUserDto.email
+        },
+        {
+          document: getUserDto.document
+        }
+      ]
+    },
+    {
+      projection: {
+        _id: 1,
+        email: 1,
+        name: 1,
+        birthDate: 1,
+        address: 1,
+        age: 1,
+        phone: 1,
+        type: 1,
+        confirmUser: 1,
+        document: 1,
+        createdAt: 1,
+        updatedAt: 1
+      }
+    }).toArray()
+
+    return MongoHelper.mapCollection(users)
+  }
+
   private getUserCollection (): Collection {
     if (!this.userCollection) {
       this.userCollection = MongoHelper.getCollection('users')

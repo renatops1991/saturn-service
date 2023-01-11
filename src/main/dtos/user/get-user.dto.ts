@@ -1,5 +1,5 @@
 export interface GetUserDto {
-  userId: string
+  userId?: string
   email?: string
   document?: string
   startDate?: Date
