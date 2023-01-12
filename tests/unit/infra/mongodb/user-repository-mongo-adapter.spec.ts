@@ -285,5 +285,21 @@ describe('UserRepositoryMongoAdapter', () => {
         ]
       )
     })
+
+    it('Should return all users correctly if filters is not provided', async () => {
+      const insertUser = await insertUsers()
+      const firstUserOutput = await users(insertUser[0])
+      const secondUserOutput = await users(insertUser[1])
+      const thirstUserOutput = await users(insertUser[2])
+
+      const expectedResponse = await sut.getAllUsers({})
+      expect(expectedResponse).toEqual(
+        [
+          firstUserOutput,
+          secondUserOutput,
+          thirstUserOutput
+        ]
+      )
+    })
   })
 })
