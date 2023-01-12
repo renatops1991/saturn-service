@@ -7,13 +7,15 @@ import {
   UpdateUserController,
   UpdateConfirmUserController,
   UpdateUserPasswordController,
-  GetUserController
+  GetUserController,
+  GetAllUsersController
 } from '@/presentation/controllers/user'
 import {
   makeSignUpValidationCompositeFactory,
   makeSignInValidationCompositeFactory,
   makeUpdateUserValidationCompositeFactory,
-  makeUpdateUserPasswordValidationCompositeFactory
+  makeUpdateUserPasswordValidationCompositeFactory,
+  makeGetAllUsersValidationCompositeFactory
 } from '@/main/factories/validations'
 import { UserRepositoryMongoAdapter } from '@/infra/mongodb/user-repository-mongo-adapter'
 import { BcryptAdapter } from '@/infra/cryptography/bcrypt-adapter'
@@ -75,4 +77,13 @@ export const getUserFactory = (): IController => {
     new UserRepositoryMongoAdapter()
   )
   return new GetUserController(user)
+}
+
+export const getAllUsersFactory = (): IController => {
+  const user = new User(
+    new BcryptAdapter(12),
+    new JwtAdapter(process.env.JWT_SECRET),
+    new UserRepositoryMongoAdapter()
+  )
+  return new GetAllUsersController(user, makeGetAllUsersValidationCompositeFactory())
 }

@@ -5,9 +5,10 @@ import {
   updateConfirmUserFactory,
   updateUserFactory,
   updateUserPasswordFactory,
-  getUserFactory
+  getUserFactory,
+  getAllUsersFactory
 } from '@/main/factories/user-factory'
-import { authUser } from '@/main/middlewares'
+import { authAdmin, authUser } from '@/main/middlewares'
 import { Router } from 'express'
 
 export default (router: Router): void => {
@@ -15,6 +16,7 @@ export default (router: Router): void => {
   router.post('/sign-in', expressRouteAdapter(signInFactory()))
   router.put('/user', authUser, expressRouteAdapter(updateUserFactory()))
   router.get('/user', authUser, expressRouteAdapter(getUserFactory()))
+  router.get('/users', authAdmin, expressRouteAdapter(getAllUsersFactory()))
   router.patch('/user/confirm', authUser, expressRouteAdapter(updateConfirmUserFactory()))
   router.patch('/user/redefine-password', authUser, expressRouteAdapter(updateUserPasswordFactory()))
 }
