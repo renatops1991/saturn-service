@@ -41,8 +41,8 @@ describe('GetAllUsersController', () => {
     const { sut, userStub } = makeSut()
     const filterUserDto: FilterUserDto = {
       document: '11111111',
-      startDate: new Date(),
-      endDate: new Date()
+      startDate: '2023-01-09',
+      endDate: '2023-01-10'
     }
     const getAllUserSpy = jest
       .spyOn(userStub, 'getAllUsers')
@@ -54,8 +54,8 @@ describe('GetAllUsersController', () => {
     const { sut } = makeSut()
     const filterUserDto: FilterUserDto = {
       document: '11111111',
-      startDate: new Date(),
-      endDate: new Date()
+      startDate: '2023-01-09',
+      endDate: '2023-01-10'
     }
     const users = await sut.handle(filterUserDto)
     expect(users.statusCode).toEqual(200)
@@ -66,8 +66,8 @@ describe('GetAllUsersController', () => {
     const { sut, validationStub } = makeSut()
     const filterUserDto: FilterUserDto = {
       document: '11111111',
-      startDate: new Date(),
-      endDate: new Date()
+      startDate: '2023-01-09',
+      endDate: '2023-01-10'
     }
     const validateSpy = jest
       .spyOn(validationStub, 'validate')
@@ -80,8 +80,8 @@ describe('GetAllUsersController', () => {
     const filterUserDto: FilterUserDto = {
       document: '11111111',
       email: 'foo@example',
-      startDate: new Date(),
-      endDate: new Date()
+      startDate: '2023-01-09',
+      endDate: '2023-01-10'
     }
     jest
       .spyOn(validationStub, 'validate')
@@ -95,8 +95,8 @@ describe('GetAllUsersController', () => {
     const { sut, userStub } = makeSut()
     const filterUserDto: FilterUserDto = {
       document: '11111111',
-      startDate: new Date(),
-      endDate: new Date()
+      startDate: '2023-01-09',
+      endDate: '2023-01-10'
     }
     jest
       .spyOn(userStub, 'getAllUsers')

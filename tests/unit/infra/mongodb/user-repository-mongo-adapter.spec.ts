@@ -231,7 +231,7 @@ describe('UserRepositoryMongoAdapter', () => {
   describe('getAllUsers', () => {
     const sut = makeSut()
     const firstUser = fixtureFullUser()
-    const secondUser = Object.assign({ ...fixtureFullUser(), email: 'foo@gmail.com' })
+    const secondUser = Object.assign({ ...fixtureFullUser(), email: 'bar@gmail.com' })
     const thirstUser = Object.assign({ ...fixtureFullUser(), createdAt: new Date('2023-01-09') })
 
     const insertUsers = async (): Promise<any> => {
@@ -247,21 +247,21 @@ describe('UserRepositoryMongoAdapter', () => {
       const insertUser = await insertUsers()
       const firstUserOutput = await users(insertUser[0])
       const secondUserOutput = await users(insertUser[1])
-      const expectedResponse = await sut.getAllUsers({ startDate: new Date('2023-01-10') })
+      const expectedResponse = await sut.getAllUsers({ startDate: '2023-01-10' })
       expect(expectedResponse).toEqual([firstUserOutput, secondUserOutput])
     })
 
     it('Should return users correctly with createdAt less than date that was provided', async () => {
       const insertUser = await insertUsers()
       const thirstUserOutput = await users(insertUser[2])
-      const expectedResponse = await sut.getAllUsers({ endDate: new Date('2023-01-10') })
+      const expectedResponse = await sut.getAllUsers({ endDate: '2023-01-10' })
       expect(expectedResponse).toEqual([thirstUserOutput])
     })
 
     it('Should return users correctly with the email that was provided', async () => {
       const insertUser = await insertUsers()
       const secondUserOutput = await users(insertUser[1])
-      const expectedResponse = await sut.getAllUsers({ email: 'foo@gmail.com' })
+      const expectedResponse = await sut.getAllUsers({ email: 'bar@gmail.com' })
       expect(expectedResponse).toEqual([secondUserOutput])
     })
 
@@ -274,8 +274,8 @@ describe('UserRepositoryMongoAdapter', () => {
       const expectedResponse = await sut.getAllUsers({
         email: 'foo@gmail.com',
         document: '000000000000',
-        startDate: new Date(),
-        endDate: new Date()
+        startDate: '2023-01-10',
+        endDate: '2023-01-11'
       })
       expect(expectedResponse).toEqual(
         [

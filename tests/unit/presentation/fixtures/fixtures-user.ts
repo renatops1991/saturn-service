@@ -48,8 +48,8 @@ export const fixtureLoadUser = (): LoadUserDto => ({
 export const fixtureFilterUser = (): FilterUserDto => ({
   email: 'foo@example.com',
   document: '000000000000',
-  startDate: new Date(),
-  endDate: new Date()
+  startDate: '2023-01-09',
+  endDate: '2023-01-10'
 })
 
 export const fixtureUpdateConfirmUser = (): UpdateConfirmUserDto => ({
