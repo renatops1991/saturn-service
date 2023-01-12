@@ -1,12 +1,12 @@
 import { setupApp } from '@/main/config/app'
 import { MongoHelper } from '@/infra/mongodb/mongo-helper'
 import { fixtureUpdateUser } from '@/tests/unit/presentation/fixtures/fixtures-user'
-import { Express } from 'express'
 import { hash } from 'bcrypt'
 import { sign } from 'jsonwebtoken'
 import request from 'supertest'
 import dotenv from 'dotenv'
-import { Collection, InsertOneResult } from 'mongodb'
+import type { Express } from 'express'
+import type { Collection, InsertOneResult } from 'mongodb'
 
 let userCollection: Collection
 let app: Express
@@ -15,7 +15,7 @@ dotenv.config()
 describe('User routes', () => {
   beforeAll(async () => {
     app = await setupApp()
-    await MongoHelper.connect(process.env.MONGODB_URL_TEST)
+    await MongoHelper.connect(process.env.MONGODB_URL_TEST as string)
   })
 
   afterAll(async () => {
@@ -35,7 +35,7 @@ describe('User routes', () => {
       password,
       role: 'admin',
       confirmUser: false,
-      accessToken: sign('foo', process.env.JWT_SECRET)
+      accessToken: sign('foo', process.env.JWT_SECRET as string)
     })
   }
   describe('Create', () => {
@@ -80,7 +80,7 @@ describe('User routes', () => {
     it('Should update confirmUser field on succeeds', async () => {
       const createUser = await makeUser()
       const id = createUser.insertedId
-      const accessToken = sign({ id }, process.env.JWT_SECRET)
+      const accessToken = sign({ id }, process.env.JWT_SECRET as string)
       await userCollection.updateOne(
         {
           _id: id
@@ -104,7 +104,7 @@ describe('User routes', () => {
     it('Should update user fields on succeeds', async () => {
       const createUser = await makeUser()
       const id = createUser.insertedId
-      const accessToken = sign({ id }, process.env.JWT_SECRET)
+      const accessToken = sign({ id }, process.env.JWT_SECRET as string)
       await userCollection.updateOne(
         {
           _id: id
@@ -139,7 +139,7 @@ describe('User routes', () => {
       )
       await request(app)
         .patch('/api/user/redefine-password')
-        .set('x-access-token', user.accessToken)
+        .set('x-access-token', user?.accessToken)
         .send({
           password: 'bar',
           passwordConfirmation: 'bar'
@@ -163,7 +163,7 @@ describe('User routes', () => {
       )
       await request(app)
         .get('/api/user')
-        .set('x-access-token', user.accessToken)
+        .set('x-access-token', user?.accessToken)
         .expect(200)
     })
   })
@@ -183,7 +183,7 @@ describe('User routes', () => {
       )
       await request(app)
         .get('/api/users')
-        .set('x-access-token', user.accessToken)
+        .set('x-access-token', user?.accessToken)
         .query({ email: 'john@example.com' })
         .expect(200)
     })

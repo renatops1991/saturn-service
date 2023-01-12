@@ -1,4 +1,4 @@
-import { ErrorsTypeEnum } from '@/presentation/enum/errors-type-enum'
+import type { ErrorsTypeEnum } from '@/presentation/enum/errors-type-enum'
 
 export abstract class CustomError extends Error {
   stack?: string

@@ -5,8 +5,9 @@ import {
   fixtureFullUser,
   fixtureUpdateUser, fixtureUpdateUserOutput
 } from '@/tests/unit/presentation/fixtures/fixtures-user'
-import { Collection } from 'mongodb'
+import { type Collection, type ObjectId } from 'mongodb'
 import MockDate from 'mockdate'
+import { type LoadUserDto } from '@/main/dtos/user'
 
 const makeSut = (): UserRepositoryMongoAdapter => {
   return new UserRepositoryMongoAdapter()
@@ -15,7 +16,7 @@ const makeSut = (): UserRepositoryMongoAdapter => {
 let userCollection: Collection
 describe('UserRepositoryMongoAdapter', () => {
   beforeAll(async () => {
-    await MongoHelper.connect(process.env.MONGODB_URL)
+    await MongoHelper.connect(process.env.MONGODB_URL as string)
     MockDate.set(new Date())
   })
 
@@ -43,7 +44,7 @@ describe('UserRepositoryMongoAdapter', () => {
     it('Should return correct an user if loadByEmail method on succeeds', async () => {
       const sut = makeSut()
       await userCollection.insertOne(fixtureCreateUser())
-      const expectedUser = await sut.loadByEmail('foo@example.com')
+      const expectedUser = await sut.loadByEmail('foo@example.com') as LoadUserDto
       expect(expectedUser).toBeTruthy()
       expect(expectedUser.id).toBeTruthy()
       expect(expectedUser.name).toEqual(fixtureCreateUser().name)
@@ -63,14 +64,14 @@ describe('UserRepositoryMongoAdapter', () => {
       const createUser = await userCollection.insertOne(fixtureCreateUser())
       const user = await userCollection.findOne({ _id: createUser.insertedId })
 
-      expect(user.accessToken).toBeFalsy()
+      expect(user?.accessToken).toBeFalsy()
 
       const userId = MongoHelper.map(user).id
       await sut.updateAccessToken(userId, 'token')
       const expectedResponse = await userCollection.findOne({ _id: userId })
 
-      expect(expectedResponse.accessToken).toBeTruthy()
-      expect(expectedResponse.accessToken).toEqual('token')
+      expect(expectedResponse?.accessToken).toBeTruthy()
+      expect(expectedResponse?.accessToken).toEqual('token')
     })
   })
 
@@ -87,7 +88,7 @@ describe('UserRepositoryMongoAdapter', () => {
         ...fixtureCreateUser(),
         accessToken: 'accessToken'
       }))
-      const expectedResponse = await sut.loadByToken('accessToken')
+      const expectedResponse = await sut.loadByToken('accessToken') as LoadUserDto
       expect(expectedResponse).toBeTruthy()
       expect(expectedResponse.id).toBeTruthy()
     })
@@ -99,7 +100,7 @@ describe('UserRepositoryMongoAdapter', () => {
         accessToken: 'accessToken',
         role: 'admin'
       }))
-      const expectedResponse = await sut.loadByToken('accessToken', 'admin')
+      const expectedResponse = await sut.loadByToken('accessToken', 'admin') as LoadUserDto
       expect(expectedResponse).toBeTruthy()
       expect(expectedResponse.id).toBeTruthy()
     })
@@ -121,8 +122,8 @@ describe('UserRepositoryMongoAdapter', () => {
       })
 
       const expectedResponse = await userCollection.findOne({ _id: userId })
-      expect(expectedResponse.confirmUser).toBeTruthy()
-      expect(expectedResponse.updatedAt).toEqual(new Date())
+      expect(expectedResponse?.confirmUser).toBeTruthy()
+      expect(expectedResponse?.updatedAt).toEqual(new Date())
     })
   })
 
@@ -198,8 +199,8 @@ describe('UserRepositoryMongoAdapter', () => {
       })
 
       const expectedResponse = await userCollection.findOne({ _id: userId })
-      expect(expectedResponse.password).toEqual('bar')
-      expect(expectedResponse.updatedAt).toEqual(new Date())
+      expect(expectedResponse?.password).toEqual('bar')
+      expect(expectedResponse?.updatedAt).toEqual(new Date())
     })
   })
 
@@ -238,7 +239,7 @@ describe('UserRepositoryMongoAdapter', () => {
       return (await userCollection.insertMany([firstUser, secondUser, thirstUser])).insertedIds
     }
 
-    const users = async (id: number): Promise<any> => {
+    const users = async (id: ObjectId): Promise<any> => {
       const user = await userCollection.findOne({ _id: id }, { projection: { password: 0 } })
       return MongoHelper.map(user)
     }

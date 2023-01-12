@@ -1,9 +1,9 @@
-import { IUser } from '@/domain/protocols/user'
-import { UpdateConfirmUserDto } from '@/main/dtos/user'
+import type { IUser } from '@/domain/protocols/user'
+import type { UpdateConfirmUserDto } from '@/main/dtos/user'
 import { MissingMandatoryParamError } from '@/presentation/errors'
 import { noContent, serverError } from '@/presentation/http-helper'
-import { IController } from '@/presentation/protocols/controller'
-import { IHttpResponse } from '@/presentation/protocols/http'
+import type { IController } from '@/presentation/protocols/controller'
+import type { IHttpResponse } from '@/presentation/protocols/http'
 
 export class UpdateConfirmUserController implements IController {
   constructor (

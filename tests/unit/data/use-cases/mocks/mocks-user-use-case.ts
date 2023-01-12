@@ -1,15 +1,15 @@
-import { IHashed } from '@/data/protocols/hashed'
-import { IUserRepository } from '@/data/protocols/user-repository'
+import { type IHashed } from '@/data/protocols/hashed'
+import { type IUserRepository } from '@/data/protocols/user-repository'
 import {
-  UpdateConfirmUserDto,
-  UpdateUserOutputDto,
-  UpdateUserDto,
-  LoadUserDto,
-  SignUpUserDto,
-  UserOutputDto,
-  UpdateUserPasswordDto,
-  GetUserOutputDto,
-  FilterUserDto
+  type UpdateConfirmUserDto,
+  type UpdateUserOutputDto,
+  type UpdateUserDto,
+  type LoadUserDto,
+  type SignUpUserDto,
+  type UserOutputDto,
+  type UpdateUserPasswordDto,
+  type GetUserOutputDto,
+  type FilterUserDto
 } from '@/main/dtos/user'
 import {
   fixtureUserOutput,
@@ -17,12 +17,12 @@ import {
   fixtureUpdateUserOutput
 } from '@/tests/unit/presentation/fixtures/fixtures-user'
 
-import { ICryptography } from '@/data/protocols/cryptography'
+import { type ICryptography } from '@/data/protocols/cryptography'
 
 export const mockHashed = (): IHashed => {
   class HashedStub implements IHashed {
     async hash (input: string): Promise<string> {
-      return await new Promise(resolve => resolve('hashed'))
+      return await new Promise(resolve => { resolve('hashed') })
     }
 
     async compare (value: string, hash: string): Promise<boolean> {
@@ -48,31 +48,31 @@ export const mockCryptography = (): ICryptography => {
 export const mockUserRepository = (): IUserRepository => {
   class UserRepositoryStub implements IUserRepository {
     async create (userDto: SignUpUserDto): Promise<UserOutputDto> {
-      return await new Promise(resolve => resolve(fixtureUserOutput()))
+      return await new Promise(resolve => { resolve(fixtureUserOutput()) })
     }
 
     async loadByEmail (email: string): Promise<LoadUserDto> {
-      return await new Promise(resolve => resolve(fixtureLoadUser()))
+      return await new Promise(resolve => { resolve(fixtureLoadUser()) })
     }
 
     async updateAccessToken (id: string, token: string): Promise<void> {
-      return await new Promise(resolve => resolve())
+      await Promise.resolve()
     }
 
     async loadByToken (accessToken: string, role?: string): Promise<LoadUserDto> {
-      return await new Promise(resolve => resolve(fixtureLoadUser()))
+      return await new Promise(resolve => { resolve(fixtureLoadUser()) })
     }
 
     async updateConfirmUser (updateConfirmUserDto: UpdateConfirmUserDto): Promise<void> {
-      return await Promise.resolve()
+      await Promise.resolve()
     }
 
     async update (updateUserDto: UpdateUserDto): Promise<UpdateUserOutputDto> {
-      return await new Promise(resolve => resolve(fixtureUpdateUserOutput()))
+      return await new Promise(resolve => { resolve(fixtureUpdateUserOutput()) })
     }
 
     async updateUserPassword (updateUserPassword: Omit<UpdateUserPasswordDto, 'passwordConfirmation'>): Promise<void> {
-      return await Promise.resolve()
+      await Promise.resolve()
     }
 
     async getUser (userId: string): Promise<GetUserOutputDto> {

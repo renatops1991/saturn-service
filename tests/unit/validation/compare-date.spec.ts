@@ -21,7 +21,7 @@ describe('CompareDate', () => {
       startDate, endDate
     })
     expect(expectedError).toEqual(new InvalidDateError('startDate').serializeErrors())
-    expect(expectedError.message).toEqual('startDate field cannot greater than endDate field')
+    expect(expectedError?.message).toEqual('startDate field cannot greater than endDate field')
   })
 
   it('Should return null if validation on succeeds', async () => {

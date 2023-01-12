@@ -1,4 +1,4 @@
-import { IUser } from '@/domain/protocols/user'
+import type { IUser } from '@/domain/protocols/user'
 import { GetUserController } from '@/presentation/controllers/user'
 import { ServerError } from '@/presentation/errors'
 import { serverError, success } from '@/presentation/http-helper'

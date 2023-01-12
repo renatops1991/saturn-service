@@ -1,8 +1,8 @@
-import { IAuthentication } from '@/domain/protocols/authentication'
-import { IController } from '@/presentation/protocols/controller'
-import { IHttpResponse } from '@/presentation/protocols/http'
-import { IValidation } from '@/presentation/protocols/validation'
-import { SignInUserDto } from '@/main/dtos/user/signin-user.dto'
+import type { IAuthentication } from '@/domain/protocols/authentication'
+import type { IController } from '@/presentation/protocols/controller'
+import type { IHttpResponse } from '@/presentation/protocols/http'
+import type { IValidation } from '@/presentation/protocols/validation'
+import type { SignInUserDto } from '@/main/dtos/user/signin-user.dto'
 import {
   badRequest,
   serverError,

@@ -1,5 +1,5 @@
 import { MissingMandatoryParamError } from '@/presentation/errors'
-import { IValidation } from '@/presentation/protocols/validation'
+import type { IValidation } from '@/presentation/protocols/validation'
 import { ValidationComposite } from '@/validation/validation-composite'
 import { mockValidation } from '../presentation/mocks/mocks-user-validation'
 
@@ -24,7 +24,7 @@ describe('ValidationComposite', () => {
       .mockReturnValueOnce(new MissingMandatoryParamError('email').serializeErrors())
     const expectedError = sut.validate({ name: 'foo' })
     expect(expectedError).toEqual(new MissingMandatoryParamError('email').serializeErrors())
-    expect(expectedError.message).toEqual('Missing mandatory parameter')
+    expect(expectedError?.message).toEqual('Missing mandatory parameter')
   })
 
   it('Should return the first error if more then one validation fails', async () => {
@@ -37,7 +37,7 @@ describe('ValidationComposite', () => {
       .mockReturnValueOnce(new MissingMandatoryParamError('email').serializeErrors())
     const expectedError = sut.validate({ name: '' })
     expect(expectedError).toEqual(new MissingMandatoryParamError('name').serializeErrors())
-    expect(expectedError.message).toEqual('Missing mandatory parameter')
+    expect(expectedError?.message).toEqual('Missing mandatory parameter')
   })
 
   it('Should return null if validations on succeeds', async () => {

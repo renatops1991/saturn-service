@@ -1,11 +1,12 @@
-import { IUser } from '@/domain/protocols/user'
-import { IValidation } from '@/presentation/protocols/validation'
+import type { IUser } from '@/domain/protocols/user'
+import type { IValidation } from '@/presentation/protocols/validation'
 import { UpdateUserPasswordController } from '@/presentation/controllers/user/update-user-password-controller'
 import { mockValidation } from '@/tests/unit/presentation/mocks/mocks-user-validation'
 import { mocksUserController } from '@/tests/unit/presentation/mocks/mocks-user-controller'
 import { fixtureUpdateUserPasswordRequest } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { MissingMandatoryParamError, InvalidParamError, ServerError } from '@/presentation/errors'
 import { noContent, serverError } from '@/presentation/http-helper'
+import { type UpdateUserPasswordDto } from '@/main/dtos/user'
 
 type SutTypes = {
   userStub: IUser
@@ -28,7 +29,7 @@ describe('UpdateUserPasswordController', () => {
     const { sut, validationStub } = makeSut()
     const validateSpy = jest
       .spyOn(validationStub, 'validate')
-    await sut.handle(fixtureUpdateUserPasswordRequest())
+    await sut.handle(fixtureUpdateUserPasswordRequest() as UpdateUserPasswordDto)
     const expectedResponse = fixtureUpdateUserPasswordRequest()
     expect(validateSpy).toHaveBeenCalledWith(expectedResponse)
   })
@@ -40,7 +41,7 @@ describe('UpdateUserPasswordController', () => {
       .spyOn(validationStub, 'validate')
       .mockReturnValueOnce(new MissingMandatoryParamError('password').serializeErrors())
     delete makeUpdateUserPassword.password
-    const expectedResponse = await sut.handle(makeUpdateUserPassword)
+    const expectedResponse = await sut.handle(makeUpdateUserPassword as UpdateUserPasswordDto)
     expect(expectedResponse.statusCode).toEqual(400)
     expect(expectedResponse.body).toEqual(new MissingMandatoryParamError('password').serializeErrors())
   })
@@ -52,7 +53,7 @@ describe('UpdateUserPasswordController', () => {
       .spyOn(validationStub, 'validate')
       .mockReturnValueOnce(new MissingMandatoryParamError('passwordConfirmation').serializeErrors())
     delete makeUpdateUserPassword.password
-    const expectedResponse = await sut.handle(makeUpdateUserPassword)
+    const expectedResponse = await sut.handle(makeUpdateUserPassword as UpdateUserPasswordDto)
     expect(expectedResponse.statusCode).toEqual(400)
     expect(expectedResponse.body).toEqual(new MissingMandatoryParamError('passwordConfirmation').serializeErrors())
   })
@@ -64,7 +65,7 @@ describe('UpdateUserPasswordController', () => {
     jest
       .spyOn(validationStub, 'validate')
       .mockReturnValueOnce(new InvalidParamError('passwordConfirmation').serializeErrors())
-    const expectedResponse = await sut.handle(makeUpdateUserPassword)
+    const expectedResponse = await sut.handle(makeUpdateUserPassword as UpdateUserPasswordDto)
     expect(expectedResponse.statusCode).toEqual(400)
     expect(expectedResponse.body).toEqual(new InvalidParamError('passwordConfirmation').serializeErrors())
   })
@@ -74,13 +75,13 @@ describe('UpdateUserPasswordController', () => {
     const makeUpdateUserPassword = fixtureUpdateUserPasswordRequest()
     const redefineUserPasswordSpy = jest
       .spyOn(userStub, 'updateUserPassword')
-    await sut.handle(makeUpdateUserPassword)
+    await sut.handle(makeUpdateUserPassword as UpdateUserPasswordDto)
     expect(redefineUserPasswordSpy).toHaveBeenCalledWith(fixtureUpdateUserPasswordRequest())
   })
 
   it('Should return 204 if redefine user password on succeeds', async () => {
     const { sut } = makeSut()
-    const expectedResponse = await sut.handle(fixtureUpdateUserPasswordRequest())
+    const expectedResponse = await sut.handle(fixtureUpdateUserPasswordRequest() as UpdateUserPasswordDto)
     expect(expectedResponse).toEqual(noContent())
   })
 
@@ -89,7 +90,7 @@ describe('UpdateUserPasswordController', () => {
     jest
       .spyOn(userStub, 'updateUserPassword')
       .mockImplementationOnce(() => { throw new Error() })
-    const expectedResponse = await sut.handle(fixtureUpdateUserPasswordRequest())
+    const expectedResponse = await sut.handle(fixtureUpdateUserPasswordRequest() as UpdateUserPasswordDto)
     expect(expectedResponse.statusCode).toEqual(500)
     expect(expectedResponse).toEqual(serverError(new ServerError(expectedResponse.body.stack)))
   })

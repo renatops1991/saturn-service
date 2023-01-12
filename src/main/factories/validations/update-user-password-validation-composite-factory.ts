@@ -1,4 +1,4 @@
-import { IValidation } from '@/presentation/protocols/validation'
+import type { IValidation } from '@/presentation/protocols/validation'
 import { RequiredField } from '@/validation/required-field'
 import { ValidationComposite } from '@/validation/validation-composite'
 import { CompareField } from '@/validation/compare-field'

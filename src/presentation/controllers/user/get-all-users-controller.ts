@@ -1,9 +1,9 @@
-import { IUser } from '@/domain/protocols/user'
-import { FilterUserDto } from '@/main/dtos/user'
+import type { IUser } from '@/domain/protocols/user'
+import type { FilterUserDto } from '@/main/dtos/user'
 import { badRequest, serverError, success } from '@/presentation/http-helper'
-import { IController } from '@/presentation/protocols/controller'
-import { IHttpResponse } from '@/presentation/protocols/http'
-import { IValidation } from '@/presentation/protocols/validation'
+import type { IController } from '@/presentation/protocols/controller'
+import type { IHttpResponse } from '@/presentation/protocols/http'
+import type { IValidation } from '@/presentation/protocols/validation'
 
 export class GetAllUsersController implements IController {
   constructor (

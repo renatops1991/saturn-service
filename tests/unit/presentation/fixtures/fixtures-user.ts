@@ -1,16 +1,16 @@
 
-import { AddressDto } from '@/main/dtos/address/address.dto'
+import { type AddressDto } from '@/main/dtos/address/address.dto'
 import {
-  SignUpUserDto,
-  LoadUserDto,
-  UserOutputDto,
-  SignInUserDto,
-  UpdateConfirmUserDto,
-  UpdateUserPasswordDto,
-  FilterUserDto
+  type SignUpUserDto,
+  type LoadUserDto,
+  type UserOutputDto,
+  type SignInUserDto,
+  type UpdateConfirmUserDto,
+  type UpdateUserPasswordDto,
+  type FilterUserDto
 } from '@/main/dtos/user'
-import { UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
-import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
+import { type UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
+import { type UpdateUserDto } from '@/main/dtos/user/update-user.dto'
 
 export const fixtureCreateUserRequest = (): SignUpUserDto => ({
   name: 'John Foo Bar',
@@ -98,7 +98,7 @@ UpdateUserPasswordDto, 'passwordConfirmation'> => ({
   password: '123'
 })
 
-export const fixtureUpdateUserPasswordRequest = (): UpdateUserPasswordDto => ({
+export const fixtureUpdateUserPasswordRequest = (): Partial<UpdateUserPasswordDto> => ({
   userId: 'foo',
   password: '123',
   passwordConfirmation: '123'

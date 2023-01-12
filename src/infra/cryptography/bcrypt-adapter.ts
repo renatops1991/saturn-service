@@ -1,4 +1,4 @@
-import { IHashed } from '@/data/protocols/hashed'
+import type { IHashed } from '@/data/protocols/hashed'
 import bcrypt from 'bcrypt'
 
 export class BcryptAdapter implements IHashed {

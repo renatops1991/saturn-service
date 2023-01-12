@@ -1,5 +1,5 @@
 import { InvalidDateError } from '@/presentation/errors/invalid-date-error'
-import { IValidation } from '@/presentation/protocols/validation'
+import type { IValidation } from '@/presentation/protocols/validation'
 
 export class CompareDate implements IValidation {
   constructor (

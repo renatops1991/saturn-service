@@ -1,4 +1,4 @@
-import { Address } from '@/domain/entities/address'
+import type { Address } from '@/domain/entities/address'
 
 export type UserType = {
   userId: string

@@ -1,6 +1,6 @@
 import { User } from '@/data/use-cases/user'
 import { UserBuilder } from '@/data/builders/user-builder'
-import { IController } from '@/presentation/protocols/controller'
+import { type IController } from '@/presentation/protocols/controller'
 import {
   SignUpUserController,
   SignInUserController,
@@ -23,10 +23,13 @@ import { JwtAdapter } from '@/infra/cryptography/jwt-adapter'
 import dotenv from 'dotenv'
 
 dotenv.config()
+
+const JWT_SECRET_TOKEN = process.env.JWT_SECRET as string
+
 export const signUpFactory = (): IController => {
   const user = new User(
     new BcryptAdapter(12),
-    new JwtAdapter(process.env.JWT_SECRET),
+    new JwtAdapter(JWT_SECRET_TOKEN),
     new UserRepositoryMongoAdapter(),
     new UserBuilder()
   )
@@ -36,7 +39,7 @@ export const signUpFactory = (): IController => {
 export const signInFactory = (): IController => {
   const authentication = new User(
     new BcryptAdapter(12),
-    new JwtAdapter(process.env.JWT_SECRET),
+    new JwtAdapter(JWT_SECRET_TOKEN),
     new UserRepositoryMongoAdapter()
   )
   return new SignInUserController(authentication, makeSignInValidationCompositeFactory())
@@ -45,7 +48,7 @@ export const signInFactory = (): IController => {
 export const updateConfirmUserFactory = (): IController => {
   const user = new User(
     new BcryptAdapter(12),
-    new JwtAdapter(process.env.JWT_SECRET),
+    new JwtAdapter(JWT_SECRET_TOKEN),
     new UserRepositoryMongoAdapter()
   )
   return new UpdateConfirmUserController(user)
@@ -54,7 +57,7 @@ export const updateConfirmUserFactory = (): IController => {
 export const updateUserFactory = (): IController => {
   const user = new User(
     new BcryptAdapter(12),
-    new JwtAdapter(process.env.JWT_SECRET),
+    new JwtAdapter(JWT_SECRET_TOKEN),
     new UserRepositoryMongoAdapter(),
     new UserBuilder()
   )
@@ -64,7 +67,7 @@ export const updateUserFactory = (): IController => {
 export const updateUserPasswordFactory = (): IController => {
   const user = new User(
     new BcryptAdapter(12),
-    new JwtAdapter(process.env.JWT_SECRET),
+    new JwtAdapter(JWT_SECRET_TOKEN),
     new UserRepositoryMongoAdapter()
   )
   return new UpdateUserPasswordController(user, makeUpdateUserPasswordValidationCompositeFactory())
@@ -73,7 +76,7 @@ export const updateUserPasswordFactory = (): IController => {
 export const getUserFactory = (): IController => {
   const user = new User(
     new BcryptAdapter(12),
-    new JwtAdapter(process.env.JWT_SECRET),
+    new JwtAdapter(JWT_SECRET_TOKEN),
     new UserRepositoryMongoAdapter()
   )
   return new GetUserController(user)
@@ -82,7 +85,7 @@ export const getUserFactory = (): IController => {
 export const getAllUsersFactory = (): IController => {
   const user = new User(
     new BcryptAdapter(12),
-    new JwtAdapter(process.env.JWT_SECRET),
+    new JwtAdapter(JWT_SECRET_TOKEN),
     new UserRepositoryMongoAdapter()
   )
   return new GetAllUsersController(user, makeGetAllUsersValidationCompositeFactory())

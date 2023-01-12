@@ -1,7 +1,7 @@
 
-import { ICryptography } from '@/data/protocols/cryptography'
-import { IHashed } from '@/data/protocols/hashed'
-import { IUserRepository } from '@/data/protocols/user-repository'
+import type { ICryptography } from '@/data/protocols/cryptography'
+import type { IHashed } from '@/data/protocols/hashed'
+import type { IUserRepository } from '@/data/protocols/user-repository'
 import { User } from '@/data/use-cases/user'
 import {
   fixtureCreateUser,
@@ -15,7 +15,7 @@ import {
   fixtureFilterUser
 } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockCryptography, mockHashed, mockUserRepository } from '@/tests/unit/data/use-cases/mocks/mocks-user-use-case'
-import { IUserBuilder } from '@/data/protocols/user-builder'
+import type { IUserBuilder } from '@/data/protocols/user-builder'
 import { mockUserBuilder } from '@/tests/unit/data/builders/mocks/mock-user-builder'
 import { fixtureBuildUser } from '@/tests/unit/data/builders/fixtures/fixtures-user-builder'
 import MockDate from 'mockdate'
@@ -177,7 +177,7 @@ describe('User use case', () => {
       const user = fixtureLoginUser()
       jest
         .spyOn(userRepositoryStub, 'loadByEmail')
-        .mockReturnValueOnce(null)
+        .mockResolvedValue(null)
       const expectedResponse = await sut.auth(user)
       expect(expectedResponse).toBeNull()
     })
@@ -206,7 +206,7 @@ describe('User use case', () => {
       const user = fixtureLoginUser()
       jest
         .spyOn(hashedStub, 'compare')
-        .mockReturnValueOnce(new Promise(resolve => resolve(false)))
+        .mockReturnValueOnce(new Promise(resolve => { resolve(false) }))
       const expectedResponse = await sut.auth(user)
       expect(expectedResponse).toBeNull()
     })
@@ -262,7 +262,7 @@ describe('User use case', () => {
       const { sut, cryptographyStub } = makeSut()
       jest
         .spyOn(cryptographyStub, 'decrypt')
-        .mockResolvedValueOnce(null)
+        .mockResolvedValue(null as any)
       const expectedResponse = await sut.loadByToken('accessToken', 'admin')
       expect(expectedResponse).toBeNull()
     })

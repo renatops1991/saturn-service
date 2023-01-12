@@ -1,5 +1,5 @@
 import { makeSignUpValidationCompositeFactory } from '@/main/factories/validations/signup-validation-composite-factory'
-import { IValidation } from '@/presentation/protocols/validation'
+import type { IValidation } from '@/presentation/protocols/validation'
 import { CompareField } from '@/validation/compare-field'
 import { EmailValidation } from '@/validation/email-validation'
 import { RequiredField } from '@/validation/required-field'

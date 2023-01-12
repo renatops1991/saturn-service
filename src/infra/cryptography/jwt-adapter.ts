@@ -1,4 +1,4 @@
-import { ICryptography } from '@/data/protocols/cryptography'
+import type { ICryptography } from '@/data/protocols/cryptography'
 import jwt from 'jsonwebtoken'
 
 export class JwtAdapter implements ICryptography {

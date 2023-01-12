@@ -1,7 +1,7 @@
 
-import { IAuthentication } from '@/domain/protocols/authentication'
-import { IUser } from '@/domain/protocols/user'
-import { SignUpUserDto } from '@/main/dtos/user/signup-user.dto'
+import type { IAuthentication } from '@/domain/protocols/authentication'
+import type { IUser } from '@/domain/protocols/user'
+import type { SignUpUserDto } from '@/main/dtos/user/signup-user.dto'
 import { EmailInUseError } from '@/presentation/errors'
 import {
   badRequest,
@@ -9,9 +9,9 @@ import {
   forbidden,
   serverError
 } from '@/presentation/http-helper'
-import { IController } from '@/presentation/protocols/controller'
-import { IHttpResponse } from '@/presentation/protocols/http'
-import { IValidation } from '@/presentation/protocols/validation'
+import type { IController } from '@/presentation/protocols/controller'
+import type { IHttpResponse } from '@/presentation/protocols/http'
+import type { IValidation } from '@/presentation/protocols/validation'
 export class SignUpUserController implements IController {
   constructor (
     private readonly user: IUser,

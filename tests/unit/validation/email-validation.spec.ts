@@ -1,5 +1,5 @@
 import { EmailValidation } from '@/validation/email-validation'
-import { IEmailValidator } from '@/validation/protocols/email-validator'
+import type { IEmailValidator } from '@/validation/protocols/email-validator'
 import { mockEmailValidator } from '@/tests/unit/presentation/mocks/mocks-user-validation'
 import { InvalidParamError } from '@/presentation/errors'
 
@@ -40,6 +40,14 @@ describe('EmailValidation', () => {
     jest
       .spyOn(emailValidatorStub, 'isValid')
     const expectedError = sut.validate({ email: 'foo@bar.com' })
+    expect(expectedError).toBeNull()
+  })
+
+  it('Should return null if email is not provided', () => {
+    const { sut, emailValidatorStub } = makeSut()
+    jest
+      .spyOn(emailValidatorStub, 'isValid')
+    const expectedError = sut.validate({ })
     expect(expectedError).toBeNull()
   })
 })

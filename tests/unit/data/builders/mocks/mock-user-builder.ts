@@ -1,7 +1,7 @@
-import { IUserBuilder } from '@/data/protocols/user-builder'
-import { UserBasicInfoType, UserType } from '@/data/types'
-import { SignUpUserDto } from '@/main/dtos/user'
-import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
+import type { IUserBuilder } from '@/data/protocols/user-builder'
+import type { UserBasicInfoType, UserType } from '@/data/types'
+import type { SignUpUserDto } from '@/main/dtos/user'
+import type { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
 import {
   fixtureBuildUser,
   fixtureBuildUserBasicInfo

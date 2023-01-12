@@ -1,8 +1,8 @@
-import { MongoClient, Collection } from 'mongodb'
+import { MongoClient, type Collection } from 'mongodb'
 
 export const MongoHelper = {
-  client: null as MongoClient,
-  uri: null as string,
+  client: null as unknown as MongoClient,
+  uri: null as unknown as string,
 
   async connect (uri: string): Promise<void> {
     this.uri = uri

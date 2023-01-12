@@ -1,5 +1,5 @@
-import { IController } from '@/presentation/protocols/controller'
-import { Request, Response, RequestHandler } from 'express'
+import type { IController } from '@/presentation/protocols/controller'
+import type { Request, Response, RequestHandler } from 'express'
 
 export const expressRouteAdapter = (controller: IController): RequestHandler =>
   async (request: Request, response: Response) => {

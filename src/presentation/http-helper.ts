@@ -1,6 +1,6 @@
 import { ServerError } from './errors/server-error'
 import { UnauthorizedError } from './errors/unauthorized-error'
-import { IHttpResponse } from './protocols/http'
+import type { IHttpResponse } from './protocols/http'
 
 export const badRequest = (error: Error): IHttpResponse => ({
   statusCode: 400,
@@ -14,7 +14,7 @@ export const forbidden = (error: Error): IHttpResponse => ({
 
 export const serverError = (error: Error): IHttpResponse => ({
   statusCode: 500,
-  body: new ServerError(error.stack).serializeErrors()
+  body: new ServerError(error.stack as string).serializeErrors()
 })
 
 export const success = <T= any>(data: T): IHttpResponse => ({

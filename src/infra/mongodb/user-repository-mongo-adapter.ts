@@ -1,6 +1,6 @@
-import { IUserRepository } from '@/data/protocols/user-repository'
+import type { IUserRepository } from '@/data/protocols/user-repository'
 import { MongoHelper } from './mongo-helper'
-import {
+import type {
   SignUpUserDto,
   LoadUserDto,
   UserOutputDto,
@@ -9,9 +9,9 @@ import {
   GetUserOutputDto,
   FilterUserDto
 } from '@/main/dtos/user'
-import { UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
-import { UpdateUserDto } from '@/main/dtos/user/update-user.dto'
-import { Collection, ObjectId } from 'mongodb'
+import { type UpdateUserOutputDto } from '@/main/dtos/user/update-user-output.dto'
+import { type UpdateUserDto } from '@/main/dtos/user/update-user.dto'
+import { type Collection, ObjectId } from 'mongodb'
 import * as utils from '@/main/utils'
 
 export class UserRepositoryMongoAdapter implements IUserRepository {
@@ -30,7 +30,7 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
     return MongoHelper.map(user)
   }
 
-  async loadByEmail (email: string): Promise<LoadUserDto> {
+  async loadByEmail (email: string): Promise<LoadUserDto | null> {
     const user = await this.getUserCollection().findOne(
       { email },
       {
@@ -47,7 +47,7 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
   async updateAccessToken (userId: string, token: string): Promise<void> {
     await this.getUserCollection().updateOne(
       {
-        _id: userId
+        _id: new ObjectId(userId)
       },
       {
         $set: {
@@ -57,7 +57,7 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
     )
   }
 
-  async loadByToken (accessToken: string, role?: string): Promise<LoadUserDto> {
+  async loadByToken (accessToken: string, role?: string): Promise<LoadUserDto | null> {
     const user = await this.getUserCollection().findOne({
       accessToken,
       $or: [
@@ -138,7 +138,7 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
     )
   }
 
-  async getUser (userId: string): Promise<GetUserOutputDto> {
+  async getUser (userId: string): Promise<GetUserOutputDto | null> {
     const user = await this.getUserCollection().findOne(
       {
         _id: new ObjectId(userId)
@@ -165,7 +165,7 @@ export class UserRepositoryMongoAdapter implements IUserRepository {
 
   async getAllUsers (filterUserDto: FilterUserDto): Promise<GetUserOutputDto[]> {
     const { startDate, endDate, email, document } = filterUserDto
-    const filter = !(startDate || endDate || email || document)
+    const filter = !(startDate ?? endDate ?? email ?? document)
       ? {}
       : {
           $or: [

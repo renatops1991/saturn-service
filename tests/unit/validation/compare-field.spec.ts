@@ -19,7 +19,7 @@ describe('CompareField', () => {
       password: '123', passwordConfirmation: 'foo'
     })
     expect(expectedError).toEqual(new InvalidParamError('passwordConfirmation').serializeErrors())
-    expect(expectedError.message).toEqual('Invalid param error')
+    expect(expectedError?.message).toEqual('Invalid param error')
   })
 
   it('Should return null if validation on succeeds', async () => {
