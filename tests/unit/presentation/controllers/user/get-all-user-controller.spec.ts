@@ -1,6 +1,6 @@
 import { IUser } from '@/domain/protocols/user'
 import { FilterUserDto } from '@/main/dtos/user'
-import { GetAllUserController } from '@/presentation/controllers/user/get-all-user-controller'
+import { GetAllUsersController } from '@/presentation/controllers/user/get-all-users-controller'
 import { badRequest, serverError, success } from '@/presentation/http-helper'
 import { IValidation } from '@/presentation/protocols/validation'
 import {
@@ -13,14 +13,14 @@ import { fixtureUpdateUserOutput } from '@/tests/unit/presentation/fixtures/fixt
 import MockDate from 'mockdate'
 
 type SutTypes = {
-  sut: GetAllUserController
+  sut: GetAllUsersController
   validationStub: IValidation
   userStub: IUser
 }
 const makeSut = (): SutTypes => {
   const userStub = mocksUserController()
   const validationStub = mockValidation()
-  const sut = new GetAllUserController(userStub, validationStub)
+  const sut = new GetAllUsersController(userStub, validationStub)
 
   return {
     sut,
@@ -29,7 +29,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-describe('getAllUserController', () => {
+describe('GetAllUsersController', () => {
   beforeAll(async () => {
     MockDate.set(new Date())
   })

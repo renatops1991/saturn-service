@@ -5,7 +5,7 @@ import { IController } from '@/presentation/protocols/controller'
 import { IHttpResponse } from '@/presentation/protocols/http'
 import { IValidation } from '@/presentation/protocols/validation'
 
-export class GetAllUserController implements IController {
+export class GetAllUsersController implements IController {
   constructor (
     private readonly user: IUser,
     private readonly validation: IValidation
