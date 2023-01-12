@@ -33,6 +33,7 @@ describe('User routes', () => {
       name: 'John Foo Bar',
       email: 'john@example.com',
       password,
+      role: 'admin',
       confirmUser: false,
       accessToken: sign('foo', process.env.JWT_SECRET)
     })
@@ -163,6 +164,27 @@ describe('User routes', () => {
       await request(app)
         .get('/api/user')
         .set('x-access-token', user.accessToken)
+        .expect(200)
+    })
+  })
+
+  describe('GetAllUsers', () => {
+    it('Should return users on succeeds', async () => {
+      const createUser = await makeUser()
+      const id = createUser.insertedId
+      const user = await userCollection.findOne(
+        {
+          _id: id
+        }, {
+          projection: {
+            accessToken: 1
+          }
+        }
+      )
+      await request(app)
+        .get('/api/users')
+        .set('x-access-token', user.accessToken)
+        .query({ email: 'john@example.com' })
         .expect(200)
     })
   })
