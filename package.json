@@ -1,6 +1,6 @@
 {
   "name": "saturn-service",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "The Saturn service is an API used for financial organization",
   "scripts": {
     "start": "node -r module-alias/register ./dist/main/server.js",

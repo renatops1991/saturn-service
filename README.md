@@ -1,7 +1,9 @@
+[![Release](https://github.com/renatops1991/saturn-service/actions/workflows/release.yml/badge.svg?branch=production&event=release)](https://github.com/renatops1991/saturn-service/actions/workflows/release.yml)
 [![Coverage Status](https://coveralls.io/repos/github/renatops1991/saturn-service/badge.svg?branch=production)](https://coveralls.io/github/renatops1991/saturn-service?branch=production)
 ![typescript](https://img.shields.io/badge/Typescript-4.9.3-blue)
 ![nodejs](https://img.shields.io/badge/node-v16.17.1-green)
 ![npm](https://img.shields.io/badge/npm-v8.15.0-blue)
+
 
 # Saturn Service (User API)
 
