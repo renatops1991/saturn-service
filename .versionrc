@@ -1,0 +1,37 @@
+{
+    "types": [
+        {
+            "type": "feat",
+            "section": "New Features"
+        },
+        {
+            "type": "fix",
+            "section": "Fixed code"
+        },
+        {
+            "type": "chore",
+            "hidden": true
+        },
+        {
+            "type": "docs",
+            "hidden": true
+        },
+        {
+            "type": "style",
+            "hidden": true
+        },
+        {
+            "type": "refactor",
+            "hidden": true
+        },
+        {
+            "type": "perf",
+            "section": "Performance"
+        },
+        {
+            "type": "test",
+            "hidden": true
+        }
+    ],
+    "releaseCommitMessageFormat": "chore: update release to {{currentTag}}"
+}
