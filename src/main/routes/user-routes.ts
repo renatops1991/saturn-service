@@ -9,7 +9,7 @@ import {
   getAllUsersFactory
 } from '@/main/factories/user-factory'
 import { authAdmin, authUser } from '@/main/middlewares'
-import { Router } from 'express'
+import type { Router } from 'express'
 
 export default (router: Router): void => {
   router.post('/sign-up', expressRouteAdapter(signUpFactory()))

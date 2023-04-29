@@ -1,4 +1,4 @@
-import { IAuthentication } from '@/domain/protocols/authentication'
+import type { IAuthentication } from '@/domain/protocols/authentication'
 import { AccessDeniedError } from '@/presentation/errors/access-denied-error'
 import { forbidden, serverError, success } from '@/presentation/http-helper'
 import { AuthMiddleware } from '@/presentation/middlewares/auth-middleware'

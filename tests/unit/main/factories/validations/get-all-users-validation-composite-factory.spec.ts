@@ -1,5 +1,5 @@
 import { makeGetAllUsersValidationCompositeFactory } from '@/main/factories/validations/get-all-users-validation-composite-factory'
-import { IValidation } from '@/presentation/protocols/validation'
+import type { IValidation } from '@/presentation/protocols/validation'
 import { mockEmailValidator } from '@/tests/unit/presentation/mocks/mocks-user-validation'
 import { CompareDate } from '@/validation/compare-date'
 import { EmailValidation } from '@/validation/email-validation'

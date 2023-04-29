@@ -1,7 +1,7 @@
 
-import { IUser } from '@/domain/protocols/user'
-import { IAuthentication } from '@/domain/protocols/authentication'
-import { IEmailValidator } from '@/validation/protocols/email-validator'
+import type { IUser } from '@/domain/protocols/user'
+import type { IAuthentication } from '@/domain/protocols/authentication'
+import type { IEmailValidator } from '@/validation/protocols/email-validator'
 import { SignUpUserController } from '@/presentation/controllers/user/signup-user-controller'
 import {
   MissingMandatoryParamError,
@@ -9,7 +9,7 @@ import {
   ServerError
 } from '@/presentation/errors'
 import { badRequest, forbidden, serverError } from '@/presentation/http-helper'
-import { IValidation } from '@/presentation/protocols/validation'
+import type { IValidation } from '@/presentation/protocols/validation'
 import { fixtureCreateUserRequest, fixtureUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mockEmailValidator, mockValidation } from '@/tests/unit/presentation/mocks/mocks-user-validation'
 import { mocksAuthentication } from '@/tests/unit/presentation/mocks/mocks-authentication'

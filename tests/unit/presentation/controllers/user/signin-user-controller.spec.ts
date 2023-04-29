@@ -1,10 +1,9 @@
-import { IAuthentication } from '@/domain/protocols/authentication'
+import type { IAuthentication } from '@/domain/protocols/authentication'
 import { SignInUserController } from '@/presentation/controllers/user/signin-user-controller'
 import { fixtureLoginUser, fixtureUserOutput } from '@/tests/unit/presentation/fixtures/fixtures-user'
 import { mocksAuthentication } from '@/tests/unit/presentation/mocks/mocks-authentication'
 import { mockValidation } from '@/tests/unit/presentation/mocks/mocks-user-validation'
 import {
-
   MissingMandatoryParamError,
   ServerError
 } from '@/presentation/errors'
@@ -14,7 +13,7 @@ import {
   success,
   unauthorized
 } from '@/presentation/http-helper'
-import { IValidation } from '@/presentation/protocols/validation'
+import type { IValidation } from '@/presentation/protocols/validation'
 
 type sutTypes = {
   sut: SignInUserController
@@ -75,7 +74,7 @@ describe('SignInUserController', () => {
     const { sut, authenticationStub } = makeSut()
     jest
       .spyOn(authenticationStub, 'auth')
-      .mockReturnValueOnce(null)
+      .mockResolvedValue(null)
     const expectedResponse = await sut.handle(fixtureLoginUser())
     expect(expectedResponse).toEqual(unauthorized())
   })

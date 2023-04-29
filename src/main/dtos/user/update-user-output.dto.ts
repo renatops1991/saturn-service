@@ -1,4 +1,4 @@
-import { AddressDto } from '@/main/dtos/address/address.dto'
+import type { AddressDto } from '@/main/dtos/address/address.dto'
 
 export interface UpdateUserOutputDto {
   id: string

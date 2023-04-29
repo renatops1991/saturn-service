@@ -1,13 +1,13 @@
-import { IUser } from '@/domain/protocols/user'
-import { IAuthentication } from '@/domain/protocols/authentication'
-import {
+import type { IUser } from '@/domain/protocols/user'
+import type { IAuthentication } from '@/domain/protocols/authentication'
+import type {
   IUserBuilder,
   IHashed,
   IUserRepository,
   ICryptography
 } from '@/data/protocols'
-import { UserType } from '@/data/types'
-import {
+import type { UserType } from '@/data/types'
+import type {
   SignUpUserDto,
   UserOutputDto,
   SignInUserDto,
@@ -28,21 +28,21 @@ export class User implements IUser, IAuthentication {
     private readonly userBuilder?: IUserBuilder
   ) { }
 
-  async create (userDto: Omit<SignUpUserDto, 'passwordConfirmation'>): Promise<UserOutputDto> {
+  async create (userDto: Omit<SignUpUserDto, 'passwordConfirmation'>): Promise<UserOutputDto | null> {
     const isEmailInUse = await this.userRepository.loadByEmail(userDto.email)
     if (isEmailInUse !== null) {
       return null
     }
     const hashedPassword = await this.hashed.hash(userDto.password)
-    const buildUser = this.userBuilder.buildUserBasicInfo(
+    const buildUser = this?.userBuilder?.buildUserBasicInfo(
       Object.assign({}, userDto, { password: hashedPassword })
-    )
+    ) as SignUpUserDto
     const user = await this.userRepository.create(buildUser)
 
     return user
   }
 
-  async auth (signInUserDto: SignInUserDto): Promise<UserOutputDto> {
+  async auth (signInUserDto: SignInUserDto): Promise<UserOutputDto | null> {
     const user = await this.userRepository.loadByEmail(signInUserDto.email)
     if (!user) {
       return null
@@ -61,7 +61,7 @@ export class User implements IUser, IAuthentication {
     }
   }
 
-  async loadByToken (accessToken: string, role?: string): Promise<LoadUserDto> {
+  async loadByToken (accessToken: string, role?: string): Promise<LoadUserDto | null> {
     const isValidAccessToken = await this.cryptography.decrypt(accessToken)
     if (!isValidAccessToken) {
       return null
@@ -84,10 +84,15 @@ export class User implements IUser, IAuthentication {
     let updateUser: UserType
 
     if (!password) {
-      updateUser = this.userBuilder.buildUser(updateUserDto)
+      updateUser = this?.userBuilder?.buildUser(updateUserDto) as UserType
     } else {
       const hashedPassword = await this.hashed.hash(password)
-      updateUser = this.userBuilder.buildUser(Object.assign({}, updateUserDto, { password: hashedPassword }))
+      updateUser = this?.userBuilder?.buildUser(
+        Object.assign({},
+          updateUserDto, {
+            password: hashedPassword
+          })
+      ) as UserType
     }
 
     return await this.userRepository.update(updateUser)
@@ -104,7 +109,7 @@ export class User implements IUser, IAuthentication {
       ))
   }
 
-  async getUser (userId: string): Promise<GetUserOutputDto> {
+  async getUser (userId: string): Promise<GetUserOutputDto | null> {
     return await this.userRepository.getUser(userId)
   }
 

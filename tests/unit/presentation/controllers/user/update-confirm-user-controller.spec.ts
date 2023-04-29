@@ -1,7 +1,7 @@
 
 import { fixtureUpdateConfirmUser } from '../../fixtures/fixtures-user'
 import { UpdateConfirmUserController } from '@/presentation/controllers/user/update-confirm-user-controller'
-import { IUser } from '@/domain/protocols/user'
+import type { IUser } from '@/domain/protocols/user'
 import { MissingMandatoryParamError, ServerError } from '@/presentation/errors'
 import { noContent, serverError } from '@/presentation/http-helper'
 import { mocksUserController } from '../../mocks/mocks-user-controller'
@@ -28,7 +28,7 @@ describe('UpdateUserConfirmationController', () => {
     const { sut, requiredFieldStub } = makeSut()
     jest
       .spyOn(requiredFieldStub, 'validate')
-    const expectedResponse = await sut.handle({ confirmUser: undefined, userId: 'foo' })
+    const expectedResponse = await sut.handle({ confirmUser: undefined as any, userId: 'foo' })
     expect(expectedResponse).toEqual(new MissingMandatoryParamError('confirmUser').serializeErrors())
   })
 

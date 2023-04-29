@@ -1,9 +1,9 @@
-import { IMiddleware } from '@/presentation/protocols/middleware'
+import type { IMiddleware } from '@/presentation/protocols/middleware'
 import { AccessDeniedError } from '@/presentation/errors/access-denied-error'
-import { IHttpResponse } from '@/presentation/protocols/http'
+import type { IHttpResponse } from '@/presentation/protocols/http'
 import { forbidden, serverError, success } from '../http-helper'
-import { IAuthentication } from '@/domain/protocols/authentication'
-import { AuthenticationDto } from '@/main/dtos/authentication.dto'
+import type { IAuthentication } from '@/domain/protocols/authentication'
+import type { AuthenticationDto } from '@/main/dtos/authentication.dto'
 
 export class AuthMiddleware implements IMiddleware {
   constructor (

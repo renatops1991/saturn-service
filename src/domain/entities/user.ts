@@ -1,6 +1,7 @@
-import { UserType } from '@/data/types'
-import { UserBasicInfoType } from '@/data/types/user-basic-info-type'
-import { Address } from './address'
+import type { UserType } from '@/data/types'
+import type { UserBasicInfoType } from '@/data/types/user-basic-info-type'
+import type { Address } from './address'
+import * as utils from '@/main/utils'
 
 export class User {
   id: string
@@ -29,7 +30,7 @@ export class User {
   }
 
   public getUser (): UserType {
-    return {
+    const user = {
       userId: this.id,
       name: this.name,
       birthDate: this.birthDate,
@@ -41,5 +42,7 @@ export class User {
       password: this.password,
       updatedAt: this.updatedAt
     }
+
+    return utils.getFieldsWithValidValues(user) as UserType
   }
 }

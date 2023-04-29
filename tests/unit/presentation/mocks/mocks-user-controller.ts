@@ -1,5 +1,5 @@
-import { IUser } from '@/domain/protocols/user'
-import {
+import type { IUser } from '@/domain/protocols/user'
+import type {
   SignUpUserDto,
   UpdateConfirmUserDto,
   UserOutputDto,
@@ -14,11 +14,11 @@ import { fixtureUpdateUserOutput, fixtureUserOutput } from '@/tests/unit/present
 export const mocksUserController = (): IUser => {
   class UserStub implements IUser {
     async create (user: SignUpUserDto): Promise<UserOutputDto> {
-      return await new Promise(resolve => resolve(fixtureUserOutput()))
+      return await new Promise(resolve => { resolve(fixtureUserOutput()) })
     }
 
     async updateConfirmUser (updateConfirmUserDto: UpdateConfirmUserDto): Promise<void> {
-      return await Promise.resolve()
+      await Promise.resolve()
     }
 
     async update (updateUserDto: UpdateUserDto): Promise<UpdateUserOutputDto> {
@@ -26,7 +26,7 @@ export const mocksUserController = (): IUser => {
     }
 
     async updateUserPassword (redefineUserPasswordDto: UpdateUserPasswordDto): Promise<void> {
-      return await Promise.resolve()
+      await Promise.resolve()
     }
 
     async getUser (userId: string): Promise<GetUserOutputDto> {

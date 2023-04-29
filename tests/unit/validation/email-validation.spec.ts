@@ -1,5 +1,5 @@
 import { EmailValidation } from '@/validation/email-validation'
-import { IEmailValidator } from '@/validation/protocols/email-validator'
+import type { IEmailValidator } from '@/validation/protocols/email-validator'
 import { mockEmailValidator } from '@/tests/unit/presentation/mocks/mocks-user-validation'
 import { InvalidParamError } from '@/presentation/errors'
 

@@ -1,4 +1,4 @@
-import { UserBasicInfoType, UserType } from '@/data/types'
+import type { UserBasicInfoType, UserType } from '@/data/types'
 
 export const fixtureBuildUserBasicInfo = (): UserBasicInfoType => ({
   name: 'John Foo Bar',

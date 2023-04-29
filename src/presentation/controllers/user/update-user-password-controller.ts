@@ -1,8 +1,8 @@
-import { IUser } from '@/domain/protocols/user'
-import { IController } from '@/presentation/protocols/controller'
-import { IHttpResponse } from '@/presentation/protocols/http'
-import { IValidation } from '@/presentation/protocols/validation'
-import { UpdateUserPasswordDto } from '@/main/dtos/user'
+import type { IUser } from '@/domain/protocols/user'
+import type { IController } from '@/presentation/protocols/controller'
+import type { IHttpResponse } from '@/presentation/protocols/http'
+import type { IValidation } from '@/presentation/protocols/validation'
+import type { UpdateUserPasswordDto } from '@/main/dtos/user'
 import { badRequest, noContent, serverError } from '@/presentation/http-helper'
 
 export class UpdateUserPasswordController implements IController {

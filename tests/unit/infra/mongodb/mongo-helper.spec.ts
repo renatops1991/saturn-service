@@ -2,7 +2,7 @@ import { MongoHelper } from '@/infra/mongodb/mongo-helper'
 
 describe('MongoHelper', () => {
   beforeAll(async () => {
-    await MongoHelper.connect(process.env.MONGODB_URL)
+    await MongoHelper.connect(process.env.MONGODB_URL as string)
   })
 
   afterAll(async () => {

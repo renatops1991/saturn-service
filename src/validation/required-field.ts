@@ -1,5 +1,5 @@
 import { MissingMandatoryParamError } from '@/presentation/errors'
-import { IValidation } from '@/presentation/protocols/validation'
+import type { IValidation } from '@/presentation/protocols/validation'
 
 export class RequiredField implements IValidation {
   constructor (
