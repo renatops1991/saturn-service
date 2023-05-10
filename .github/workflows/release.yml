@@ -1,21 +1,39 @@
-name: "Release"
+name: "Create a new Release"
 
 on:
   push:
     tags:
-      - "*"
+      - "v*"
 
 jobs:
-  tagged-release:
-    name: "Tagged Release"
-    runs-on: "ubuntu-latest"
+  release:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: "Build & test"
+      - name: "Checkout code"
+        uses: actions/checkout@v3
+      - name: Build project
         run: |
-          echo "done!"
-
-      - uses: "marvinpinto/action-automatic-releases@latest"
+          zip --junk-paths saturn-service README.md
+      - name: "Create a new release"
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
           prerelease: false
+      - name: "Upload release"
+        id: update_release_asset
+        uses: actions/update-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.output.upload_url }}
+          asset_path: ./saturn-service.zip
+          asset_name: saturn-service.zip
+          asset_content_type: "application/zip
+
+
