@@ -7,7 +7,7 @@
 
 # Saturn Service (User API)
 
-Saturn Service is a API used for user creation and authentication. Where you can create, update and fetch user data. It is part of a project aimed at creating portfolios for financial control wallet.
+Saturn Service is an API specially developed for financial institutions, offering you the possibility to record all your monthly earnings and expenses in a simple and practical way. With it, you can plan your future investments and create customized wallets.
 
 ## Stacks 
 - Design Patterns
@@ -49,6 +49,7 @@ docker compose up
 ## API Routes
 All routes run on port 3001 but you can change it in .env file
 
+### User Routes
 - Sign Up: `{{host}}/api/sign-up`
 - Sign In: `{{host}}/api/sign-in`
 - Get User: `{{host}}/api/user` ![auth](https://img.shields.io/badge/auth-yes-green)
