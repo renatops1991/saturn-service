@@ -9,9 +9,15 @@ export class MissingMandatoryParamError extends CustomError {
 
   serializeErrors (): any {
     return {
-      type: ErrorsTypeEnum.MISSING_MANDATORY_PARAM_ERROR,
-      field: this.field,
-      message: 'Missing mandatory parameter'
+      alias: ErrorsTypeEnum.MISSING_MANDATORY_PARAM_ERROR,
+      errors: [
+        {
+          field: this.field,
+          message: 'Missing mandatory parameter'
+        }
+      ],
+      message: 'Missing mandatory parameter',
+      timestamp: new Date()
     }
   }
 }

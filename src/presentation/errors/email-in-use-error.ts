@@ -9,8 +9,9 @@ export class EmailInUseError extends CustomError {
 
   serializeErrors (): any {
     return {
-      type: ErrorsTypeEnum.EMAIL_IS_ALREADY_USE,
-      message: 'The received email is already in use'
+      alias: ErrorsTypeEnum.EMAIL_IS_ALREADY_USE,
+      message: 'The received email is already in use',
+      timestamp: new Date()
     }
   }
 }

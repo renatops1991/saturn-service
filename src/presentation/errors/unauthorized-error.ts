@@ -9,8 +9,9 @@ export class UnauthorizedError extends CustomError {
 
   serializeErrors (): any {
     return {
-      type: ErrorsTypeEnum.UNAUTHORIZED_ERROR,
-      message: 'Email or password incorrect'
+      alias: ErrorsTypeEnum.UNAUTHORIZED_ERROR,
+      message: 'Email or password incorrect',
+      timestamp: new Date()
     }
   }
 }

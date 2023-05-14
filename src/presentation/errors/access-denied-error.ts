@@ -9,8 +9,9 @@ export class AccessDeniedError extends CustomError {
 
   serializeErrors (): any {
     return {
-      type: ErrorsTypeEnum.ACCESS_DENIED_ERROR,
-      message: 'Access not allowed, please authenticate before accessing the route'
+      alias: ErrorsTypeEnum.ACCESS_DENIED_ERROR,
+      message: 'Access not allowed, please authenticate before accessing the route',
+      timestamp: new Date()
     }
   }
 }

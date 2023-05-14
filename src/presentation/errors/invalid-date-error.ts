@@ -9,9 +9,15 @@ export class InvalidDateError extends CustomError {
 
   serializeErrors (): any {
     return {
-      type: ErrorsTypeEnum.INVALID_DATE_ERROR,
-      field: this.field,
-      message: 'startDate field cannot greater than endDate field'
+      alias: ErrorsTypeEnum.INVALID_DATE_ERROR,
+      errors: [
+        {
+          field: this.field,
+          message: 'startDate field cannot greater than endDate field'
+        }
+      ],
+      message: 'startDate field cannot greater than endDate field',
+      timestamp: new Date()
     }
   }
 }

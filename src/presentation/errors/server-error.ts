@@ -8,9 +8,10 @@ export class ServerError extends CustomError {
 
   serializeErrors (): any {
     return {
-      type: ErrorsTypeEnum.SERVER_ERROR,
+      alias: ErrorsTypeEnum.SERVER_ERROR,
       message: 'Internal Server Error',
-      stack: this.stack
+      stack: this.stack,
+      timestamp: new Date()
     }
   }
 }

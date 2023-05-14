@@ -9,9 +9,15 @@ export class InvalidParamError extends CustomError {
 
   serializeErrors (): any {
     return {
-      type: ErrorsTypeEnum.INVALID_PARAM_ERROR,
-      field: this.field,
-      message: 'Invalid param error'
+      alias: ErrorsTypeEnum.INVALID_PARAM_ERROR,
+      errors: [
+        {
+          field: this.field,
+          message: 'Invalid param error'
+        }
+      ],
+      message: 'Invalid param error',
+      timestamp: new Date()
     }
   }
 }

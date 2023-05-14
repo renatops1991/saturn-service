@@ -8,9 +8,10 @@ export abstract class CustomError extends Error {
   }
 
   abstract serializeErrors (): {
-    type: ErrorsTypeEnum
-    field?: string
+    alias: ErrorsTypeEnum
+    errors?: Record<string, string>
     message: string
     stack?: any
+    timestamp: Date
   }
 }
