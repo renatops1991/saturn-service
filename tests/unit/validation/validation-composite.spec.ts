@@ -2,6 +2,7 @@ import { MissingMandatoryParamError } from '@/presentation/errors'
 import type { IValidation } from '@/presentation/protocols/validation'
 import { ValidationComposite } from '@/validation/validation-composite'
 import { mockValidation } from '../presentation/mocks/mocks-user-validation'
+import MockDate from 'mockdate'
 
 type SutTypes = {
   sut: ValidationComposite
@@ -17,6 +18,13 @@ const makeSut = (): SutTypes => {
   }
 }
 describe('ValidationComposite', () => {
+  beforeAll(async () => {
+    MockDate.set(new Date())
+  })
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   it('Should return an error if any validation fails', async () => {
     const { sut, validationStub } = makeSut()
     jest

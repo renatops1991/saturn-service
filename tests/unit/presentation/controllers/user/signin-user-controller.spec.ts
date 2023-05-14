@@ -14,6 +14,7 @@ import {
   unauthorized
 } from '@/presentation/http-helper'
 import type { IValidation } from '@/presentation/protocols/validation'
+import MockDate from 'mockdate'
 
 type sutTypes = {
   sut: SignInUserController
@@ -32,6 +33,13 @@ const makeSut = (): sutTypes => {
   }
 }
 describe('SignInUserController', () => {
+  beforeAll(async () => {
+    MockDate.set(new Date())
+  })
+  afterAll(() => {
+    MockDate.reset()
+  })
+  
   it('Should return 500 error if Validation throws exception error', async () => {
     const { sut, validationStub } = makeSut()
     jest.spyOn(validationStub, 'validate')

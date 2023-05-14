@@ -1,5 +1,6 @@
 import { InvalidDateError } from '@/presentation/errors/invalid-date-error'
 import { CompareDate } from '@/validation/compare-date'
+import MockDate from 'mockdate'
 
 type SutTypes = {
   sut: CompareDate
@@ -13,6 +14,13 @@ const makeSut = (): SutTypes => {
 }
 
 describe('CompareDate', () => {
+  beforeAll(async () => {
+    MockDate.set(new Date())
+  })
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   it('Should return a InvalidDateError if validation fails', async () => {
     const { sut } = makeSut()
     const startDate = '2023-01-12'

@@ -1,5 +1,6 @@
 import { MissingMandatoryParamError } from '@/presentation/errors'
 import { RequiredField } from '@/validation/required-field'
+import MockDate from 'mockdate'
 
 type SutTypes = {
   sut: RequiredField
@@ -13,6 +14,13 @@ const makeSut = (): SutTypes => {
 }
 
 describe('RequiredField', () => {
+  beforeAll(async () => {
+    MockDate.set(new Date())
+  })
+  afterAll(() => {
+    MockDate.reset()
+  })
+  
   it('Should return MissingMandatoryParamError if validation fails', async () => {
     const { sut } = makeSut()
     const expectedError = sut.validate({ name: '' })

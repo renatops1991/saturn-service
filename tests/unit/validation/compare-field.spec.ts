@@ -1,5 +1,6 @@
 import { InvalidParamError } from '@/presentation/errors'
 import { CompareField } from '@/validation/compare-field'
+import MockDate from 'mockdate'
 
 type SutTypes = {
   sut: CompareField
@@ -13,6 +14,13 @@ const makeSut = (): SutTypes => {
 }
 
 describe('CompareField', () => {
+  beforeAll(async () => {
+    MockDate.set(new Date())
+  })
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   it('Should return a InvalidParamError if validation fails', async () => {
     const { sut } = makeSut()
     const expectedError = sut.validate({

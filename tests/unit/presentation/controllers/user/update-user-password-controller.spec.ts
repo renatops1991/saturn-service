@@ -7,6 +7,7 @@ import { fixtureUpdateUserPasswordRequest } from '@/tests/unit/presentation/fixt
 import { MissingMandatoryParamError, InvalidParamError, ServerError } from '@/presentation/errors'
 import { noContent, serverError } from '@/presentation/http-helper'
 import { type UpdateUserPasswordDto } from '@/main/dtos/user'
+import MockDate from 'mockdate'
 
 type SutTypes = {
   userStub: IUser
@@ -25,6 +26,13 @@ const makeSut = (): SutTypes => {
   }
 }
 describe('UpdateUserPasswordController', () => {
+  beforeAll(async () => {
+    MockDate.set(new Date())
+  })
+  afterAll(() => {
+    MockDate.reset()
+  })
+  
   it('Should call validate method with correct values', async () => {
     const { sut, validationStub } = makeSut()
     const validateSpy = jest

@@ -2,6 +2,7 @@ import { EmailValidation } from '@/validation/email-validation'
 import type { IEmailValidator } from '@/validation/protocols/email-validator'
 import { mockEmailValidator } from '@/tests/unit/presentation/mocks/mocks-user-validation'
 import { InvalidParamError } from '@/presentation/errors'
+import MockDate from 'mockdate'
 
 type SutTypes = {
   sut: EmailValidation
@@ -18,6 +19,13 @@ const makeSut = (): SutTypes => {
   }
 }
 describe('EmailValidation', () => {
+  beforeAll(async () => {
+    MockDate.set(new Date())
+  })
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   it('Should call EmailValidator with corrects values', () => {
     const { sut, emailValidatorStub } = makeSut()
     const isValidSpy = jest

@@ -14,7 +14,8 @@ import { fixtureCreateUserRequest, fixtureUserOutput } from '@/tests/unit/presen
 import { mockEmailValidator, mockValidation } from '@/tests/unit/presentation/mocks/mocks-user-validation'
 import { mocksAuthentication } from '@/tests/unit/presentation/mocks/mocks-authentication'
 import { EmailInUseError } from '@/presentation/errors/email-in-use-error'
-import { mocksUserController } from '../../mocks/mocks-user-controller'
+import { mocksUserController } from '@/tests/unit/presentation/mocks/mocks-user-controller'
+import MockDate from 'mockdate'
 
 type SutTypes = {
   sut: SignUpUserController
@@ -41,6 +42,13 @@ const makeSut = (): SutTypes => {
 }
 
 describe('User Controller', () => {
+  beforeAll(async () => {
+    MockDate.set(new Date())
+  })
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   it('Should return 400 error if email provided is not valid', async () => {
     const { sut, validationStub } = makeSut()
     const userDto = fixtureCreateUserRequest()

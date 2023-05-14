@@ -6,6 +6,7 @@ import { MissingMandatoryParamError, ServerError } from '@/presentation/errors'
 import { noContent, serverError } from '@/presentation/http-helper'
 import { mocksUserController } from '../../mocks/mocks-user-controller'
 import { RequiredField } from '@/validation/required-field'
+import MockDate from 'mockdate'
 
 type SutTypes = {
   requiredFieldStub: RequiredField
@@ -24,6 +25,13 @@ const makeSut = (): SutTypes => {
   }
 }
 describe('UpdateUserConfirmationController', () => {
+  beforeAll(async () => {
+    MockDate.set(new Date())
+  })
+  afterAll(() => {
+    MockDate.reset()
+  })
+  
   it('Should return MissingMandatoryParamError if validation fails', async () => {
     const { sut, requiredFieldStub } = makeSut()
     jest

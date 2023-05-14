@@ -3,6 +3,7 @@ import { AccessDeniedError } from '@/presentation/errors/access-denied-error'
 import { forbidden, serverError, success } from '@/presentation/http-helper'
 import { AuthMiddleware } from '@/presentation/middlewares/auth-middleware'
 import { mocksAuthentication } from '../mocks/mocks-authentication'
+import MockDate from 'mockdate'
 
 type SutTypes = {
   sut: AuthMiddleware
@@ -19,6 +20,13 @@ const makeSut = (role?: string): SutTypes => {
 }
 
 describe('Auth Middleware', () => {
+  beforeAll(async () => {
+    MockDate.set(new Date())
+  })
+  afterAll(() => {
+    MockDate.reset()
+  })
+  
   it('Should return 403 if x-access-token no exists in headers', async () => {
     const { sut } = makeSut()
     const expectedResponse = await sut.handle({})
