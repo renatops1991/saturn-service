@@ -182,7 +182,7 @@ describe('User routes', () => {
         }
       )
       await request(app)
-        .get('/api/users')
+        .get('/users')
         .set('x-access-token', user?.accessToken)
         .query({ email: 'john@example.com' })
         .expect(200)
